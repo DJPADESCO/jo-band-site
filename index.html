@@ -4,50 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JO BAND - Partout où ça bouge, JO BAND est là</title>
-    <meta name="description" content="JO BAND est un groupe artistique orienté comédie, humour et animation.">
+    <title>JO BAND | Site Officiel</title>
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- SEO & Meta -->
+    <meta name="description" content="Site officiel du groupe JO BAND. Humour, Comédie et Animation à Lomé.">
+    <meta name="author" content="DJ PADESCO">
     
-    <!-- Tailwind CSS (via CDN for single-file deployment) -->
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
                     colors: {
-                        brand: {
-                            dark: '#050814',
-                            orange: '#fb923c',
-                            blue: '#38bdf8'
-                        }
-                    },
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        }
+                        gold: '#fb923c',
+                        dark: '#020617'
                     }
                 }
             }
@@ -55,255 +30,192 @@
     </script>
 
     <style>
-        /* Custom Styles & Scrollbar */
-        body {
-            background-color: #050814;
-            color: white;
-            overflow-x: hidden;
-        }
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050814; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2); 
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4); 
-        }
-
-        /* Glassmorphism utilities */
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        body { background-color: #020617; color: #f8fafc; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card:hover { background: rgba(255, 255, 255, 0.07); border-color: rgba(251, 146, 60, 0.4); transform: translateY(-5px); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Scroll Reveal Animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        /* Animation Background */
+        .bg-glow { position: fixed; width: 50vw; height: 50vw; border-radius: 50%; filter: blur(120px); z-index: -1; opacity: 0.15; pointer-events: none; }
+        
+        /* Reveal on scroll */
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s all ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* DJ PADESCO Signature Shine */
+        .padesco-glow {
+            background: linear-gradient(90deg, #fb923c, #fff, #fb923c);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
         }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .reveal-delay-1 { transition-delay: 100ms; }
-        .reveal-delay-2 { transition-delay: 200ms; }
-        .reveal-delay-3 { transition-delay: 300ms; }
+        @keyframes shine { to { background-position: 200% center; } }
     </style>
 </head>
-<body class="antialiased selection:bg-brand-orange selection:text-white relative">
+<body class="selection:bg-gold selection:text-dark">
 
-    <!-- Animated Background Effect -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-orange-500/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"></div>
-        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-blue-500/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob" style="animation-delay: 2s"></div>
-        <div class="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-purple-500/10 rounded-full mix-blend-screen filter blur-[100px] animate-blob" style="animation-delay: 4s"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(180deg,#07101f_0%,#05070c_100%)] opacity-80 z-[-1]"></div>
-    </div>
+    <div class="bg-glow top-[-10%] left-[-10%] bg-gold animate-pulse"></div>
+    <div class="bg-glow bottom-[-10%] right-[-10%] bg-blue-500" style="animation-delay: 2s"></div>
 
-    <!-- Header / Navbar -->
-    <header class="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-xl transition-all duration-300">
-        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
-            <a href="#home" class="flex items-center gap-3 group">
-                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/10 transition group-hover:bg-brand-orange/20 group-hover:ring-brand-orange/50">
-                    <i data-lucide="headphones" class="h-5 w-5 text-orange-300 group-hover:text-brand-orange transition"></i>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 glass border-b border-white/5 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gold/20 rounded-xl flex items-center justify-center border border-gold/30">
+                    <i data-lucide="music" class="text-gold h-5 w-5"></i>
                 </div>
-                <div>
-                    <p class="text-sm font-bold tracking-[0.25em] text-white/80 group-hover:text-white transition">JO BAND</p>
-                    <p class="text-[10px] text-white/45 uppercase tracking-wider" data-i18n="badge">Comedy • Humor</p>
-                </div>
-            </a>
+                <span class="font-extrabold tracking-tighter text-xl">JO BAND</span>
+            </div>
+            
+            <div class="hidden md:flex gap-8 text-sm font-medium text-white/60">
+                <a href="#home" class="hover:text-gold transition">Accueil</a>
+                <a href="#about" class="hover:text-gold transition">À propos</a>
+                <a href="#media" class="hover:text-gold transition">Médias</a>
+                <a href="#services" class="hover:text-gold transition">Services</a>
+                <a href="#contact" class="hover:text-gold transition">Contact</a>
+            </div>
 
-            <nav class="hidden items-center gap-8 text-sm font-medium text-white/60 lg:flex">
-                <a href="#home" class="transition hover:text-white hover:scale-105" data-i18n="nav.0">Accueil</a>
-                <a href="#about" class="transition hover:text-white hover:scale-105" data-i18n="nav.1">À propos</a>
-                <a href="#media" class="transition hover:text-white hover:scale-105" data-i18n="nav.2">Médias</a>
-                <a href="#team" class="transition hover:text-white hover:scale-105" data-i18n="nav.3">Équipe</a>
-                <a href="#services" class="transition hover:text-white hover:scale-105" data-i18n="nav.4">Services</a>
-                <a href="#contact" class="transition hover:text-white hover:scale-105" data-i18n="nav.5">Contact</a>
-            </nav>
-
-            <button onclick="toggleLang()" id="langBtn" class="flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 hover:scale-105 active:scale-95">
-                <i data-lucide="globe-2" class="h-4 w-4"></i>
-                <span id="langText">EN</span>
+            <button onclick="toggleLang()" class="glass px-4 py-2 rounded-xl text-xs font-bold hover:bg-white/10 transition flex items-center gap-2">
+                <i data-lucide="languages" class="h-4 w-4"></i>
+                <span id="langLabel">EN</span>
             </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header id="home" class="max-w-7xl mx-auto px-6 pt-20 pb-32 text-center md:text-left flex flex-col md:flex-row items-center gap-12">
+        <div class="flex-1 reveal">
+            <div class="inline-block px-4 py-1.5 rounded-full glass text-[10px] font-bold tracking-widest text-gold mb-6 uppercase border border-gold/20">
+                Lomé • Togo • Entertainment
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black leading-tight mb-6">
+                JO BAND <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold to-white italic" data-i18n="hero-title">Partout où ça bouge...</span>
+            </h1>
+            <p class="text-white/50 text-lg max-w-xl mb-10 leading-relaxed font-light" data-i18n="hero-desc">
+                Le groupe artistique qui redéfinit l'humour et l'animation. Une équipe de 13 passionnés prête à enflammer vos événements.
+            </p>
+            <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                <a href="#contact" class="bg-gold text-dark px-8 py-4 rounded-2xl font-bold hover:scale-105 transition shadow-lg shadow-gold/20 flex items-center gap-2">
+                    <i data-lucide="calendar" class="h-5 w-5"></i> <span data-i18n="btn-book">Réserver</span>
+                </a>
+                <a href="#media" class="glass px-8 py-4 rounded-2xl font-bold hover:bg-white/10 transition border border-white/10">
+                    <span data-i18n="btn-media">Découvrir</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="flex-1 w-full max-w-md reveal reveal-delay-2">
+            <div class="glass p-4 rounded-[2.5rem] border-white/20 rotate-3 hover:rotate-0 transition-transform duration-500">
+                <div class="aspect-[4/5] glass rounded-[2rem] flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-b from-white/5 to-transparent">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+                    <i data-lucide="users" class="h-20 w-20 text-gold/30 mb-4"></i>
+                    <p class="text-white/20 font-bold tracking-[0.5em] uppercase text-xs" data-i18n="photo-wait">Photo à venir</p>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="mx-auto max-w-7xl px-4 pb-16 pt-12 md:px-8 md:pt-24 relative z-10">
-        
-        <!-- Hero Section -->
-        <section id="home" class="grid gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:items-center min-h-[80vh]">
-            <div class="reveal">
-                <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white/80 shadow-sm backdrop-blur glass">
-                    <i data-lucide="star" class="h-4 w-4 text-amber-400 fill-amber-400/20"></i>
-                    <span data-i18n="badgeFull">Groupe de comédie, humour et spectacle</span>
-                </div>
+    <!-- Services Grid -->
+    <section id="services" class="max-w-7xl mx-auto px-6 py-20">
+        <h2 class="text-3xl font-black mb-12 flex items-center gap-4">
+            <span class="w-12 h-1 bg-gold rounded-full"></span> 
+            <span data-i18n="services-title">Nos Prestations</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="glass glass-card p-8 rounded-3xl">
+                <i data-lucide="smile" class="text-gold h-10 w-10 mb-6"></i>
+                <h3 class="text-xl font-bold mb-3" data-i18n="srv1">Humour & Comédie</h3>
+                <p class="text-white/40 text-sm leading-relaxed" data-i18n="srv1-d">Spectacles de stand-up et sketchs originaux.</p>
+            </div>
+            <div class="glass glass-card p-8 rounded-3xl">
+                <i data-lucide="party-popper" class="text-pink-400 h-10 w-10 mb-6"></i>
+                <h3 class="text-xl font-bold mb-3" data-i18n="srv2">Événementiel</h3>
+                <p class="text-white/40 text-sm leading-relaxed" data-i18n="srv2-d">Mariages, anniversaires et fêtes privées.</p>
+            </div>
+            <div class="glass glass-card p-8 rounded-3xl">
+                <i data-lucide="mic-2" class="text-blue-400 h-10 w-10 mb-6"></i>
+                <h3 class="text-xl font-bold mb-3" data-i18n="srv3">Animation</h3>
+                <p class="text-white/40 text-sm leading-relaxed" data-i18n="srv3-d">Maitrise de cérémonie et ambiance garantie.</p>
+            </div>
+            <div class="glass glass-card p-8 rounded-3xl">
+                <i data-lucide="clapperboard" class="text-purple-400 h-10 w-10 mb-6"></i>
+                <h3 class="text-xl font-bold mb-3" data-i18n="srv4">Digital</h3>
+                <p class="text-white/40 text-sm leading-relaxed" data-i18n="srv4-d">Contenus vidéos pour TikTok et réseaux.</p>
+            </div>
+        </div>
+    </section>
 
-                <h1 class="max-w-3xl text-5xl font-black tracking-tight text-white md:text-7xl lg:text-8xl leading-tight">
-                    JO BAND
-                    <span class="mt-2 block bg-gradient-to-r from-orange-400 via-white to-sky-400 bg-clip-text text-transparent pb-2" data-i18n="title">
-                        Partout où ça bouge, JO BAND est là
-                    </span>
-                </h1>
-
-                <p class="mt-6 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg font-light" data-i18n="intro">
-                    JO BAND est un groupe artistique orienté comédie, humour et animation. Le site présente le groupe, ses contenus vidéo et ses moyens de contact officiels.
-                </p>
-
-                <div class="mt-10 flex flex-wrap gap-4">
-                    <a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-400 px-8 py-4 text-sm font-bold text-slate-950 transition hover:opacity-90 hover:scale-105 hover:shadow-[0_0_20px_rgba(251,146,60,0.4)]">
-                        <i data-lucide="calendar-days" class="h-5 w-5"></i>
-                        <span data-i18n="ctaPrimary">Réserver maintenant</span>
-                    </a>
-                    <a href="#media" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-8 py-4 text-sm font-bold text-white transition hover:bg-white/10 hover:scale-105 glass">
-                        <i data-lucide="play" class="h-5 w-5"></i>
-                        <span data-i18n="ctaSecondary">Voir les médias</span>
-                    </a>
-                </div>
-
-                <div class="mt-16 grid gap-4 grid-cols-3 sm:grid-cols-3 reveal reveal-delay-2">
-                    <div class="glass rounded-3xl p-5 hover:-translate-y-1 transition duration-300 group">
-                        <p class="text-3xl font-extrabold group-hover:text-brand-orange transition">13</p>
-                        <p class="mt-1 text-xs font-medium text-white/50 uppercase tracking-widest" data-i18n="stat1">Membres</p>
-                    </div>
-                    <div class="glass rounded-3xl p-5 hover:-translate-y-1 transition duration-300 group">
-                        <p class="text-3xl font-extrabold group-hover:text-brand-blue transition">FR/EN</p>
-                        <p class="mt-1 text-xs font-medium text-white/50 uppercase tracking-widest" data-i18n="stat2">Site bilingue</p>
-                    </div>
-                    <div class="glass rounded-3xl p-5 hover:-translate-y-1 transition duration-300 group">
-                        <p class="text-3xl font-extrabold group-hover:text-amber-400 transition">3+</p>
-                        <p class="mt-1 text-xs font-medium text-white/50 uppercase tracking-widest" data-i18n="stat3">Canaux</p>
-                    </div>
-                </div>
+    <!-- Footer -->
+    <footer class="border-t border-white/5 pt-20 pb-10 bg-black/40">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex justify-center gap-6 mb-12">
+                <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:text-gold transition"><i data-lucide="youtube"></i></a>
+                <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:text-gold transition"><i data-lucide="message-circle"></i></a>
+                <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:text-gold transition"><i data-lucide="video"></i></a>
             </div>
 
-            <div class="relative reveal reveal-delay-1 animate-float">
-                <!-- Glowing backdrops -->
-                <div class="absolute -left-4 top-10 h-32 w-32 rounded-full bg-orange-500/30 blur-[60px]"></div>
-                <div class="absolute bottom-8 right-2 h-32 w-32 rounded-full bg-sky-500/30 blur-[60px]"></div>
-
-                <div class="glass overflow-hidden rounded-[2rem] shadow-2xl shadow-black/50 border-white/20 relative z-10 bg-gradient-to-br from-white/10 to-transparent">
-                    <div class="p-8">
-                        <div class="flex items-start justify-between gap-4">
-                            <div>
-                                <p class="text-xs font-bold tracking-[0.3em] text-white/50">OFFICIAL PAGE</p>
-                                <h3 class="mt-2 text-3xl font-black">JO BAND</h3>
-                            </div>
-                            <div class="flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-1.5 text-xs font-bold text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                                <span class="relative flex h-2 w-2">
-                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                  <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                                </span>
-                                LIVE
-                            </div>
-                        </div>
-
-                        <div class="mt-8 grid h-[280px] place-items-center rounded-3xl border border-white/10 bg-black/40 shadow-inner overflow-hidden relative group">
-                            <!-- Background pattern in the card -->
-                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px] opacity-50"></div>
-                            
-                            <div class="relative flex h-32 w-32 items-center justify-center rounded-full border border-white/20 bg-white/5 shadow-[0_0_50px_rgba(251,146,60,0.3)] backdrop-blur transition duration-500 group-hover:scale-110 group-hover:shadow-[0_0_80px_rgba(251,146,60,0.5)]">
-                                <div class="absolute inset-0 rounded-full border border-orange-400/50 animate-ping" style="animation-duration: 3s;"></div>
-                                <i data-lucide="waves" class="h-14 w-14 text-orange-300"></i>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 grid gap-4 sm:grid-cols-2">
-                            <div class="rounded-2xl border border-white/5 bg-black/30 p-4 transition hover:bg-white/5">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">WhatsApp</p>
-                                <p class="mt-1 text-sm font-medium">+228 97 66 80 22</p>
-                            </div>
-                            <div class="rounded-2xl border border-white/5 bg-black/30 p-4 transition hover:bg-white/5">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40" data-i18n="callText">Appel</p>
-                                <p class="mt-1 text-sm font-medium">+228 70 00 25 39</p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- THE SIGNATURE -->
+            <div class="py-10">
+                <p class="text-[10px] font-bold tracking-[0.4em] text-white/20 uppercase mb-2">Developed with Passion by</p>
+                <div class="padesco-glow text-3xl font-black tracking-widest uppercase">DJ PADESCO</div>
+                <div class="flex justify-center gap-2 mt-4">
+                    <span class="w-2 h-2 rounded-full bg-gold"></span>
+                    <span class="w-2 h-2 rounded-full bg-gold/50"></span>
+                    <span class="w-2 h-2 rounded-full bg-gold/20"></span>
                 </div>
             </div>
-        </section>
 
-        <!-- Divider -->
-        <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-12"></div>
+            <p class="text-white/20 text-[10px] mt-10">© 2026 JO BAND OFFICIAL. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
 
-        <!-- About Section -->
-        <section id="about" class="mt-24 grid gap-12 lg:grid-cols-2 lg:items-start reveal">
-            <div class="max-w-xl">
-                <p class="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-brand-orange" data-i18n="aboutEyebrow">À PROPOS</p>
-                <h2 class="text-4xl font-black tracking-tight text-white md:text-5xl" data-i18n="aboutTitle">Présentation du groupe</h2>
-                <p class="mt-6 text-base leading-relaxed text-white/60" data-i18n="aboutText">
-                    Le nom officiel est JO BAND. Le projet est pensé pour les spectacles, la comédie, l’humour, les mariages, les concerts, les parties et les animations.
-                </p>
-            </div>
+    <script>
+        lucide.createIcons();
 
-            <div class="glass rounded-[2rem] p-8 reveal reveal-delay-1">
-                <div class="grid gap-6 md:grid-cols-2">
-                    <div class="rounded-2xl border border-white/5 bg-black/40 p-6 hover:bg-white/5 transition">
-                        <i data-lucide="quote" class="h-6 w-6 text-orange-400 mb-4 opacity-50"></i>
-                        <p class="text-xs font-bold text-white/50 uppercase tracking-widest mb-2" data-i18n="sloganLabel">Slogan</p>
-                        <p class="text-sm font-medium leading-relaxed text-white">Partout où ça bouge, JO BAND est là.</p>
-                    </div>
-                    <div class="rounded-2xl border border-white/5 bg-black/40 p-6 hover:bg-white/5 transition">
-                        <i data-lucide="map-pin" class="h-6 w-6 text-sky-400 mb-4 opacity-50"></i>
-                        <p class="text-xs font-bold text-white/50 uppercase tracking-widest mb-2" data-i18n="addressLabel">Adresse</p>
-                        <p class="text-sm font-medium leading-relaxed text-white">Lomé, Togo</p>
-                    </div>
-                    <div class="rounded-2xl border border-white/5 bg-black/40 p-6 md:col-span-2 group hover:bg-white/5 transition">
-                        <div class="flex items-center justify-between mb-4">
-                            <i data-lucide="image" class="h-6 w-6 text-purple-400 opacity-50"></i>
-                            <span class="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-white/50">PENDING</span>
-                        </div>
-                        <p class="text-xs font-bold text-white/50 uppercase tracking-widest mb-2" data-i18n="photoLabel">Photo Officielle</p>
-                        <p class="text-sm leading-relaxed text-white/60" data-i18n="photoText">
-                            La photo du groupe n’est pas encore disponible. Cette zone pourra être remplacée par une galerie plus tard.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        // Reveal logic
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
 
-        <!-- Media Section -->
-        <section id="media" class="mt-32 reveal">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <p class="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-brand-orange" data-i18n="mediaEyebrow">MÉDIAS</p>
-                <h2 class="text-4xl font-black tracking-tight text-white md:text-5xl" data-i18n="mediaTitle">Vidéos / TikTok / YouTube</h2>
-                <p class="mt-6 text-base leading-relaxed text-white/60" data-i18n="mediaText">
-                    La visibilité doit se concentrer sur TikTok et YouTube. La chaîne WhatsApp sert aussi à publier les annonces et les nouveautés.
-                </p>
-            </div>
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-            <div class="grid gap-6 md:grid-cols-3">
-                <!-- TikTok -->
-                <a href="https://www.tiktok.com/@jobandofficiel?_r=1&_t=ZS-96MQKFp8Yxk" target="_blank" class="glass rounded-[2rem] p-8 group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(255,255,255,0.05)] border-white/5 hover:border-white/20">
-                    <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-black/50 border border-white/10 text-white group-hover:bg-brand-orange group-hover:text-black transition-colors duration-300">
-                        <i data-lucide="video" class="h-6 w-6"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">TikTok</h3>
-                    <p class="text-sm leading-relaxed text-white/50 mb-8" data-i18n="tiktokDesc">Extraits rapides, humour, comédie et moments forts.</p>
-                    <div class="flex items-center gap-2 text-sm font-bold text-brand-orange group-hover:text-white transition-colors">
-                        <span data-i18n="openLink">Ouvrir le lien</span> <i data-lucide="arrow-right" class="h-4 w-4 transform group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                </a>
+        // Translation Logic
+        const i18n = {
+            fr: {
+                "hero-title": "Partout où ça bouge, JO BAND est là",
+                "hero-desc": "Le groupe artistique qui redéfinit l'humour et l'animation. Une équipe de 13 passionnés prête à enflammer vos événements.",
+                "btn-book": "Réserver", "btn-media": "Découvrir", "photo-wait": "Photo à venir",
+                "services-title": "Nos Prestations",
+                "srv1": "Humour & Comédie", "srv1-d": "Spectacles de stand-up et sketchs originaux.",
+                "srv2": "Événementiel", "srv2-d": "Mariages, anniversaires et fêtes privées.",
+                "srv3": "Animation", "srv3-d": "Maitrise de cérémonie et ambiance garantie.",
+                "srv4": "Digital", "srv4-d": "Contenus vidéos pour TikTok et réseaux."
+            },
+            en: {
+                "hero-title": "Everywhere it moves, JO BAND is there",
+                "hero-desc": "The artistic group redefining humor and hosting. A team of 13 enthusiasts ready to ignite your events.",
+                "btn-book": "Book Now", "btn-media": "Discover", "photo-wait": "Photo coming soon",
+                "services-title": "Our Services",
+                "srv1": "Humor & Comedy", "srv1-d": "Stand-up shows and original sketches.",
+                "srv2": "Events", "srv2-d": "Weddings, birthdays and private parties.",
+                "srv3": "Hosting", "srv3-d": "Master of ceremonies and guaranteed vibes.",
+                "srv4": "Digital", "srv4-d": "Video content for TikTok and socials."
+            }
+        };
 
-                <!-- YouTube -->
-                <a href="https://www.youtube.com/@JoBandofficiel" target="_blank" class="glass rounded-[2rem] p-8 group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(255,0,0,0.1)] border-white/5 hover:border-red-500/30 reveal-delay-1">
-                    <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-black/50 border border-white/10 text-white group-hover:bg-red-500 transition-colors duration-300">
-                        <i data-lucide="youtube" class="h-6 w-6"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">YouTube</h3>
-                    <p class="text-sm leading-relaxed text-white/50 mb-8" data-i18n="ytDesc">Vidéos longues, performances et contenus officiels.</p>
-                    <div class="flex items-center gap-2 text-sm font-bold text-red-400 group-hover:text-white transition-colors">
-                        <span data-i18n="openLink">Ouvrir le lien</span> <i data-lucide="arrow-right" class="h-4 w-4 transform group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                </a>
+        let currentLang = 'fr';
+        function toggleLang() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            document.getElementById('langLabel').innerText = currentLang === 'fr' ? 'EN' : 'FR';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                el.innerText = i18n[currentLang][el.getAttribute('data-i18n')];
+            });
+        }
+    </script>
+</body>
+</html>
 
-                <!-- WhatsApp Channel -->
-                <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="glass rounded-[2rem] p-8 group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(37
+```
