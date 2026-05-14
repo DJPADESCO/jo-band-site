@@ -1,273 +1,305 @@
-import React, { useState } from "react"; import { motion } from "framer-motion"; import { ArrowRight, CalendarDays, ChevronRight, Disc3, Facebook, Globe2, Instagram, Mail, MapPin, Mic2, Music2, PhoneCall, Play, Send, Star, Headphones, Users, Youtube, Video, Waves, MessageCircleMore, Laugh, PartyPopper, Clapperboard, Link as LinkIcon, } from "lucide-react"; import { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { Input } from "@/components/ui/input"; import { Textarea } from "@/components/ui/textarea";
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JO BAND | Comédie • Humour • Spectacle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .hero-gradient { background: radial-gradient(circle at top, rgba(255,153,0,0.15), transparent 40%), radial-gradient(circle at bottom right, rgba(62,132,255,0.1), transparent 30%); }
+        .text-gradient { background: linear-gradient(to right, #fb923c, #fde68a, #7dd3fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-[#050814] text-white overflow-x-hidden">
 
-const LINKS = { tiktok: "https://www.tiktok.com/@jobandofficiel?_r=1&_t=ZS-96MQKFp8Yxk", youtube: "https://www.youtube.com/@JoBandofficiel", whatsappChannel: "https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C", };
+    <div class="fixed inset-0 -z-10 hero-gradient"></div>
 
-const CONTACTS = { whatsapp: "+228 97 66 80 22", call: "+228 70 00 25 39", city: "Lomé, Togo", };
-
-const team = [ { name: "Fondateur / DG", role: "Nom à confirmer" }, { name: "JOËL", role: "Adjoint / superviseur" }, { name: "DJ PADESCO", role: "DJ / remplaçant principal" }, { name: "CLAUDE", role: "Membre du groupe" }, { name: "GÉDÉON", role: "Membre du groupe" }, { name: "ESTHER", role: "Membre du groupe" }, { name: "NANA SIKA", role: "Membre du groupe" }, { name: "JEAN", role: "Membre du groupe" }, { name: "PRISCA", role: "Membre du groupe" }, { name: "MAKAFUI", role: "Membre du groupe" }, { name: "THE GACHA", role: "Membre du groupe" }, { name: "AROLE", role: "Caméra / soutien visuel" }, { name: "L&H", role: "Caméra / soutien visuel" }, ];
-
-const stats = [ { value: "13", label: "Membres" }, { value: "FR / EN", label: "Site bilingue" }, { value: "3", label: "Canaux officiels" }, ];
-
-const mediaCards = [ { title: "TikTok", text: "Extraits rapides, humour, comédie et moments forts.", icon: <Video className="h-5 w-5" />, href: LINKS.tiktok, }, { title: "YouTube", text: "Vidéos longues, performances et contenus officiels.", icon: <Youtube className="h-5 w-5" />, href: LINKS.youtube, }, { title: "Chaîne WhatsApp", text: "Suivi direct des nouveautés et annonces du groupe.", icon: <MessageCircleMore className="h-5 w-5" />, href: LINKS.whatsappChannel, }, ];
-
-const services = [ { icon: <Laugh className="h-5 w-5" />, fr: "Comédie / humour", en: "Comedy / humor" }, { icon: <PartyPopper className="h-5 w-5" />, fr: "Mariage / fête / party", en: "Weddings / parties" }, { icon: <Mic2 className="h-5 w-5" />, fr: "Animation / spectacle", en: "Hosting / stage shows" }, { icon: <Clapperboard className="h-5 w-5" />, fr: "Contenus vidéo", en: "Video content" }, ];
-
-const translations = { fr: { nav: ["Accueil", "À propos", "Médias", "Équipe", "Services", "Contact"], badge: "Groupe de comédie, humour et spectacle", title: "Partout où ça bouge, JO BAND est là", intro: "JO BAND est un groupe artistique orienté comédie, humour et animation. Le site présente le groupe, ses contenus vidéo et ses moyens de contact officiels.", ctaPrimary: "Réserver maintenant", ctaSecondary: "Voir les médias", aboutTitle: "Présentation du groupe", aboutText: "Le nom officiel est JO BAND. Le projet est pensé pour les spectacles, la comédie, l’humour, les mariages, les concerts, les parties et les animations.", mediaTitle: "Vidéos / TikTok / YouTube", mediaText: "La visibilité doit se concentrer sur TikTok et YouTube. La chaîne WhatsApp sert aussi à publier les annonces et les nouveautés.", teamTitle: "Membres de l’équipe", teamText: "L’équipe compte 13 personnes. Le nom du fondateur / DG n’est pas encore confirmé. Joël est adjoint / superviseur et DJ PADESCO remplace quand nécessaire.", servicesTitle: "Ce que JO BAND propose", servicesText: "Ces services résument l’activité du groupe et montrent clairement ce qui peut être proposé aux clients.", contactTitle: "Contact & réseaux", contactText: "Les canaux officiels sont le WhatsApp, l’appel, TikTok, YouTube et la chaîne WhatsApp.", formName: "Nom / Organisation", formContact: "Téléphone ou email", formMessage: "Décris l’événement, la date et le lieu", send: "Envoyer la demande", addPhoto: "Photo du groupe : à ajouter plus tard", city: "Ville", note: "Lomé, Togo", }, en: { nav: ["Home", "About", "Media", "Team", "Services", "Contact"], badge: "Comedy, humor, and performance group", title: "Wherever things move, JO BAND is there", intro: "JO BAND is an artistic group focused on comedy, humor, and entertainment. This site presents the group, its video content, and its official contact channels.", ctaPrimary: "Book now", ctaSecondary: "View media", aboutTitle: "About the group", aboutText: "The official name is JO BAND. The project is designed for shows, comedy, humor, weddings, concerts, parties, and hosting.", mediaTitle: "Videos / TikTok / YouTube", mediaText: "Visibility should focus on TikTok and YouTube. The WhatsApp channel is also used for announcements and updates.", teamTitle: "Team members", teamText: "The team has 13 people. The founder / CEO is not yet confirmed. Joël is the assistant / supervisor and DJ PADESCO steps in when needed.", servicesTitle: "What JO BAND offers", servicesText: "These services summarize the group’s activity and clearly show what can be offered to clients.", contactTitle: "Contact & social links", contactText: "Official channels are WhatsApp, phone calls, TikTok, YouTube, and the WhatsApp channel.", formName: "Name / Organization", formContact: "Phone or email", formMessage: "Describe the event, date, and location", send: "Send request", addPhoto: "Group photo: add later", city: "City", note: "Lomé, Togo", }, } as const;
-
-function SectionTitle({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) { return ( <div className="max-w-3xl"> <p className="mb-2 text-sm font-semibold uppercase tracking-[0.28em] text-white/55">{eyebrow}</p> <h2 className="text-3xl font-bold tracking-tight text-white md:text-4xl">{title}</h2> <p className="mt-4 text-sm leading-7 text-white/68 md:text-base">{subtitle}</p> </div> ); }
-
-export default function JoBandLandingPage() { const [lang, setLang] = useState<"fr" | "en">("fr"); const t = translations[lang];
-
-const navTargets = ["#home", "#about", "#media", "#team", "#services", "#contact"]; const socialButtons = [ { label: "TikTok", href: LINKS.tiktok, icon: <Video className="h-4 w-4" /> }, { label: "YouTube", href: LINKS.youtube, icon: <Youtube className="h-4 w-4" /> }, { label: "WhatsApp", href: LINKS.whatsappChannel, icon: <MessageCircleMore className="h-4 w-4" /> }, ];
-
-return ( <div className="min-h-screen bg-[#050814] text-white"> <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(255,153,0,0.18),transparent_36%),radial-gradient(circle_at_bottom_right,rgba(62,132,255,0.14),transparent_28%),linear-gradient(180deg,#07101f_0%,#05070c_100%)]" />
-
-<header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur-xl">
-    <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
-      <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/10">
-          <Headphones className="h-5 w-5 text-orange-300" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold tracking-[0.25em] text-white/60">JO BAND</p>
-          <p className="text-xs text-white/45">Comedy • Humor • Entertainment</p>
-        </div>
-      </div>
-
-      <nav className="hidden items-center gap-6 text-sm text-white/70 lg:flex">
-        {t.nav.map((item, index) => (
-          <a key={item} href={navTargets[index]} className="transition hover:text-white">
-            {item}
-          </a>
-        ))}
-      </nav>
-
-      <Button
-        variant="outline"
-        className="rounded-2xl border-white/15 bg-white/5 text-white hover:bg-white/10"
-        onClick={() => setLang(lang === "fr" ? "en" : "fr")}
-      >
-        <Globe2 className="mr-2 h-4 w-4" /> {lang.toUpperCase()}
-      </Button>
-    </div>
-  </header>
-
-  <main id="home" className="mx-auto max-w-7xl px-4 pb-16 pt-12 md:px-8 md:pt-16">
-    <section className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-      <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white/75 shadow-sm backdrop-blur">
-          <Star className="h-4 w-4 text-amber-300" /> {t.badge}
-        </div>
-
-        <h1 className="max-w-3xl text-5xl font-black tracking-tight text-white md:text-7xl">
-          JO BAND
-          <span className="mt-3 block bg-gradient-to-r from-orange-300 via-white to-sky-300 bg-clip-text text-transparent">
-            {t.title}
-          </span>
-        </h1>
-
-        <p className="mt-6 max-w-2xl text-base leading-7 text-white/72 md:text-lg">{t.intro}</p>
-
-        <div className="mt-8 flex flex-wrap gap-4">
-          <Button className="rounded-2xl bg-orange-400 px-6 text-slate-950 hover:bg-orange-300">
-            <CalendarDays className="mr-2 h-4 w-4" /> {t.ctaPrimary}
-          </Button>
-          <Button variant="outline" className="rounded-2xl border-white/15 bg-white/5 px-6 text-white hover:bg-white/10">
-            <Play className="mr-2 h-4 w-4" /> {t.ctaSecondary}
-          </Button>
-        </div>
-
-        <div className="mt-10 grid gap-4 sm:grid-cols-3">
-          {stats.map((item) => (
-            <Card key={item.label} className="border-white/10 bg-white/5 text-white shadow-2xl shadow-black/20 backdrop-blur">
-              <CardContent className="p-5">
-                <p className="text-3xl font-extrabold">{item.value}</p>
-                <p className="mt-1 text-sm text-white/60">{item.label}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </motion.div>
-
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.1 }} className="relative">
-        <div className="absolute -left-4 top-10 h-24 w-24 rounded-full bg-orange-400/20 blur-2xl" />
-        <div className="absolute bottom-8 right-2 h-28 w-28 rounded-full bg-sky-400/20 blur-2xl" />
-
-        <Card className="overflow-hidden border-white/10 bg-white/5 shadow-2xl shadow-black/30 backdrop-blur-2xl">
-          <CardContent className="p-0">
-            <div className="relative aspect-[4/5] bg-[linear-gradient(180deg,rgba(255,255,255,0.11),rgba(255,255,255,0.02))] p-6">
-              <div className="flex items-start justify-between gap-4">
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 border-b border-white/5 bg-black/40 backdrop-blur-xl">
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+            <div class="flex items-center gap-3">
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-500/10 ring-1 ring-white/10">
+                    <i data-lucide="headphones" class="h-5 w-5 text-orange-400"></i>
+                </div>
                 <div>
-                  <p className="text-sm font-semibold tracking-[0.25em] text-white/55">OFFICIAL PAGE</p>
-                  <h3 className="mt-2 text-2xl font-bold">JO BAND</h3>
+                    <p class="text-sm font-bold tracking-[0.2em]">JO BAND</p>
+                    <p class="text-[10px] uppercase text-white/50 tracking-widest">Show • Comedy</p>
                 </div>
-                <div className="rounded-full border border-red-400/30 bg-red-500/20 px-3 py-1 text-xs font-semibold text-red-100">
-                  LIVE
-                </div>
-              </div>
-
-              <div className="mt-6 grid h-[320px] place-items-center rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.12),rgba(255,255,255,0.03))]">
-                <div className="flex h-28 w-28 items-center justify-center rounded-full border border-white/15 bg-white/10 shadow-2xl shadow-orange-500/20">
-                  <Waves className="h-12 w-12 text-orange-200" />
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.25em] text-white/45">WhatsApp</p>
-                  <p className="mt-2 font-semibold">{CONTACTS.whatsapp}</p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.25em] text-white/45">Appel</p>
-                  <p className="mt-2 font-semibold">{CONTACTS.call}</p>
-                </div>
-              </div>
             </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </section>
 
-    <section id="about" className="mt-24 grid gap-8 lg:grid-cols-2 lg:items-start">
-      <SectionTitle eyebrow={lang === "fr" ? "À propos" : "About"} title={t.aboutTitle} subtitle={t.aboutText} />
+            <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-white/60">
+                <a href="#home" class="hover:text-white transition-colors" data-t="nav0">Accueil</a>
+                <a href="#about" class="hover:text-white transition-colors" data-t="nav1">À propos</a>
+                <a href="#media" class="hover:text-white transition-colors" data-t="nav2">Médias</a>
+                <a href="#team" class="hover:text-white transition-colors" data-t="nav3">Équipe</a>
+                <a href="#services" class="hover:text-white transition-colors" data-t="nav4">Services</a>
+                <a href="#contact" class="hover:text-white transition-colors" data-t="nav5">Contact</a>
+            </nav>
 
-      <Card className="border-white/10 bg-white/5 shadow-2xl shadow-black/20 backdrop-blur">
-        <CardContent className="p-6">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm font-semibold text-white">Slogan</p>
-              <p className="mt-2 text-sm leading-6 text-white/65">Partout où ça bouge, JO BAND est là.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm font-semibold text-white">Adresse</p>
-              <p className="mt-2 text-sm leading-6 text-white/65">{CONTACTS.city}</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5 md:col-span-2">
-              <p className="text-sm font-semibold text-white">Photo</p>
-              <p className="mt-2 text-sm leading-6 text-white/65">
-                {lang === "fr"
-                  ? "La photo du groupe n’est pas encore disponible. Cette zone pourra être remplacée par une galerie plus tard."
-                  : "The group photo is not available yet. This area can later be replaced with a gallery."}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </section>
-
-    <section id="media" className="mt-24">
-      <SectionTitle eyebrow={lang === "fr" ? "Médias" : "Media"} title={t.mediaTitle} subtitle={t.mediaText} />
-
-      <div className="mt-8 grid gap-5 md:grid-cols-3">
-        {mediaCards.map((item) => (
-          <Card key={item.title} className="border-white/10 bg-white/5 shadow-xl shadow-black/20 backdrop-blur transition hover:-translate-y-1 hover:bg-white/8">
-            <CardContent className="p-6">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-orange-200 ring-1 ring-white/10">
-                {item.icon}
-              </div>
-              <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-white/65">{item.text}</p>
-              <a
-                href={item.href}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-orange-200 hover:text-orange-100"
-              >
-                {lang === "fr" ? "Ouvrir" : "Open"} <ArrowRight className="h-4 w-4" />
-              </a>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </section>
-
-    <section className="mt-24 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-      <SectionTitle eyebrow={lang === "fr" ? "Moyens officiels" : "Official channels"} title={t.contactTitle} subtitle={t.contactText} />
-
-      <div className="grid gap-4">
-        <Card className="border-white/10 bg-white/5 shadow-xl shadow-black/20 backdrop-blur">
-          <CardContent className="p-6">
-            <div className="space-y-4 text-sm text-white/75">
-              <div className="flex items-center gap-3"><PhoneCall className="h-4 w-4 text-orange-200" /> WhatsApp: {CONTACTS.whatsapp}</div>
-              <div className="flex items-center gap-3"><PhoneCall className="h-4 w-4 text-orange-200" /> Appel: {CONTACTS.call}</div>
-              <div className="flex items-center gap-3"><MapPin className="h-4 w-4 text-orange-200" /> {CONTACTS.city}</div>
-              <div className="flex items-center gap-3"><Mail className="h-4 w-4 text-orange-200" /> Email: à ajouter</div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="grid gap-3 sm:grid-cols-3">
-          {socialButtons.map((item) => (
-            <Button key={item.label} asChild variant="outline" className="rounded-2xl border-white/15 bg-white/5 text-white hover:bg-white/10">
-              <a href={item.href} target="_blank" rel="noreferrer">
-                {item.icon}
-                <span className="ml-2">{item.label}</span>
-              </a>
-            </Button>
-          ))}
+            <button onclick="toggleLang()" class="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-xs hover:bg-white/10 transition-all">
+                <i data-lucide="globe" class="h-4 w-4"></i>
+                <span id="lang-label">FR</span>
+            </button>
         </div>
-      </div>
-    </section>
+    </header>
 
-    <section id="team" className="mt-24 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-      <SectionTitle eyebrow={lang === "fr" ? "Équipe" : "Team"} title={t.teamTitle} subtitle={t.teamText} />
+    <main class="mx-auto max-w-7xl px-6 pb-20 pt-16">
+        <!-- Hero Section -->
+        <section id="home" class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-orange-500/20 bg-orange-500/10 text-xs font-semibold text-orange-200 mb-8">
+                    <i data-lucide="star" class="h-4 w-4 fill-orange-200"></i>
+                    <span data-t="badge">Groupe de comédie, humour et spectacle</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6">
+                    JO BAND <br>
+                    <span class="text-gradient" data-t="title">Partout où ça bouge, JO BAND est là</span>
+                </h1>
+                <p class="text-white/70 text-lg leading-relaxed max-w-xl mb-10" data-t="intro">
+                    JO BAND est un groupe artistique orienté comédie, humour et animation. Nous apportons la magie à vos événements officiels et privés.
+                </p>
+                <div class="flex flex-wrap gap-4 mb-12">
+                    <a href="#contact" class="flex items-center gap-2 px-8 py-4 rounded-2xl bg-orange-500 font-bold text-white hover:bg-orange-400 transition-all shadow-lg shadow-orange-500/20">
+                        <i data-lucide="calendar-days" class="h-5 w-5"></i>
+                        <span data-t="ctaPrimary">Réserver maintenant</span>
+                    </a>
+                    <a href="#media" class="flex items-center gap-2 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 font-bold hover:bg-white/10 transition-all">
+                        <i data-lucide="play" class="h-5 w-5"></i>
+                        <span data-t="ctaSecondary">Voir les médias</span>
+                    </a>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="glass p-5 rounded-3xl">
+                        <p class="text-3xl font-black text-white">13</p>
+                        <p class="text-xs font-medium text-white/50 uppercase tracking-widest mt-1" data-t="statM">Membres</p>
+                    </div>
+                    <div class="glass p-5 rounded-3xl">
+                        <p class="text-3xl font-black text-white">FR/EN</p>
+                        <p class="text-xs font-medium text-white/50 uppercase tracking-widest mt-1" data-t="statB">Bilingue</p>
+                    </div>
+                    <div class="glass p-5 rounded-3xl">
+                        <p class="text-3xl font-black text-white">Lomé</p>
+                        <p class="text-xs font-medium text-white/50 uppercase tracking-widest mt-1">Togo</p>
+                    </div>
+                </div>
+            </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        {team.map((person) => (
-          <Card key={person.name} className="border-white/10 bg-white/5 shadow-xl shadow-black/20 backdrop-blur">
-            <CardContent className="p-5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/10">
-                <Users className="h-5 w-5 text-orange-200" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold text-white">{person.name}</h3>
-              <p className="mt-1 text-sm text-white/60">{person.role}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </section>
+            <!-- Visual Card -->
+            <div class="relative reveal" style="transition-delay: 0.2s">
+                <div class="glass rounded-[2.5rem] p-1 relative overflow-hidden shadow-2xl">
+                    <div class="bg-black/60 p-8 rounded-[2.2rem]">
+                        <div class="flex justify-between items-start mb-8">
+                            <div>
+                                <p class="text-[10px] font-bold text-white/40 tracking-[0.3em] uppercase">Official Hub</p>
+                                <h3 class="text-2xl font-black mt-1">JO BAND</h3>
+                            </div>
+                            <span class="px-3 py-1 bg-red-500/20 border border-red-500/30 text-red-400 text-[10px] font-bold tracking-widest animate-pulse rounded-full uppercase">Live Now</span>
+                        </div>
+                        <div class="aspect-video bg-gradient-to-br from-white/10 to-transparent rounded-3xl flex items-center justify-center border border-white/10 mb-8">
+                            <i data-lucide="waves" class="h-16 w-16 text-orange-400/50"></i>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="glass p-4 rounded-2xl bg-white/5">
+                                <p class="text-[9px] uppercase tracking-widest text-white/40 mb-1">WhatsApp</p>
+                                <p class="text-sm font-bold">+228 97 66 80 22</p>
+                            </div>
+                            <div class="glass p-4 rounded-2xl bg-white/5">
+                                <p class="text-[9px] uppercase tracking-widest text-white/40 mb-1">Appel</p>
+                                <p class="text-sm font-bold">+228 70 00 25 39</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section id="services" className="mt-24">
-      <SectionTitle eyebrow={lang === "fr" ? "Services" : "Services"} title={t.servicesTitle} subtitle={t.servicesText} />
+        <!-- About Section -->
+        <section id="about" class="mt-32 reveal">
+            <p class="text-orange-400 text-xs font-bold uppercase tracking-[0.3em] mb-4" data-t="aboutEyebrow">À propos</p>
+            <div class="grid lg:grid-cols-2 gap-12">
+                <h2 class="text-4xl font-black" data-t="aboutTitle">Présentation du groupe</h2>
+                <div class="glass p-8 rounded-3xl">
+                    <p class="text-white/70 leading-relaxed" data-t="aboutText">
+                        JO BAND est né d'une passion pour le spectacle. Nous intervenons dans les mariages, concerts, fêtes privées et animations commerciales. Notre objectif est d'apporter l'humour et l'énergie partout où nous passons.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-      <div className="mt-8 grid gap-5 md:grid-cols-4">
-        {services.map((service) => (
-          <Card key={service.fr} className="border-white/10 bg-white/5 shadow-xl shadow-black/20 backdrop-blur transition hover:-translate-y-1 hover:bg-white/8">
-            <CardContent className="p-6">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-orange-200 ring-1 ring-white/10">
-                {service.icon}
-              </div>
-              <h3 className="text-lg font-semibold text-white">{lang === "fr" ? service.fr : service.en}</h3>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </section>
+        <!-- Media Section -->
+        <section id="media" class="mt-32 reveal">
+            <p class="text-orange-400 text-xs font-bold uppercase tracking-[0.3em] mb-4">Médias</p>
+            <h2 class="text-4xl font-black mb-12" data-t="mediaTitle">Vidéos & Réseaux</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- TikTok -->
+                <a href="https://www.tiktok.com/@jobandofficiel?_r=1&_t=ZS-96MQKFp8Yxk" target="_blank" class="glass p-8 rounded-[2rem] hover:bg-white/10 transition-all group">
+                    <div class="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="video" class="text-orange-300"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">TikTok</h3>
+                    <p class="text-sm text-white/50 mb-6" data-t="mediaT">Extraits rapides, humour et moments forts du groupe.</p>
+                    <span class="text-xs font-bold text-orange-400 flex items-center gap-2">Ouvrir <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                </a>
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/@JoBandofficiel" target="_blank" class="glass p-8 rounded-[2rem] hover:bg-white/10 transition-all group">
+                    <div class="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="youtube" class="text-orange-300"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">YouTube</h3>
+                    <p class="text-sm text-white/50 mb-6" data-t="mediaY">Performances complètes et productions officielles.</p>
+                    <span class="text-xs font-bold text-orange-400 flex items-center gap-2">Ouvrir <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                </a>
+                <!-- WhatsApp -->
+                <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="glass p-8 rounded-[2rem] hover:bg-white/10 transition-all group">
+                    <div class="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="message-circle" class="text-orange-300"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Canal WhatsApp</h3>
+                    <p class="text-sm text-white/50 mb-6" data-t="mediaW">Suivi direct des nouveautés et annonces exclusives.</p>
+                    <span class="text-xs font-bold text-orange-400 flex items-center gap-2">Ouvrir <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                </a>
+            </div>
+        </section>
 
-    <section id="contact" className="mt-24 grid gap-8 lg:grid-cols-2">
-      <Card className="border-white/10 bg-white/5 shadow-2xl shadow-black/20 backdrop-blur">
-        <CardContent className="p-6">
-          <SectionTitle
-            eyebrow={lang === "fr" ? "Réservation" : "Booking"}
-            title={lang === "fr" ? "Formulaire de demande" : "Request form"}
-            subtitle={lang === "fr" ? "Envoie les détails de ton événement." : "Send your event details."}
-          />
+        <!-- Team Section -->
+        <section id="team" class="mt-32 reveal">
+            <p class="text-orange-400 text-xs font-bold uppercase tracking-[0.3em] mb-4">L'Équipe</p>
+            <h2 class="text-4xl font-black mb-12" data-t="teamTitle">Les visages derrière JO BAND</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="team-grid">
+                <!-- JS will populate some or we keep main ones -->
+            </div>
+        </section>
 
-          <div className="mt-8 grid gap-4">
-            <Input placeholder={t.formName} className="border-white/10 bg-black/20 text-white placeholder:text-white/35" />
-            <Input placeholder={t.formContact} className="border-white/10 bg-black/20 text-white placeholder:text-white/35" />
-            <Textarea placeholder={t.formMessage} className="min-h-32 border-white/10 bg-black/20 text-white placeholder:text-white/35" />
-            <Button className="rounded-2xl bg-orange-400 text-slate-950 hover:bg-orange-300">
-              <Send className="mr-2 h-4 w-4" /> {t.send}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+        <!-- Services Section -->
+        <section id="services" class="mt-32 reveal">
+            <p class="text-orange-400 text-xs font-bold uppercase tracking-[0.3em] mb-4">Services</p>
+            <h2 class="text-4xl font-black mb-12" data-t="servicesTitle">Ce que nous proposons</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="glass p-6 text-center rounded-3xl">
+                    <i data-lucide="laugh" class="h-10 w-10 mx-auto mb-4 text-orange-400"></i>
+                    <h4 class="font-bold text-sm uppercase tracking-wider" data-t="s1">Comédie</h4>
+                </div>
+                <div class="glass p-6 text-center rounded-3xl">
+                    <i data-lucide="party-popper" class="h-10 w-10 mx-auto mb-4 text-orange-400"></i>
+                    <h4 class="font-bold text-sm uppercase tracking-wider" data-t="s2">Mariage</h4>
+                </div>
+                <div class="glass p-6 text-center rounded-3xl">
+                    <i data-lucide="mic-2" class="h-10 w-10 mx-auto mb-4 text-orange-400"></i>
+                    <h4 class="font-bold text-sm uppercase tracking-wider" data-t="s3">Animation</h4>
+                </div>
+                <div class="glass p-6 text-center rounded-3xl">
+                    <i data-lucide="clapperboard" class="h-10 w-10 mx-auto mb-4 text-orange-400"></i>
+                    <h4 class="font-bold text-sm uppercase tracking-wider" data-t="s4">Vidéo</h4>
+                </div>
+            </div>
+        </section>
 
-      <Card className="border-white/10 bg-white/5 shadow-2xl shadow-black/20 backdrop-blur">
-        <CardContent className="p-6">
-          <h3 className="text-xl font-semibold text-white">Liens directs</h3>
-          <div className="mt-5 grid gap-3">
-            <a href={LINKS.tiktok} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/75 hover:bg-white/5">
-              <span className="flex items-center gap-2"><Video className="h-4 w-4 text-orange-200" /> TikTok</span>
-              <ChevronRight classN
+        <!-- Contact Section -->
+        <section id="contact" class="mt-32 grid lg:grid-cols-2 gap-12 reveal">
+            <div>
+                <h2 class="text-4xl font-black mb-6" data-t="contactTitle">Contactez-nous</h2>
+                <p class="text-white/60 mb-10" data-t="contactText">Envoyez les détails de votre événement pour une cotation rapide.</p>
+                <div class="glass p-8 rounded-3xl space-y-6">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="phone" class="h-5 w-5 text-orange-400"></i>
+                        <span>+228 97 66 80 22 / 70 00 25 39</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="map-pin" class="h-5 w-5 text-orange-400"></i>
+                        <span>Lomé, Togo</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="mail" class="h-5 w-5 text-orange-400"></i>
+                        <span>jobandofficiel@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+
+            <form class="glass p-8 rounded-3xl space-y-4" onsubmit="event.preventDefault()">
+                <input type="text" placeholder="Nom complet" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors" data-t="pName">
+                <input type="text" placeholder="Contact (WhatsApp ou Email)" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors" data-t="pContact">
+                <textarea placeholder="Décrivez votre événement (Date, Lieu, Heure)" rows="4" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors" data-t="pMsg"></textarea>
+                <button class="w-full py-4 bg-orange-500 rounded-xl font-bold hover:bg-orange-400 transition-all shadow-lg shadow-orange-500/20" data-t="send">Envoyer la demande</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="py-12 border-t border-white/5 bg-black/40 backdrop-blur-md text-center">
+        <p class="text-white/30 text-xs font-medium uppercase tracking-widest">© 2026 JO BAND. TOUS DROITS RÉSERVÉS.</p>
+    </footer>
+
+    <script>
+        // Initialisation des icônes
+        lucide.createIcons();
+
+        // Gestion des traductions
+        let currentLang = 'fr';
+        const translations = {
+            fr: {
+                nav0: "Accueil", nav1: "À propos", nav2: "Médias", nav3: "Équipe", nav4: "Services", nav5: "Contact",
+                badge: "Groupe de comédie, humour et spectacle",
+                title: "Partout où ça bouge, JO BAND est là",
+                intro: "JO BAND est un groupe artistique orienté comédie, humour et animation. Nous apportons la magie à vos événements officiels et privés.",
+                ctaPrimary: "Réserver maintenant", ctaSecondary: "Voir les médias",
+                statM: "Membres", statB: "Bilingue",
+                aboutEyebrow: "À propos", aboutTitle: "Présentation du groupe",
+                aboutText: "JO BAND est né d'une passion pour le spectacle. Nous intervenons dans les mariages, concerts, fêtes privées et animations commerciales. Notre objectif est d'apporter l'humour et l'énergie partout où nous passons.",
+                mediaTitle: "Vidéos & Réseaux",
+                mediaT: "Extraits rapides, humour et moments forts du groupe.",
+                mediaY: "Performances complètes et productions officielles.",
+                mediaW: "Suivi direct des nouveautés et annonces exclusives.",
+                teamTitle: "Les visages derrière JO BAND",
+                servicesTitle: "Ce que nous proposons",
+                s1: "Comédie", s2: "Mariage", s3: "Animation", s4: "Vidéo",
+                contactTitle: "Contactez-nous", contactText: "Envoyez les détails de votre événement pour une cotation rapide.",
+                pName: "Nom complet", pContact: "Contact (WhatsApp ou Email)", pMsg: "Décrivez votre événement (Date, Lieu, Heure)",
+                send: "Envoyer la demande"
+            },
+            en: {
+                nav0: "Home", nav1: "About", nav2: "Media", nav3: "Team", nav4: "Services", nav5: "Contact",
+                badge: "Comedy, humor, and performance group",
+                title: "Wherever things move, JO BAND is there",
+                intro: "JO BAND is an artistic group focused on comedy, humor, and entertainment. We bring magic to your official and private events.",
+                ctaPrimary: "Book Now", ctaSecondary: "Watch Media",
+                statM: "Members", statB: "Bilingual",
+                aboutEyebrow: "About Us", aboutTitle: "About the Group",
+                aboutText: "JO BAND was born from a passion for performance. We work at weddings, concerts, private parties, and commercial animations. Our goal is to bring humor and energy wherever we go.",
+                mediaTitle: "Videos & Social",
+                mediaT: "Quick clips, humor, and group highlights.",
+                mediaY: "Full performances and official productions.",
+                mediaW: "Direct follow-up on news and exclusive announcements.",
+                teamTitle: "The Faces Behind JO BAND",
+                servicesTitle: "What We Offer",
+                s1: "Comedy", s2: "Wedding", s3: "Hosting", s4: "Video",
+                contactTitle: "Contact Us", contactText: "Send your event details for a quick quote.",
+                pName: "Full Name", pContact: "Contact (WhatsApp or Email)", pMsg: "Describe your event (Date, Location, Time)",
+                send: "Send Request"
+            }
+        };
+
+        function toggleLang() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            document.getElementById('lang-label').textContent = currentLang.toUpperCase();
+            updateUI();
+        }
+
+        function updateUI() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = t[key];
+                } else {
+                    el.textContent = t[key];
+                }
+            });
+        }
+
+        // Equipe
+        const members = [
