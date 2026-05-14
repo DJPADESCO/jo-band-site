@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JO BAND | Partout où ça bouge, JO BAND est là</title>
     
-    <!-- Tailwind CSS via CDN pour le design sans processus de build -->
+    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- FontAwesome pour les icônes -->
@@ -51,14 +51,29 @@
             background-clip: text;
         }
 
-        /* Système de traduction CSS (Géré par JS) */
+        /* Système de traduction CSS */
         .lang-en-content { display: none; }
         body.lang-en .lang-fr-content { display: none !important; }
         body.lang-en .lang-en-content { display: block !important; }
         
-        /* Pour les éléments en ligne (span) */
         span.lang-en-content { display: none; }
         body.lang-en span.lang-en-content { display: inline !important; }
+
+        /* Classes pour les animations au défilement (Scroll) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Désactiver le scroll quand le pop-up est ouvert */
+        body.modal-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="antialiased relative">
@@ -70,7 +85,7 @@
     </div>
 
     <!-- En-tête / Navigation -->
-    <header class="fixed top-0 w-full z-50 border-b border-white/10 bg-black/40 backdrop-blur-md">
+    <header class="fixed top-0 w-full z-40 border-b border-white/10 bg-black/40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-brand-orange">
@@ -84,25 +99,25 @@
 
             <!-- Navigation Desktop -->
             <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
-                <a href="#accueil" class="hover:text-white transition">
+                <a href="#accueil" class="hover:text-white transition active:scale-95">
                     <span class="lang-fr-content">Accueil</span><span class="lang-en-content">Home</span>
                 </a>
-                <a href="#apropos" class="hover:text-white transition">
-                    <span class="lang-fr-content">À propos</span><span class="lang-en-content">About</span>
+                <a href="#services" class="hover:text-white transition active:scale-95">
+                    <span class="lang-fr-content">Services</span><span class="lang-en-content">Services</span>
                 </a>
-                <a href="#medias" class="hover:text-white transition">
+                <a href="#medias" class="hover:text-white transition active:scale-95">
                     <span class="lang-fr-content">Médias</span><span class="lang-en-content">Media</span>
                 </a>
-                <a href="#equipe" class="hover:text-white transition">
+                <a href="#equipe" class="hover:text-white transition active:scale-95">
                     <span class="lang-fr-content">L'Équipe</span><span class="lang-en-content">Team</span>
                 </a>
-                <a href="#contact" class="hover:text-white transition">
+                <a href="#contact" class="hover:text-white transition active:scale-95">
                     <span class="lang-fr-content">Contact</span><span class="lang-en-content">Contact</span>
                 </a>
             </nav>
 
             <!-- Bouton Langue -->
-            <button id="langToggle" class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 transition text-sm flex items-center gap-2">
+            <button id="langToggle" class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 transition active:scale-95 text-sm flex items-center gap-2">
                 <i class="fa-solid fa-globe"></i>
                 <span id="currentLangBtn">EN</span>
             </button>
@@ -131,23 +146,23 @@
                 </p>
                 
                 <div class="flex flex-wrap gap-4">
-                    <a href="#contact" class="px-8 py-4 rounded-2xl bg-brand-orange text-black font-bold hover:bg-orange-300 transition flex items-center gap-2">
+                    <a href="#contact" class="px-8 py-4 rounded-2xl bg-brand-orange text-black font-bold hover:bg-orange-300 transition active:scale-95 flex items-center gap-2 shadow-lg shadow-orange-500/20">
                         <i class="fa-solid fa-calendar-check"></i>
                         <span class="lang-fr-content">Réserver maintenant</span>
                         <span class="lang-en-content">Book Now</span>
                     </a>
-                    <a href="#medias" class="px-8 py-4 rounded-2xl border border-white/20 bg-white/5 hover:bg-white/10 transition font-bold flex items-center gap-2 glass-card">
+                    <!-- BOUTON VIDEOS MODIFIÉ -->
+                    <button onclick="openVideoModal()" class="px-8 py-4 rounded-2xl border border-white/20 bg-white/5 hover:bg-white/10 transition active:scale-95 font-bold flex items-center gap-2 glass-card">
                         <i class="fa-solid fa-play"></i>
                         <span class="lang-fr-content">Voir nos vidéos</span>
                         <span class="lang-en-content">Watch Videos</span>
-                    </a>
+                    </button>
                 </div>
             </div>
             
             <div class="relative">
                 <div class="glass-card p-6 rounded-3xl relative z-10">
                     <div class="aspect-square rounded-2xl bg-[rgba(255,255,255,0.02)] border border-white/10 flex flex-col items-center justify-center text-center p-6 relative overflow-hidden">
-                        <!-- Décoration visuelle pour remplacer la photo manquante pour l'instant -->
                         <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
                         <i class="fa-solid fa-users text-6xl text-white/20 mb-4"></i>
                         <h3 class="text-xl font-bold mb-2">
@@ -160,26 +175,27 @@
                         </p>
                     </div>
                     
-                    <div class="mt-6 grid grid-cols-2 gap-4">
-                        <div class="bg-black/40 p-4 rounded-xl border border-white/10 text-center">
-                            <p class="text-xs uppercase text-white/50 mb-1">WhatsApp</p>
-                            <p class="font-bold text-brand-orange">+228 97 66 80 22</p>
+                    <!-- Numéros de téléphone fusionnés -->
+                    <div class="mt-6 bg-black/40 p-4 rounded-xl border border-white/10 text-center">
+                        <div class="flex justify-center gap-3 mb-2 text-white/50">
+                            <i class="fa-brands fa-whatsapp text-green-400"></i>
+                            <i class="fa-solid fa-phone text-blue-400"></i>
+                            <i class="fa-solid fa-message text-white"></i>
                         </div>
-                        <div class="bg-black/40 p-4 rounded-xl border border-white/10 text-center">
-                            <p class="text-xs uppercase text-white/50 mb-1">
-                                <span class="lang-fr-content">Appel direct</span>
-                                <span class="lang-en-content">Direct Call</span>
-                            </p>
-                            <p class="font-bold text-brand-blue">+228 70 00 25 39</p>
-                        </div>
+                        <p class="text-xs uppercase text-white/50 mb-2">
+                            <span class="lang-fr-content">Contact direct (Appel & WhatsApp)</span>
+                            <span class="lang-en-content">Direct Contact (Call & WhatsApp)</span>
+                        </p>
+                        <p class="font-bold text-brand-orange">+228 97 66 80 21</p>
+                        <p class="font-bold text-brand-blue">+228 70 00 25 39</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION SERVICES -->
+        <!-- SECTION SERVICES (Avec Animation Reveal) -->
         <section id="services" class="max-w-7xl mx-auto px-4 md:px-8 py-16">
-            <div class="mb-12">
+            <div class="mb-12 reveal">
                 <p class="text-sm font-bold uppercase tracking-widest text-brand-orange mb-2">Nos Services</p>
                 <h3 class="text-3xl font-bold">
                     <span class="lang-fr-content">Ce que JO BAND propose</span>
@@ -189,7 +205,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Service 1 -->
-                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition duration-300">
+                <div class="glass-card p-6 rounded-2xl transition duration-300 reveal">
                     <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl mb-4 text-white">
                         <i class="fa-solid fa-face-laugh-squint"></i>
                     </div>
@@ -203,7 +219,7 @@
                     </p>
                 </div>
                 <!-- Service 2 -->
-                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition duration-300">
+                <div class="glass-card p-6 rounded-2xl transition duration-300 reveal" style="transition-delay: 100ms;">
                     <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl mb-4 text-white">
                         <i class="fa-solid fa-ring"></i>
                     </div>
@@ -217,7 +233,7 @@
                     </p>
                 </div>
                 <!-- Service 3 -->
-                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition duration-300">
+                <div class="glass-card p-6 rounded-2xl transition duration-300 reveal" style="transition-delay: 200ms;">
                     <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl mb-4 text-white">
                         <i class="fa-solid fa-microphone-lines"></i>
                     </div>
@@ -231,7 +247,7 @@
                     </p>
                 </div>
                 <!-- Service 4 -->
-                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition duration-300">
+                <div class="glass-card p-6 rounded-2xl transition duration-300 reveal" style="transition-delay: 300ms;">
                     <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl mb-4 text-white">
                         <i class="fa-solid fa-video"></i>
                     </div>
@@ -248,7 +264,7 @@
         </section>
 
         <!-- SECTION MEDIAS -->
-        <section id="medias" class="max-w-7xl mx-auto px-4 md:px-8 py-16">
+        <section id="medias" class="max-w-7xl mx-auto px-4 md:px-8 py-16 reveal">
             <div class="mb-12">
                 <p class="text-sm font-bold uppercase tracking-widest text-brand-blue mb-2">Réseaux Sociaux</p>
                 <h3 class="text-3xl font-bold">
@@ -259,7 +275,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- TikTok -->
-                <a href="https://www.tiktok.com/@jobandofficiel?_r=1&_t=ZS-96MQKFp8Yxk" target="_blank" rel="noopener noreferrer" class="glass-card p-8 rounded-3xl flex flex-col items-center text-center hover:bg-white/10 transition group">
+                <a href="https://www.tiktok.com/@jobandofficiel?_r=1&_t=ZS-96MQKFp8Yxk" target="_blank" rel="noopener noreferrer" class="active:scale-95 glass-card p-8 rounded-3xl flex flex-col items-center text-center hover:bg-white/10 transition group">
                     <i class="fa-brands fa-tiktok text-5xl mb-4 group-hover:scale-110 transition"></i>
                     <h4 class="text-xl font-bold mb-2">TikTok</h4>
                     <p class="text-sm text-white/60 mb-6">
@@ -270,7 +286,7 @@
                 </a>
                 
                 <!-- YouTube -->
-                <a href="https://www.youtube.com/@JoBandofficiel" target="_blank" rel="noopener noreferrer" class="glass-card p-8 rounded-3xl flex flex-col items-center text-center hover:bg-white/10 transition group">
+                <a href="https://www.youtube.com/@JoBandofficiel" target="_blank" rel="noopener noreferrer" class="active:scale-95 glass-card p-8 rounded-3xl flex flex-col items-center text-center hover:bg-white/10 transition group">
                     <i class="fa-brands fa-youtube text-5xl text-red-500 mb-4 group-hover:scale-110 transition"></i>
                     <h4 class="text-xl font-bold mb-2">YouTube</h4>
                     <p class="text-sm text-white/60 mb-6">
@@ -281,11 +297,11 @@
                 </a>
 
                 <!-- WhatsApp Channel -->
-                <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" rel="noopener noreferrer" class="glass-card p-8 rounded-3xl flex flex-col items-center text-center hover:bg-white/10 transition group">
+                <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" rel="noopener noreferrer" class="active:scale-95 glass-card p-8 rounded-3xl flex flex-col items-center text-center hover:bg-white/10 transition group">
                     <i class="fa-brands fa-whatsapp text-5xl text-green-400 mb-4 group-hover:scale-110 transition"></i>
                     <h4 class="text-xl font-bold mb-2">Chaîne WhatsApp</h4>
                     <p class="text-sm text-white/60 mb-6">
-                        <span class="lang-fr-content">Rejoignez la communauté pour les annonces et actus exclusives.</span>
+                        <span class="lang-fr-content">Rejoignez la communauté pour annonces et actus exclusives.</span>
                         <span class="lang-en-content">Join the community for exclusive announcements and news.</span>
                     </p>
                     <span class="mt-auto px-6 py-2 rounded-full border border-white/20 text-sm">Rejoindre / Join</span>
@@ -294,7 +310,7 @@
         </section>
 
         <!-- SECTION EQUIPE -->
-        <section id="equipe" class="max-w-7xl mx-auto px-4 md:px-8 py-16">
+        <section id="equipe" class="max-w-7xl mx-auto px-4 md:px-8 py-16 reveal">
             <div class="mb-12">
                 <p class="text-sm font-bold uppercase tracking-widest text-white/50 mb-2">Notre Force</p>
                 <h3 class="text-3xl font-bold">
@@ -303,14 +319,13 @@
                 </h3>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <!-- JS Générera la liste ici pour garder le HTML propre -->
-                <div id="team-grid" class="contents"></div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="team-grid">
+                <!-- Généré par JS -->
             </div>
         </section>
 
         <!-- SECTION CONTACT -->
-        <section id="contact" class="max-w-7xl mx-auto px-4 md:px-8 py-16">
+        <section id="contact" class="max-w-7xl mx-auto px-4 md:px-8 py-16 reveal">
             <div class="glass-card rounded-3xl p-8 md:p-12">
                 <div class="grid lg:grid-cols-2 gap-12">
                     <div>
@@ -319,25 +334,17 @@
                             <span class="lang-en-content">Ready to set the vibe?</span>
                         </h3>
                         <p class="text-white/60 mb-8">
-                            <span class="lang-fr-content">Contactez-nous directement par téléphone ou WhatsApp pour réserver JO BAND pour votre prochain événement à Lomé (Togo) ou ailleurs.</span>
-                            <span class="lang-en-content">Contact us directly by phone or WhatsApp to book JO BAND for your next event in Lomé (Togo) or elsewhere.</span>
+                            <span class="lang-fr-content">Contactez-nous pour réserver JO BAND pour votre événement à Lomé (Togo) ou ailleurs.</span>
+                            <span class="lang-en-content">Contact us to book JO BAND for your event in Lomé (Togo) or elsewhere.</span>
                         </p>
 
-                        <div class="space-y-6">
-                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-black/30 border border-white/10">
-                                <div class="w-12 h-12 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xl">
-                                    <i class="fa-brands fa-whatsapp"></i>
+                        <!-- Infos de Contact mises à jour -->
+                        <div class="space-y-4">
+                            <div class="p-5 rounded-2xl bg-black/30 border border-white/10">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fa-brands fa-whatsapp text-green-400"></i>
+                                    <i class="fa-solid fa-phone text-blue-400"></i>
+                                    <span class="text-sm font-bold">Contact 1</span>
                                 </div>
-                                <div>
-                                    <p class="text-sm text-white/50">WhatsApp Officiel</p>
-                                    <p class="font-bold text-lg">+228 97 66 80 22</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-black/30 border border-white/10">
-                                <div class="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
-                                    <i class="fa-solid fa-phone"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-white/50">Appel Direct</p>
-         
+                                <p class="text-xl font-bold text-white">+228 97 66 80 21</p>
+ 
