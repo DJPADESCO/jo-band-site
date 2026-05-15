@@ -1,0 +1,56 @@
+/* Polices et Bases */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.logo {
+    font-family: 'Syncopate', sans-serif;
+}
+
+/* Effets Premium */
+.nav-glass {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vw;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.section-title {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.5em;
+    color: rgba(255, 255, 255, 0.3);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* Cartes Membres */
+.member-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 2rem 1.5rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.member-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(249, 115, 22, 0.5);
+    transform: translateY(-10px);
+}
+
+.padesco-special {
+    background: linear-gradient(145deg, rgba(249, 115, 22, 0.1), rgba(0, 0, 0, 0));
+    border-color: rgba(249, 115, 22, 0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
