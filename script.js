@@ -5,58 +5,66 @@
 const performers = [
   {
     name: "DJ PADESCO",
-    role: "Comédien, Vidéaste & DJ",
+    role: "Comédien, vidéaste & DJ",
     tag: "POLYVALENT",
     icon: "fa-headphones",
     special: true
   },
   {
     name: "NANA SIKA",
-    role: "Comédien & Vidéaste",
+    role: "Comédien & vidéaste",
     tag: "ARTISTE",
-    icon: "fa-video"
+    icon: "fa-video",
+    special: false
   },
   {
     name: "CLAUDE",
     role: "Humoriste",
     tag: "HUMOUR",
-    icon: "fa-face-laugh"
+    icon: "fa-face-laugh",
+    special: false
   },
   {
     name: "GÉDÉON",
-    role: "Humoriste & Danseur",
+    role: "Humoriste & danseur",
     tag: "DANSE / HUMOUR",
-    icon: "fa-person-running"
+    icon: "fa-person-running",
+    special: false
   },
   {
     name: "ESTHER",
     role: "Humoriste",
     tag: "HUMOUR",
-    icon: "fa-masks-theater"
+    icon: "fa-masks-theater",
+    special: false
   },
   {
     name: "PRISCA",
     role: "Humoriste",
     tag: "HUMOUR",
-    icon: "fa-face-smile"
+    icon: "fa-face-smile",
+    special: false
   },
   {
     name: "MAKAFUI",
     role: "Artiste",
     tag: "ARTISTE",
-    icon: "fa-star"
+    icon: "fa-star",
+    special: false
   },
   {
     name: "JEAN",
-    role: "Humoriste & Artiste chanteur",
+    role: "Humoriste & artiste chanteur",
     tag: "CHANT",
-    icon: "fa-microphone-lines"
+    icon: "fa-microphone-lines",
+    special: false
   },
   {
     name: "THE GACHA",
-    role: "Humoriste & Artiste chanteur",
+    role: "Humoriste & artiste chanteur",
     tag: "CHANT",
-    icon: "fa-music"
+    icon: "fa-music",
+    special: false
   }
 ];
 
@@ -65,22 +73,25 @@ const staff = [
     name: "JOËL",
     role: "Superviseur",
     tag: "STAFF",
-    icon: "fa-user-tie"
+    icon: "fa-user-tie",
+    special: false
   },
   {
     name: "DG À CONFIRMER",
     role: "Fondateur",
     tag: "DIRECTION",
-    icon: "fa-crown"
+    icon: "fa-crown",
+    special: false
   }
 ];
 
 const cameraTeam = [
   {
     name: "AROLE & L&H",
-    role: "Équipe Caméra / Visuel",
+    role: "Équipe caméra / visuel",
     tag: "VISUEL",
-    icon: "fa-camera-retro"
+    icon: "fa-camera-retro",
+    special: false
   }
 ];
 
@@ -90,8 +101,7 @@ const cameraTeam = [
 
 function createMemberCard(member) {
   return `
-    <div class="member-card ${member.special ? 'padesco-special' : ''}">
-      
+    <div class="member-card ${member.special ? "padesco-special" : ""}">
       <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-5 text-orange-500">
         <i class="fa-solid ${member.icon} text-xl"></i>
       </div>
@@ -112,46 +122,34 @@ function createMemberCard(member) {
 }
 
 // ===============================
-// AFFICHER L'ÉQUIPE
+// AFFICHER L'EQUIPE
 // ===============================
 
 function renderTeam() {
   const container = document.getElementById("team-container");
-
   if (!container) return;
 
   container.innerHTML = `
-    
     <div class="team-category">
-      <h3 class="team-category-title">
-        Artistes / Humoristes
-      </h3>
-
+      <h3 class="team-category-title">Artistes / Humoristes</h3>
       <div class="team-grid">
         ${performers.map(createMemberCard).join("")}
       </div>
     </div>
 
     <div class="team-category">
-      <h3 class="team-category-title">
-        Direction / Supervision
-      </h3>
-
+      <h3 class="team-category-title">Direction / Supervision</h3>
       <div class="team-grid">
         ${staff.map(createMemberCard).join("")}
       </div>
     </div>
 
     <div class="team-category">
-      <h3 class="team-category-title">
-        Caméra / Visuel
-      </h3>
-
+      <h3 class="team-category-title">Caméra / Visuel</h3>
       <div class="team-grid">
         ${cameraTeam.map(createMemberCard).join("")}
       </div>
     </div>
-
   `;
 }
 
