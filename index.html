@@ -3,26 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JO BAND - Équipe</title>
-    <!-- CDN Public pour FontAwesome (icônes) -->
+    <title>JO BAND - Partout où ça bouge, nous sommes là</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <section class="team-section">
-        <h2 class="team-section-title">L'ÉQUIPE JO BAND</h2>
-        <p class="team-subtitle">Découvrez les talents créatifs, humoristes et l'équipe technique qui font vivre notre univers.</p>
-        
-        <!-- NOUVELLE FONCTIONNALITÉ : Barre de recherche -->
-        <div class="search-container">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="search-input" placeholder="Rechercher un membre par nom, rôle ou tag...">
-        </div>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <a href="#home"><img src="logo.jpg" alt="JO BAND Logo" class="site-logo"></a>
+            </div>
+            
+            <nav class="desktop-nav">
+                <a href="#about" data-key="nav-about">Histoire</a>
+                <a href="#services" data-key="nav-services">Prestations</a>
+                <a href="#team" data-key="nav-team">L'Équipe</a>
+                <a href="#contact" data-key="nav-contact">Contact</a>
+            </nav>
 
-        <!-- Conteneur principal généré par JavaScript -->
-        <div id="team-container"></div>
+            <div class="lang-switcher">
+                <button id="btn-fr" class="active">FR</button>
+                <button id="btn-en">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="hero-section">
+        <h1 data-key="hero-title">JO BAND</h1>
+        <p class="slogan">"Partout où ça bouge, Jo Band est là."</p>
+        <p class="description" data-key="hero-subtitle">Le collectif d'artistes qui donne de la joie à vos événements.</p>
+        
+        <div class="social-links">
+            <a href="https://www.youtube.com/@JoBandofficiel" target="_blank" class="social-btn youtube"><i class="fa-brands fa-youtube"></i> YouTube</a>
+            <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="social-btn tiktok"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+            <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> Chaîne</a>
+        </div>
     </section>
+
+    <section id="about" class="about-section">
+        <h2 data-key="about-title">Notre Histoire</h2>
+        <div class="tts-container">
+            <button id="btn-speak" class="tts-btn">
+                <i class="fa-solid fa-volume-high"></i> <span data-key="btn-listen">Écouter</span>
+            </button>
+        </div>
+        <p id="about-text" data-key="about-text" class="about-content"></p>
+    </section>
+
+    <section id="services" class="services-section">
+        <h2 class="section-title" data-key="services-title">Nos Prestations</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fa-solid fa-champagne-glasses service-icon"></i>
+                <h3 data-key="service-1-title">Mariages</h3>
+                <p data-key="service-1-desc">Une animation unique et pleine d'humour.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-guitar service-icon"></i>
+                <h3 data-key="service-2-title">Concerts & Parties</h3>
+                <p data-key="service-2-desc">Un show explosif mêlant comédie et musique.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-microphone service-icon"></i>
+                <h3 data-key="service-3-title">Animations</h3>
+                <p data-key="service-3-desc">Festivals et soirées privées de A à Z.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="events-section">
+        <h2 class="section-title" data-key="events-title">Prochainement</h2>
+        <div id="events-container" class="events-list">
+            </div>
+    </section>
+
+    <section id="team" class="team-section">
+        <h2 class="section-title" data-key="team-title">L'Équipe</h2>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Rechercher...">
+        </div>
+        <div id="team-container" class="team-grid"></div>
+    </section>
+
+    <footer id="contact" class="contact-footer">
+        <h2 data-key="contact-title">Contact & Réservation</h2>
+        <div class="contact-buttons">
+            <a href="tel:+22897668021" class="contact-link phone">
+                <i class="fa-solid fa-phone"></i> DJ PADESCO: +228 97 66 80 21
+            </a>
+            <a href="https://wa.me/22870002539" target="_blank" class="contact-link whatsapp-direct">
+                <i class="fa-brands fa-whatsapp"></i> JOËL: +228 70 00 25 39
+            </a>
+            <a href="mailto:jobandofficiel@gmail.com" class="contact-link email">
+                <i class="fa-solid fa-envelope"></i> jobandofficiel@gmail.com
+            </a>
+        </div>
+        <p class="location-footer">LOMÉ • TOGO • AFRICA</p>
+        <p class="credits">&copy; 2026 JO BAND. Tout droits réservés.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
