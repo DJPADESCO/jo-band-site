@@ -1,61 +1,34 @@
-// DONNÉES OFFICIELLES DU COLLECTIF JO BAND
 const members = [
-    { name: "DJ PADESCO", role: "Humoriste / Management / DJ", icon: "fa-headphones" },
-    { name: "JOËL", role: "Adjoint / Coordination", icon: "fa-user-check" },
-    { name: "LE FONDATEUR", role: "L'Inspiration", icon: "fa-crown" },
-    { name: "NANA SIKA", role: "Humoriste & Vidéaste", icon: "fa-video" },
-    { name: "JEAN", role: "Humoriste & Chanteur", icon: "fa-microphone" },
-    { name: "THE GACHA", role: "Humoriste & Chanteur", icon: "fa-music" },
-    { name: "AROLE", role: "Caméraman Pro", icon: "fa-camera" },
-    { name: "L&H", role: "Caméraman Pro", icon: "fa-film" },
-    { name: "CLAUDE", role: "Humoriste", icon: "fa-face-laugh-squint" },
-    { name: "GÉDÉON", role: "Humoriste & Danseur", icon: "fa-bolt" },
-    { name: "ESTHER", role: "Humoriste", icon: "fa-face-grin-stars" },
-    { name: "PRISCA", role: "Humoriste", icon: "fa-face-smile-wink" },
-    { name: "MAKAFUI", role: "Humoriste", icon: "fa-star" }
+    { name: "DJ PADESCO", id: "padesco", role: "DJ / Humoriste" },
+    { name: "JOËL", id: "joel", role: "Management" },
+    { name: "LE FONDATEUR", id: "fondateur", role: "Fondateur" },
+    { name: "NANA SIKA", id: "nanasika", role: "Comédie" },
+    { name: "GÉDÉON", id: "gedeon", role: "Humour" },
+    { name: "JEAN", id: "jean", role: "Chant" },
+    { name: "THE GACHA", id: "gacha", role: "Chant" },
+    { name: "AROLE", id: "arole", role: "Vidéo" },
+    { name: "L&H", id: "lh", role: "Production" },
+    { name: "CLAUDE", id: "claude", role: "Humoriste" },
+    { name: "ESTHER", id: "esther", role: "Humoriste" },
+    { name: "PRISCA", id: "prisca", role: "Humoriste" },
+    { name: "MAKAFUI", id: "makafui", role: "Humoriste" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Génération des membres
     const grid = document.getElementById('team-grid');
     grid.innerHTML = members.map(m => `
         <div class="member-card">
-            <i class="fa-solid ${m.icon}"></i>
+            <img src="${m.id}.jpg" alt="${m.name}" class="member-img" onerror="this.src='https://via.placeholder.com/150/112240/d4af37?text=JO+BAND'">
             <h3>${m.name}</h3>
             <p>${m.role}</p>
         </div>
     `).join('');
 
-    // 2. Gestion du Preloader
-    setTimeout(() => {
-        const loader = document.getElementById('preloader');
-        loader.style.opacity = '0';
-        setTimeout(() => loader.style.display = 'none', 500);
-    }, 2000);
-
-    // 3. Lecteur Audio (Histoire)
     const synth = window.speechSynthesis;
-    const storyText = document.getElementById('about-text').innerText;
-    let speech = new SpeechSynthesisUtterance(storyText);
-    speech.lang = 'fr-FR';
-    speech.rate = 0.9;
+    const text = document.getElementById('about-text').innerText;
+    let msg = new SpeechSynthesisUtterance(text);
+    msg.lang = 'fr-FR';
 
-    document.getElementById('btn-play').onclick = () => {
-        if(synth.paused) synth.resume();
-        else { synth.cancel(); synth.speak(speech); }
-    };
-    document.getElementById('btn-pause').onclick = () => synth.pause();
+    document.getElementById('btn-play').onclick = () => { synth.cancel(); synth.speak(msg); };
     document.getElementById('btn-stop').onclick = () => synth.cancel();
-
-    // 4. Animations au défilement (Reveal)
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
-
-    // 5. Partage WhatsApp
-    document.getElementById('share-btn').onclick = () => {
-        const url = window.location.href;
-        window.open(`https://api.whatsapp.com/send?text=Découvre le site officiel du JO BAND : ${url}`, '_blank');
-    };
 });
