@@ -1,162 +1,27 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JO BAND | Partout où ça bouge, JO BAND est là</title>
+// =============================== // JO BAND - TEAM DATABASE // ===============================
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+const performers = [ { name: "DJ PADESCO", role: "Comédien, vidéaste & DJ", tag: "POLYVALENT", icon: "fa-headphones", special: true }, { name: "NANA SIKA", role: "Comédienne & vidéaste", tag: "ARTISTE", icon: "fa-video", special: false }, { name: "CLAUDE", role: "Humoriste", tag: "HUMOUR", icon: "fa-face-laugh-squint", special: false }, { name: "GÉDÉON", role: "Humoriste & danseur", tag: "HUMOUR / DANSE", icon: "fa-person-running", special: false }, { name: "ESTHER", role: "Humoriste", tag: "HUMOUR", icon: "fa-face-laugh", special: false }, { name: "PRISCA", role: "Humoriste", tag: "HUMOUR", icon: "fa-face-smile", special: false }, { name: "MAKAFUI", role: "Rôle à confirmer", tag: "ARTISTE", icon: "fa-user", special: false }, { name: "JEAN", role: "Humoriste & artiste chanteur", tag: "CHANT", icon: "fa-microphone-lines", special: false }, { name: "THE GACHA", role: "Humoriste & artiste chanteur", tag: "CHANT", icon: "fa-music", special: false }, { name: "JOËL", role: "Superviseur", tag: "STAFF", icon: "fa-star", special: false }, { name: "DG À CONFIRMER", role: "Fondateur", tag: "DIRECTION", icon: "fa-crown", special: false } ];
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+const cameraTeam = [ { name: "AROLE", role: "Caméraman", tag: "VISUEL", icon: "fa-camera", special: false }, { name: "L&H", role: "Caméraman", tag: "VISUEL", icon: "fa-video", special: false } ];
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+// =============================== // AFFICHER L'ÉQUIPE // ===============================
 
-    <!-- Ton CSS -->
-    <link rel="stylesheet" href="style.css">
-</head>
+function createMemberCard(member) { const card = document.createElement("div"); card.className = member-card ${member.special ? "padesco-special" : ""};
 
-<body class="bg-black text-white overflow-x-hidden">
+card.innerHTML = <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-6 text-orange-500"> <i class="fa-solid ${member.icon} text-xl"></i> </div> <h4 class="font-black text-lg mb-2 uppercase tracking-tight">${member.name}</h4> <p class="text-white/50 text-sm mb-4">${member.role}</p> <span class="inline-block text-[10px] bg-white/10 px-3 py-2 rounded-full font-bold text-white/70 tracking-wide">${member.tag}</span>;
 
-    <!-- Glow background -->
-    <div class="hero-glow"></div>
+return card; }
 
-    <!-- NAVBAR -->
-    <header class="nav-glass fixed top-0 left-0 w-full z-50">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+function renderTeam() { const container = document.getElementById("team-container"); if (!container) return;
 
-            <div>
-                <h1 class="logo text-xl font-bold tracking-[0.3em]">
-                    JO BAND
-                </h1>
-                <p class="text-xs text-white/40 uppercase">
-                    Partout où ça bouge, JO BAND est là
-                </p>
-            </div>
+container.innerHTML = <div class="lg:col-span-2 grid gap-6"> <div> <h4 class="text-sm font-bold uppercase tracking-[0.35em] text-white/45 mb-4">Artistes / Humoristes</h4> <div id="performers-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div> </div> <div> <h4 class="text-sm font-bold uppercase tracking-[0.35em] text-white/45 mb-4">Caméra / Visuel</h4> <div id="camera-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8"></div> </div> </div>;
 
-            <nav class="hidden md:flex gap-8 text-sm text-white/60">
-                <a href="#home" class="hover:text-orange-500 transition">
-                    Accueil
-                </a>
+const performersGrid = document.getElementById("performers-grid"); const cameraGrid = document.getElementById("camera-grid");
 
-                <a href="#team" class="hover:text-orange-500 transition">
-                    Équipe
-                </a>
+if (performersGrid) { performers.forEach(member => performersGrid.appendChild(createMemberCard(member))); }
 
-                <a href="#contact" class="hover:text-orange-500 transition">
-                    Contact
-                </a>
-            </nav>
-        </div>
-    </header>
+if (cameraGrid) { cameraTeam.forEach(member => cameraGrid.appendChild(createMemberCard(member))); } }
 
-    <!-- HERO -->
-    <section id="home" class="min-h-screen flex items-center justify-center px-6">
+// =============================== // LANCEMENT PAGE // ===============================
 
-        <div class="max-w-5xl text-center relative z-10">
-
-            <p class="section-title mb-8">
-                Comédie • Humour • Animation
-            </p>
-
-            <h2 class="text-5xl md:text-7xl font-black leading-tight mb-8">
-                PARTOUT OÙ ÇA BOUGE,
-                <br>
-                <span class="text-orange-500">
-                    JO BAND EST LÀ
-                </span>
-            </h2>
-
-            <p class="text-white/60 max-w-2xl mx-auto text-lg mb-10">
-                JO BAND est un groupe de comédie, humour, animation,
-                mariage, spectacles, vidéos et divertissement à Lomé.
-            </p>
-
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://www.tiktok.com/@jobandofficiel?_r=1&_t=ZS-96MQKFp8Yxk"
-                    target="_blank"
-                    class="bg-orange-500 px-8 py-4 rounded-2xl font-bold text-black hover:scale-105 transition">
-                    TikTok
-                </a>
-
-                <a href="https://www.youtube.com/@JoBandofficiel"
-                    target="_blank"
-                    class="border border-white/10 px-8 py-4 rounded-2xl hover:bg-white/5 transition">
-                    YouTube
-                </a>
-
-                <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C"
-                    target="_blank"
-                    class="border border-green-500 text-green-400 px-8 py-4 rounded-2xl hover:bg-green-500/10 transition">
-                    Chaîne WhatsApp
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- TEAM -->
-    <section id="team" class="py-24 px-6">
-        <div class="max-w-7xl mx-auto">
-
-            <p class="section-title mb-5">
-                <p class="section-title mb-5">
-    ÉQUIPE JO BAND
-</p>
-
-<h3 class="text-center text-4xl font-black mb-4">
-    Organisation du JO BAND
-</h3>
-
-<p class="text-center text-white/50 max-w-2xl mx-auto mb-14">
-    Humoristes, artistes chanteurs, DJ, superviseur et équipe caméra / visuel.
-</p> class="text-center text-4xl font-black mb-14">
-                Les membres du JO BAND
-            </h3>
-
-            <!-- LE JS AJOUTE LES MEMBRES ICI -->
-            <div id="team-container"
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
-
-        </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="py-24 px-6">
-        <div class="max-w-5xl mx-auto text-center">
-
-            <p class="section-title mb-5">
-                CONTACT
-            </p>
-
-            <h3 class="text-4xl font-black mb-8">
-                Réservez JO BAND
-            </h3>
-
-            <p class="text-white/50 mb-10">
-                Mariages • Concerts • Soirées • Animation • Humour
-            </p>
-
-            <div class="flex flex-col md:flex-row gap-5 justify-center">
-
-                <a href="tel:+22897668021"
-                    class="bg-white/5 border border-white/10 px-8 py-5 rounded-2xl hover:border-orange-500 transition">
-                    📞 +228 97 66 80 21
-                </a>
-
-                <a href="tel:+22870002539"
-                    class="bg-white/5 border border-white/10 px-8 py-5 rounded-2xl hover:border-blue-500 transition">
-                    📞 +228 70 00 25 39
-                </a>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- TON JS -->
-    <script src="script.js"></script>
-
-</body>
-</html>
+document.addEventListener("DOMContentLoaded", () => { renderTeam(); });
