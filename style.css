@@ -1,105 +1,83 @@
-/* Polices et bases */
-body {
-    font-family: 'Inter', sans-serif;
-    background: #050814;
-    color: white;
-    overflow-x: hidden;
-}
+/* ==========================
+   SECTION ÉQUIPE JO BAND
+========================== */
 
-.logo {
-    font-family: 'Syncopate', sans-serif;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-/* Fond premium */
-.hero-glow {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80vw;
-    height: 80vw;
-    background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: -1;
-}
-
-/* Barre de navigation */
-.nav-glass {
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Titres de section */
-.section-title {
-    font-family: 'Syncopate', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.5em;
-    color: rgba(255, 255, 255, 0.35);
+.team-section-title {
     text-align: center;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.team-subtitle {
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    max-width: 700px;
+    margin: 0 auto 50px auto;
+    line-height: 1.7;
+}
+
+.team-category {
+    margin-bottom: 50px;
+}
+
+.team-category-title {
+    font-size: 0.8rem;
+    font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 20px;
+    border-left: 4px solid #f97316;
+    padding-left: 14px;
 }
 
-/* Cartes */
-.glass-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+/* grille membres */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
 }
 
+/* carte membre améliorée */
 .member-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 24px;
-    padding: 2rem 1.5rem;
-    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 24px;
+    transition: 0.35s ease;
+    backdrop-filter: blur(12px);
 }
 
 .member-card:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(249, 115, 22, 0.5);
     transform: translateY(-8px);
+    border-color: rgba(249,115,22,0.5);
+    box-shadow: 0 15px 40px rgba(249,115,22,0.15);
 }
 
+/* carte spéciale DJ PADESCO */
 .padesco-special {
-    background: linear-gradient(145deg, rgba(249, 115, 22, 0.10), rgba(0, 0, 0, 0));
-    border-color: rgba(249, 115, 22, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    background: linear-gradient(
+        135deg,
+        rgba(249,115,22,0.12),
+        rgba(255,255,255,0.03)
+    );
+    border: 1px solid rgba(249,115,22,0.35);
 }
 
-/* Animations */
-.reveal {
-    opacity: 0;
-    transform: translateY(35px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Liens */
-a {
-    text-decoration: none;
-}
-
-/* Responsive */
+/* responsive téléphone */
 @media (max-width: 768px) {
-    .section-title {
-        letter-spacing: 0.3em;
-        font-size: 0.7rem;
+    .team-section-title {
+        font-size: 1.6rem;
     }
 
-    .hero-glow {
-        width: 120vw;
-        height: 120vw;
+    .team-subtitle {
+        font-size: 0.95rem;
+        padding: 0 15px;
+    }
+
+    .team-category-title {
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
     }
 }
