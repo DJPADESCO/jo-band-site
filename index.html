@@ -151,4 +151,386 @@
 
             <div class="flex flex-col sm:flex-row w-full sm:w-auto gap-4 reveal" style="transition-delay: 300ms;">
                 <a href="#contact" class="btn-press bg-brand-orange text-black font-black px-8 py-4 rounded-2xl flex items-center justify-center gap-3 shadow-lg shadow-orange-500/20 hover:bg-orange-400 transition">
-                    <i class="fa-solid fa-calendar-check text-xl"></i>
+                    <i class="fa-solid fa-calendar-check text-xl"></i>                   <span class="lang-fr-content">RÉSERVER JO BAND</span>
+                    <span class="lang-en-content">BOOK JO BAND</span>
+                </a>
+                <button onclick="openVideoModal()" class="btn-press glass-card px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-white/10 transition">
+                    <i class="fa-solid fa-play text-brand-orange"></i> 
+                    <span class="lang-fr-content">NOS VIDÉOS</span>
+                    <span class="lang-en-content">OUR VIDEOS</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="max-w-5xl mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
+            <div class="glass-card p-5 rounded-3xl text-center">
+                <p class="text-4xl font-black text-brand-orange">13</p>
+                <p class="text-xs uppercase tracking-widest text-white/50 mt-1"><span class="lang-fr-content">Membres</span><span class="lang-en-content">Members</span></p>
+            </div>
+            <div class="glass-card p-5 rounded-3xl text-center">
+                <p class="text-4xl font-black text-brand-blue">100%</p>
+                <p class="text-xs uppercase tracking-widest text-white/50 mt-1"><span class="lang-fr-content">Humour</span><span class="lang-en-content">Humor</span></p>
+            </div>
+            <div class="glass-card p-5 rounded-3xl text-center">
+                <p class="text-4xl font-black text-white">Lomé</p>
+                <p class="text-xs uppercase tracking-widest text-white/50 mt-1">Togo</p>
+            </div>
+            <div class="glass-card p-5 rounded-3xl text-center">
+                <p class="text-4xl font-black text-green-400">24/7</p>
+                <p class="text-xs uppercase tracking-widest text-white/50 mt-1">Dispo</p>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section id="services" class="max-w-7xl mx-auto px-4 py-16">
+            <div class="mb-10 text-center reveal">
+                <p class="text-brand-orange font-bold text-sm tracking-widest uppercase mb-2">Expertise</p>
+                <h2 class="text-3xl md:text-5xl font-black"><span class="lang-fr-content">Nos Services</span><span class="lang-en-content">Our Services</span></h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div class="glass-card p-8 rounded-3xl reveal group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition duration-500">
+                        <i class="fa-solid fa-masks-theater text-brand-orange"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3"><span class="lang-fr-content">Comédie & Spectacles</span><span class="lang-en-content">Comedy & Shows</span></h3>
+                    <p class="text-white/60 text-sm leading-relaxed">
+                        <span class="lang-fr-content">Des sketchs hilarants et des performances en direct pour galas, anniversaires et événements. Le rire est garanti.</span>
+                        <span class="lang-en-content">Hilarious skits and live performances for galas, birthdays, and events. Laughter is guaranteed.</span>
+                    </p>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="glass-card p-8 rounded-3xl reveal group" style="transition-delay: 100ms;">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition duration-500">
+                        <i class="fa-solid fa-microphone-lines text-brand-blue"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3"><span class="lang-fr-content">Animation (MC & DJ)</span><span class="lang-en-content">Hosting (MC & DJ)</span></h3>
+                    <p class="text-white/60 text-sm leading-relaxed">
+                        <span class="lang-fr-content">Animation de mariages et fêtes avec nos Maîtres de Cérémonie. <b>DJ Padesco</b> assure l'ambiance musicale (et comique !) aux platines.</span>
+                        <span class="lang-en-content">Hosting weddings and parties. <b>DJ Padesco</b> brings the musical (and comic!) vibe to the turntables.</span>
+                    </p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="glass-card p-8 rounded-3xl reveal group" style="transition-delay: 200ms;">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition duration-500">
+                        <i class="fa-solid fa-video text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3"><span class="lang-fr-content">Création Vidéo</span><span class="lang-en-content">Video Creation</span></h3>
+                    <p class="text-white/60 text-sm leading-relaxed">
+                        <span class="lang-fr-content">Notre équipe visuelle (Arole, L&H) capture vos meilleurs moments et crée des contenus viraux pour TikTok et YouTube.</span>
+                       <span class="lang-en-content">Our visual team captures your best moments and creates viral content for TikTok and YouTube.</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- L'Équipe (Réintégrée et améliorée) -->
+        <section id="equipe" class="max-w-7xl mx-auto px-4 py-16">
+            <div class="mb-10 text-center reveal">
+                <p class="text-brand-blue font-bold text-sm tracking-widest uppercase mb-2">La Famille</p>
+                <h2 class="text-3xl md:text-5xl font-black"><span class="lang-fr-content">Les 13 Membres</span><span class="lang-en-content">The 13 Members</span></h2>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="team-grid">
+                <!-- Généré par JavaScript pour garder le code propre -->
+            </div>
+        </section>
+
+        <!-- Galerie / Médias -->
+        <section id="galerie" class="max-w-7xl mx-auto px-4 py-16">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-10 reveal">
+                <div>
+                    <h2 class="text-3xl font-black mb-2"><span class="lang-fr-content">Moments Forts</span><span class="lang-en-content">Highlights</span></h2>
+                    <p class="text-white/50 text-sm"><span class="lang-fr-content">Photos officielles à venir.</span><span class="lang-en-content">Official photos coming soon.</span></p>
+                </div>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="w-12 h-12 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center text-xl transition btn-press"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@JoBandofficiel" target="_blank" class="w-12 h-12 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center text-xl transition btn-press"><i class="fa-brands fa-youtube text-red-500"></i></a>
+                    <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="w-12 h-12 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center text-xl transition btn-press"><i class="fa-brands fa-whatsapp text-green-400"></i></a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
+                <!-- Placeholders de galerie stylisés -->
+                <div class="aspect-[4/5] glass-card rounded-2xl flex flex-col items-center justify-center text-white/20 group overflow-hidden relative">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-end p-4">
+                        <p class="text-white font-bold text-sm">Comédie en live</p>
+                    </div>
+                    <i class="fa-solid fa-camera text-4xl group-hover:scale-125 transition duration-500"></i>
+                </div>
+                <div class="aspect-[4/5] glass-card rounded-2xl flex flex-col items-center justify-center text-white/20 group overflow-hidden relative">
+                    <i class="fa-solid fa-ring text-4xl group-hover:scale-125 transition duration-500"></i>
+                </div>
+                <div class="aspect-[4/5] glass-card rounded-2xl flex flex-col items-center justify-center text-white/20 group overflow-hidden relative">
+                    <i class="fa-solid fa-headphones text-4xl group-hover:scale-125 transition duration-500"></i>
+                </div>
+                <div class="aspect-[4/5] glass-card rounded-2xl flex flex-col items-center justify-center text-white/20 group overflow-hidden relative">
+                    <i class="fa-solid fa-masks-theater text-4xl group-hover:scale-125 transition duration-500"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- ✨ Assistant IA -->
+        <section class="max-w-4xl mx-auto px-4 py-12 reveal">
+            <div class="p-8 rounded-3xl border border-brand-orange/30 bg-gradient-to-br from-brand-orange/10 to-transparent relative overflow-hidden">
+                <i class="fa-solid fa-wand-magic-sparkles absolute -right-6 -top-6 text-9xl text-brand-orange/10"></i>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange ai-sparkle">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3 class="font-bold text-xl"><span class="lang-fr-content">Boîte à idées IA ✨</span><span class="lang-en-content">AI Idea Box ✨</span></h3>
+                    </div>
+                    <p class="text-sm text-white/70 mb-6 max-w-lg">
+                        <span class="lang-fr-content">Dites-nous quel événement vous organisez (ex: "Mariage le mois prochain"), notre IA suggérera une animation originale avec JO BAND.</span>
+                        <span class="lang-en-content">Tell us what event you're organizing, our AI will suggest a unique animation idea with JO BAND.</span>
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input id="aiInput" type="text" placeholder="Mon événement..." class="flex-1 bg-black/50 border border-white/20 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none transition">
+                        <button onclick="generateAIIdeas()" id="aiBtn" class="bg-brand-orange text-black px-6 py-3 rounded-xl font-bold text-sm hover:bg-orange-400 transition btn-press flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-lightbulb"></i> Générer
+                        </button>
+                    </div>
+                    <div id="aiResult" class="mt-4 text-sm bg-black/40 p-4 rounded-xl hidden border border-brand-orange/30 text-brand-orange italic"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact (Smart WhatsApp Form) -->
+        <section id="contact" class="max-w-7xl mx-auto px-4 py-16 reveal">
+            <div class="glass-card rounded-3xl p-6 md:p-12">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- Infos -->
+                    <div>
+                        <h3 class="text-3xl md:text-4xl font-black mb-6">
+                            <span class="lang-fr-content">Prêt à mettre l'ambiance ?</span>
+                            <span class="lang-en-content">Ready to set the vibe?</span>
+                        </h3>
+                        <p class="text-white/60 mb-8 leading-relaxed">
+                            <span class="lang-fr-content">Remplissez le formulaire, cela générera automatiquement un message professionnel directement sur notre WhatsApp ! Vous pouvez aussi nous appeler.</span>
+                            <span class="lang-en-content">Fill out the form, it will automatically generate a professional message directly to our WhatsApp! You can also call us.</span>
+                        </p>
+
+                        <div class="space-y-4">
+                            <a href="tel:+22897668021" class="block p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition btn-press group">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs text-white/50 mb-1">Contact Principal</p>
+                                        <p class="text-xl font-bold text-white group-hover:text-brand-orange transition">+228 97 66 80 21</p>
+                                    </div>
+                                    <div class="flex gap-2 text-xl">
+                                        <i class="fa-brands fa-whatsapp text-green-400"></i>
+                                        <i class="fa-solid fa-phone text-blue-400"></i>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="tel:+22870002539" class="block p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition btn-press group">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs text-white/50 mb-1">Contact Secondaire</p>
+                                        <p class="text-xl font-bold text-white group-hover:text-brand-blue transition">+228 70 00 25 39</p>
+                                    </div>
+                                    <div class="flex gap-2 text-xl">
+                                        <i class="fa-brands fa-whatsapp text-green-400"></i>
+                                        <i class="fa-solid fa-phone text-blue-400"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Formulaire WhatsApp -->
+                    <div class="bg-black/40 p-6 md:p-8 rounded-3xl border border-white/10">
+                        <form onsubmit="sendWhatsAppMessage(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-2">Votre Nom</label>
+                                <input id="waName" type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-400 transition" placeholder="Ex: Jean Dupont">
+</div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-2">Type d'événement</label>
+                                <select id="waType" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-400 transition appearance-none">
+                                    <option value="Mariage" class="bg-black">Mariage</option>
+                                    <option value="Concert" class="bg-black">Concert / Festival</option>
+                                    <option value="Anniversaire" class="bg-black">Anniversaire / Soirée</option>
+                                    <option value="Autre" class="bg-black">Autre</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-2">Détails (Date, Lieu...)</label>
+                                <textarea id="waMessage" rows="3" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-400 transition" placeholder="Bonjour, j'aimerais réserver JO BAND pour..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full btn-press bg-[#25D366] text-black font-black py-4 rounded-xl hover:bg-[#20bd5a] transition flex justify-center items-center gap-2 mt-2">
+                                <i class="fa-brands fa-whatsapp text-xl"></i> ENVOYER SUR WHATSAPP
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-white/10 bg-black/80 py-8 text-center text-white/40 text-xs">
+        <p class="mb-2 uppercase tracking-widest">&copy; 2024 JO BAND • LOMÉ, TOGO</p>
+        <p>Création originale pour le groupe JO BAND.</p>
+    </footer>
+
+    <!-- MODAL VIDÉOS -->
+    <div id="videoModal" class="fixed inset-0 z-[60] flex items-center justify-center hidden p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeVideoModal()"></div>
+        <div class="glass-card relative z-10 w-full max-w-sm p-6 rounded-3xl text-center border-t border-white/20">
+            <h3 class="text-2xl font-black mb-6">Regarder JO BAND</h3>
+            <div class="space-y-3">
+                <a href="https://www.tiktok.com/@jobandofficiel?_r=1&_t=ZS-96MQKFp8Yxk" target="_blank" class="flex items-center justify-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition btn-press border border-white/5">
+                    <i class="fa-brands fa-tiktok text-2xl"></i> <span class="font-bold">TikTok</span>
+                </a>
+                <a href="https://www.youtube.com/@JoBandofficiel" target="_blank" class="flex items-center justify-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition btn-press border border-white/5">
+                    <i class="fa-brands fa-youtube text-2xl text-red-500"></i> <span class="font-bold">YouTube</span>
+                </a>
+                <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="flex items-center justify-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition btn-press border border-white/5">
+                    <i class="fa-brands fa-whatsapp text-2xl text-green-400"></i> <span class="font-bold">Chaîne WhatsApp</span>
+                </a>
+            </div>
+            <button onclick="closeVideoModal()" class="mt-6 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mx-auto text-white/50 hover:text-white transition btn-press">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+GÉNÉRATION DE L'ÉQUIPE (Avec Rôles Corrigés)
+        const teamMembers = [
+            { name: "Nom à confirmer", roleFr: "Fondateur / DG", roleEn: "Founder / CEO", color: "text-amber-400" },
+            { name: "JOËL", roleFr: "Adjoint / Superviseur", roleEn: "Supervisor", color: "text-blue-400" },
+            { name: "PADESCO", roleFr: "Comédien & DJ", roleEn: "Comedian & DJ", color: "text-brand-orange" }, // Correction ICI
+            { name: "CLAUDE", roleFr: "Comédien", roleEn: "Comedian", color: "text-white/70" },
+            { name: "GÉDÉON", roleFr: "Comédien", roleEn: "Comedian", color: "text-white/70" },
+            { name: "ESTHER", roleFr: "Comédienne", roleEn: "Comedian", color: "text-white/70" },
+            { name: "NANA SIKA", roleFr: "Comédien", roleEn: "Comedian", color: "text-white/70" },
+            { name: "JEAN", roleFr: "Comédien", roleEn: "Comedian", color: "text-white/70" },
+            { name: "PRISCA", roleFr: "Comédienne", roleEn: "Comedian", color: "text-white/70" },
+            { name: "MAKAFUI", roleFr: "Comédien", roleEn: "Comedian", color: "text-white/70" },
+            { name: "THE GACHA", roleFr: "Comédien", roleEn: "Comedian", color: "text-white/70" },
+            { name: "AROLE", roleFr: "Caméra / Visuel", roleEn: "Camera", color: "text-green-400" },
+            { name: "L&H", roleFr: "Caméra / Visuel", roleEn: "Camera", color: "text-green-400" }
+        ];
+
+        const teamGrid = document.getElementById('team-grid');
+        teamMembers.forEach(member => {
+            const isPadesco = member.name === "PADESCO";
+            const icon = isPadesco ? 'fa-headphones' : (member.roleFr.includes('Caméra') ? 'fa-video' : 'fa-user');
+            
+            const card = document.createElement('div');
+            card.className = `glass-card p-4 rounded-2xl flex flex-col items-center text-center hover:-translate-y-1 transition duration-300 ${isPadesco ? 'border-brand-orange/30 bg-brand-orange/5' : ''}`;
+            card.innerHTML = `
+                <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3 border border-white/10 ${member.color}">
+                    <i class="fa-solid ${icon}"></i>
+                </div>
+                <h4 class="font-bold text-sm text-white">${member.name}</h4>
+                <p class="text-[10px] uppercase tracking-widest mt-1 ${member.color}">
+                    <span class="lang-fr-content">${member.roleFr}</span>
+                    <span class="lang-en-content">${member.roleEn}</span>
+                </p>
+            `;
+            teamGrid.appendChild(card);
+        });
+
+        // 2. FONCTIONNALITÉ SMART WHATSAPP
+        function sendWhatsAppMessage(e) {
+            e.preventDefault();
+            const name = document.getElementById('waName').value;
+            const type = document.getElementById('waType').value;
+            const details = document.getElementById('waMessage').value;
+            
+            // Formatage du message
+            const text = `*NOUVELLE DEMANDE JO BAND* 🎭%0A%0A*Nom:* ${name}%0A*Événement:* ${type}%0A*Détails:* ${details}%0A%0A_Message envoyé depuis le site officiel._`;
+            
+            // Numéro principal de JO BAND
+            const phone = "22897668021"; 
+            
+            // Ouverture de WhatsApp
+            window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+        }
+
+        // 3. API GEMINI (Assistant IA)
+        const apiKey = ""; // Géré par l'environnement
+        async function generateAIIdeas() {
+            const input = document.getElementById('aiInput');
+            const btn = document.getElementById('aiBtn');
+            const result = document.getElementById('aiResult');
+            
+            if (!input.value.trim()) return;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
+            result.classList.remove('hidden');
+            result.innerHTML = '<i>L\'IA réfléchit...</i>';
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Le client organise cet événement : "${input.value}". En tant qu'assistant de JO BAND, propose 1 idée d'animation très fun (comédie ou musique) en 2 phrases max.` }] }],
+                        systemInstruction: { parts: [{ text: "Tu es un assistant créatif pour JO BAND, un groupe togolais drôle et dynamique." }] }
+                    })
+                });
+                const data = await response.json();
+                result.innerHTML = `✨ <b>Idée JO BAND :</b> ${data.candidates?.[0]?.content?.parts?.[0]?.text || "Mettez le volume au max, on s'occupe du reste !"}`;
+            } catch (e) {
+                result.textContent = "Oops, petite erreur réseau. Mais on est prêt pour votre fête !";
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-lightbulb"></i> Générer';
+            }
+        }
+
+        // 4. SYSTÈME DE LANGUES
+        const langToggleBtn = document.getElementById('langToggle');
+        const currentLangBtnSpan = document.getElementById('currentLangBtn');
+        let currentLang = 'fr';
+        langToggleBtn.addEventListener('click', () => {
+            if(currentLang === 'fr') {
+                document.body.classList.add('lang-en');
+                currentLangBtnSpan.textContent = 'FR';
+                currentLang = 'en';
+            } else {
+                document.body.classList.remove('lang-en');
+                currentLangBtnSpan.textContent = 'EN';
+                currentLang = 'fr';
+            }
+        });
+
+        // 5. PARTAGE SOCIAL
+        function shareSite() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'JO BAND',
+                    text: 'Découvrez JO BAND, le meilleur groupe d\'animation à Lomé !',
+                    url: window.location.href
+                });
+            } else {
+                alert('Copiez ce lien pour partager : ' + window.location.href);
+            }
+        }
+
+        // 6. UI HELPERS
+        function openVideoModal() { document.getElementById('videoModal').classList.remove('hidden'); document.body.classList.add('modal-open'); }
+        function closeVideoModal() { document.getElementById('videoModal').classList.add('hidden'); document.body.classList.remove('modal-open'); }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
+
+
+```
