@@ -1,27 +1,29 @@
-// =============================== // JO BAND - TEAM DATABASE // ===============================
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JO BAND - Équipe</title>
+    <!-- CDN Public pour FontAwesome (icônes) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-const performers = [ { name: "DJ PADESCO", role: "Comédien, vidéaste & DJ", tag: "POLYVALENT", icon: "fa-headphones", special: true }, { name: "NANA SIKA", role: "Comédienne & vidéaste", tag: "ARTISTE", icon: "fa-video", special: false }, { name: "CLAUDE", role: "Humoriste", tag: "HUMOUR", icon: "fa-face-laugh-squint", special: false }, { name: "GÉDÉON", role: "Humoriste & danseur", tag: "HUMOUR / DANSE", icon: "fa-person-running", special: false }, { name: "ESTHER", role: "Humoriste", tag: "HUMOUR", icon: "fa-face-laugh", special: false }, { name: "PRISCA", role: "Humoriste", tag: "HUMOUR", icon: "fa-face-smile", special: false }, { name: "MAKAFUI", role: "Rôle à confirmer", tag: "ARTISTE", icon: "fa-user", special: false }, { name: "JEAN", role: "Humoriste & artiste chanteur", tag: "CHANT", icon: "fa-microphone-lines", special: false }, { name: "THE GACHA", role: "Humoriste & artiste chanteur", tag: "CHANT", icon: "fa-music", special: false }, { name: "JOËL", role: "Superviseur", tag: "STAFF", icon: "fa-star", special: false }, { name: "DG À CONFIRMER", role: "Fondateur", tag: "DIRECTION", icon: "fa-crown", special: false } ];
+    <section class="team-section">
+        <h2 class="team-section-title">L'ÉQUIPE JO BAND</h2>
+        <p class="team-subtitle">Découvrez les talents créatifs, humoristes et l'équipe technique qui font vivre notre univers.</p>
+        
+        <!-- NOUVELLE FONCTIONNALITÉ : Barre de recherche -->
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="search-input" placeholder="Rechercher un membre par nom, rôle ou tag...">
+        </div>
 
-const cameraTeam = [ { name: "AROLE", role: "Caméraman", tag: "VISUEL", icon: "fa-camera", special: false }, { name: "L&H", role: "Caméraman", tag: "VISUEL", icon: "fa-video", special: false } ];
+        <!-- Conteneur principal généré par JavaScript -->
+        <div id="team-container"></div>
+    </section>
 
-// =============================== // AFFICHER L'ÉQUIPE // ===============================
-
-function createMemberCard(member) { const card = document.createElement("div"); card.className = member-card ${member.special ? "padesco-special" : ""};
-
-card.innerHTML = <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-6 text-orange-500"> <i class="fa-solid ${member.icon} text-xl"></i> </div> <h4 class="font-black text-lg mb-2 uppercase tracking-tight">${member.name}</h4> <p class="text-white/50 text-sm mb-4">${member.role}</p> <span class="inline-block text-[10px] bg-white/10 px-3 py-2 rounded-full font-bold text-white/70 tracking-wide">${member.tag}</span>;
-
-return card; }
-
-function renderTeam() { const container = document.getElementById("team-container"); if (!container) return;
-
-container.innerHTML = <div class="lg:col-span-2 grid gap-6"> <div> <h4 class="text-sm font-bold uppercase tracking-[0.35em] text-white/45 mb-4">Artistes / Humoristes</h4> <div id="performers-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div> </div> <div> <h4 class="text-sm font-bold uppercase tracking-[0.35em] text-white/45 mb-4">Caméra / Visuel</h4> <div id="camera-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8"></div> </div> </div>;
-
-const performersGrid = document.getElementById("performers-grid"); const cameraGrid = document.getElementById("camera-grid");
-
-if (performersGrid) { performers.forEach(member => performersGrid.appendChild(createMemberCard(member))); }
-
-if (cameraGrid) { cameraTeam.forEach(member => cameraGrid.appendChild(createMemberCard(member))); } }
-
-// =============================== // LANCEMENT PAGE // ===============================
-
-document.addEventListener("DOMContentLoaded", () => { renderTeam(); });
+    <script src="script.js"></script>
+</body>
+</html>
