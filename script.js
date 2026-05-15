@@ -2,7 +2,7 @@
 // JO BAND - TEAM DATABASE
 // ===============================
 
-const team = [
+const performers = [
   {
     name: "DJ PADESCO",
     role: "Comédien, Vidéaste & DJ",
@@ -14,87 +14,102 @@ const team = [
     name: "NANA SIKA",
     role: "Comédien & Vidéaste",
     tag: "ARTISTE",
-    icon: "fa-video",
-    special: false
+    icon: "fa-video"
   },
   {
-    name: "AROLE",
-    role: "Caméraman",
-    tag: "VISUEL",
-    icon: "fa-camera",
-    special: false
+    name: "CLAUDE",
+    role: "Humoriste",
+    tag: "HUMOUR",
+    icon: "fa-face-laugh"
   },
   {
-    name: "L&H",
-    role: "Caméraman",
-    tag: "VISUEL",
-    icon: "fa-video",
-    special: false
+    name: "GÉDÉON",
+    role: "Humoriste & Danseur",
+    tag: "DANSE / HUMOUR",
+    icon: "fa-person-running"
   },
+  {
+    name: "ESTHER",
+    role: "Humoriste",
+    tag: "HUMOUR",
+    icon: "fa-masks-theater"
+  },
+  {
+    name: "PRISCA",
+    role: "Humoriste",
+    tag: "HUMOUR",
+    icon: "fa-face-smile"
+  },
+  {
+    name: "MAKAFUI",
+    role: "Artiste",
+    tag: "ARTISTE",
+    icon: "fa-star"
+  },
+  {
+    name: "JEAN",
+    role: "Humoriste & Artiste chanteur",
+    tag: "CHANT",
+    icon: "fa-microphone-lines"
+  },
+  {
+    name: "THE GACHA",
+    role: "Humoriste & Artiste chanteur",
+    tag: "CHANT",
+    icon: "fa-music"
+  }
+];
+
+const staff = [
   {
     name: "JOËL",
     role: "Superviseur",
     tag: "STAFF",
-    icon: "fa-star",
-    special: false
+    icon: "fa-user-tie"
   },
   {
     name: "DG À CONFIRMER",
     role: "Fondateur",
     tag: "DIRECTION",
-    icon: "fa-crown",
-    special: false
-  },
-  {
-    name: "CLAUDE",
-    role: "Membre du groupe",
-    tag: "ARTISTE",
-    icon: "fa-microphone",
-    special: false
-  },
-  {
-    name: "GÉDÉON",
-    role: "Membre du groupe",
-    tag: "ARTISTE",
-    icon: "fa-masks-theater",
-    special: false
-  },
-  {
-    name: "ESTHER",
-    role: "Membre du groupe",
-    tag: "ARTISTE",
-    icon: "fa-star",
-    special: false
-  },
-  {
-    name: "JEAN",
-    role: "Membre du groupe",
-    tag: "ARTISTE",
-    icon: "fa-user",
-    special: false
-  },
-  {
-    name: "PRISCA",
-    role: "Membre du groupe",
-    tag: "ARTISTE",
-    icon: "fa-user",
-    special: false
-  },
-  {
-    name: "MAKAFUI",
-    role: "Membre du groupe",
-    tag: "ARTISTE",
-    icon: "fa-user",
-    special: false
-  },
-  {
-    name: "THE GACHA",
-    role: "Membre du groupe",
-    tag: "ARTISTE",
-    icon: "fa-music",
-    special: false
+    icon: "fa-crown"
   }
 ];
+
+const cameraTeam = [
+  {
+    name: "AROLE & L&H",
+    role: "Équipe Caméra / Visuel",
+    tag: "VISUEL",
+    icon: "fa-camera-retro"
+  }
+];
+
+// ===============================
+// CREER UNE CARTE MEMBRE
+// ===============================
+
+function createMemberCard(member) {
+  return `
+    <div class="member-card ${member.special ? 'padesco-special' : ''}">
+      
+      <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-5 text-orange-500">
+        <i class="fa-solid ${member.icon} text-xl"></i>
+      </div>
+
+      <h4 class="font-black text-lg uppercase tracking-tight mb-2">
+        ${member.name}
+      </h4>
+
+      <p class="text-white/50 text-sm mb-4">
+        ${member.role}
+      </p>
+
+      <span class="inline-block px-4 py-2 rounded-full bg-white/10 text-[11px] font-bold text-white/70">
+        ${member.tag}
+      </span>
+    </div>
+  `;
+}
 
 // ===============================
 // AFFICHER L'ÉQUIPE
@@ -103,42 +118,45 @@ const team = [
 function renderTeam() {
   const container = document.getElementById("team-container");
 
-  // sécurité
   if (!container) return;
 
-  // évite les doublons
-  container.innerHTML = "";
+  container.innerHTML = `
+    
+    <div class="team-category">
+      <h3 class="team-category-title">
+        Artistes / Humoristes
+      </h3>
 
-  team.forEach(member => {
-    const card = document.createElement("div");
-
-    card.className =
-      `member-card ${member.special ? "padesco-special" : ""}`;
-
-    card.innerHTML = `
-      <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-6 text-orange-500">
-        <i class="fa-solid ${member.icon} text-xl"></i>
+      <div class="team-grid">
+        ${performers.map(createMemberCard).join("")}
       </div>
+    </div>
 
-      <h4 class="font-black text-lg mb-2 uppercase tracking-tight">
-        ${member.name}
-      </h4>
+    <div class="team-category">
+      <h3 class="team-category-title">
+        Direction / Supervision
+      </h3>
 
-      <p class="text-white/50 text-sm mb-4">
-        ${member.role}
-      </p>
+      <div class="team-grid">
+        ${staff.map(createMemberCard).join("")}
+      </div>
+    </div>
 
-      <span class="inline-block text-[10px] bg-white/10 px-3 py-2 rounded-full font-bold text-white/70 tracking-wide">
-        ${member.tag}
-      </span>
-    `;
+    <div class="team-category">
+      <h3 class="team-category-title">
+        Caméra / Visuel
+      </h3>
 
-    container.appendChild(card);
-  });
+      <div class="team-grid">
+        ${cameraTeam.map(createMemberCard).join("")}
+      </div>
+    </div>
+
+  `;
 }
 
 // ===============================
-// LANCEMENT PAGE
+// DEMARRAGE
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
