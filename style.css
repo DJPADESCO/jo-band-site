@@ -1,191 +1,89 @@
-/* ==========================
-   RESET ET THEME GLOBAL
-========================== */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* VARIABLES GLOBALES */
+:root {
+    --primary: #d4af37; /* Or / Jaune du logo */
+    --bg-dark: #0a0e1a; /* Bleu très sombre */
+    --bg-card: #1a2a44; /* Bleu marine du logo */
+    --text: #ffffff;
 }
 
-body {
-    background-color: #0f172a; /* Fond sombre (style Tailwind slate-900) */
-    color: #ffffff;
-    padding: 40px 20px;
-}
+/* RESET */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
+body { background-color: var(--bg-dark); color: var(--text); line-height: 1.6; }
 
-/* ==========================
-   SECTION ÉQUIPE JO BAND
-========================== */
-.team-section {
-    max-width: 1200px;
-    margin: 0 auto;
-}
+/* HEADER & NAVIGATION */
+.main-header { padding: 15px 20px; background: rgba(10, 14, 26, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
+.header-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.site-logo { height: 60px; border-radius: 8px; transition: transform 0.3s; }
+.site-logo:hover { transform: scale(1.05); }
 
-.team-section-title {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: 900;
-    margin-bottom: 10px;
-    letter-spacing: 2px;
-}
+.desktop-nav { display: flex; gap: 20px; }
+.desktop-nav a { color: var(--text); text-decoration: none; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; transition: color 0.3s; }
+.desktop-nav a:hover { color: var(--primary); }
 
-.team-subtitle {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.6);
-    max-width: 700px;
-    margin: 0 auto 40px auto;
-    line-height: 1.7;
-}
+.lang-switcher button { background: transparent; border: 1px solid var(--text); color: var(--text); padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-left: 5px; }
+.lang-switcher button.active { background: var(--primary); border-color: var(--primary); color: var(--bg-dark); font-weight: bold; }
 
-/* NOUVEAUTÉ : Barre de recherche */
-.search-container {
-    max-width: 500px;
-    margin: 0 auto 50px auto;
-    position: relative;
-}
+/* TITRES DE SECTIONS */
+.section-title { text-align: center; font-size: 2.2rem; color: var(--primary); margin: 40px 0 20px 0; text-transform: uppercase; letter-spacing: 2px; }
 
-.search-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.4);
-}
+/* HERO SECTION */
+.hero-section { text-align: center; padding: 80px 20px; background: radial-gradient(circle, var(--bg-card) 0%, var(--bg-dark) 80%); }
+.hero-section h1 { font-size: 4rem; color: var(--primary); margin-bottom: 10px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+.slogan { font-style: italic; color: var(--primary); font-size: 1.3rem; margin-bottom: 20px; letter-spacing: 1px; }
 
-#search-input {
-    width: 100%;
-    padding: 15px 15px 15px 45px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50px;
-    color: #fff;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
+/* BOUTONS RESEAUX */
+.social-links { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
+.social-btn { text-decoration: none; color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; display: flex; align-items: center; gap: 10px; transition: transform 0.3s; }
+.social-btn:hover { transform: translateY(-3px); }
+.youtube { background: #ff0000; }
+.tiktok { background: #000000; border: 1px solid var(--primary); }
+.whatsapp { background: #25d366; }
 
-#search-input:focus {
-    outline: none;
-    border-color: #f97316; /* Orange */
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 15px rgba(249, 115, 22, 0.2);
-}
+/* ABOUT SECTION & TTS */
+.about-section { max-width: 800px; margin: 40px auto; padding: 40px; text-align: center; background: var(--bg-card); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.about-section h2 { color: var(--primary); font-size: 2rem; margin-bottom: 20px; }
+.tts-container { margin-bottom: 20px; }
+.tts-btn { background: var(--primary); color: var(--bg-dark); border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+.tts-btn:hover { background: #fff; }
+.about-content { font-size: 1.1rem; line-height: 1.8; }
 
-.team-category {
-    margin-bottom: 50px;
-}
+/* SERVICES */
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+.service-card { background: var(--bg-card); padding: 40px 20px; border-radius: 15px; text-align: center; border: 1px solid transparent; transition: border 0.3s; }
+.service-card:hover { border-color: var(--primary); }
+.service-icon { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
 
-.team-category-title {
-    font-size: 0.85rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 25px;
-    border-left: 4px solid #f97316;
-    padding-left: 14px;
-}
+/* EVENTS */
+.events-list { max-width: 800px; margin: 0 auto; padding: 20px; }
+.event-item { background: rgba(212, 175, 55, 0.1); border-left: 5px solid var(--primary); padding: 20px; margin-bottom: 15px; border-radius: 0 10px 10px 0; display: flex; justify-content: space-between; align-items: center; }
+.event-date { color: var(--primary); font-weight: bold; font-size: 1.2rem; }
 
-/* grille membres */
-.team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 25px;
-}
+/* TEAM */
+.team-section { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+.search-container input { width: 100%; max-width: 500px; padding: 15px 25px; border-radius: 30px; border: 1px solid var(--primary); background: var(--bg-card); color: white; margin: 0 auto 40px auto; display: block; outline: none; }
+.team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+.member-card { background: var(--bg-card); padding: 25px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s; }
+.member-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+.member-card i { font-size: 2rem; color: var(--primary); margin-bottom: 15px; }
+.card-tag { display: inline-block; margin-top: 15px; color: var(--bg-dark); background: var(--primary); padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
 
-/* ==========================
-   CARTES & ANIMATIONS CSS PUR
-========================== */
-.member-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    padding: 24px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    backdrop-filter: blur(12px);
-    
-    /* Le contenu est visible par défaut. L'animation se superpose. */
-    opacity: 1;
-    visibility: visible;
-    animation: fadeInUp 0.6s ease-out forwards;
-}
+/* FOOTER & CONTACT */
+.contact-footer { background: #05070a; padding: 80px 20px 40px 20px; text-align: center; border-top: 2px solid var(--primary); }
+.contact-footer h2 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; }
+.contact-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; }
+.contact-link { text-decoration: none; color: white; padding: 15px 30px; border-radius: 10px; font-weight: bold; display: flex; align-items: center; gap: 10px; transition: background 0.3s; }
+.phone { background: #1a2a44; border: 1px solid var(--primary); }
+.phone:hover { background: var(--primary); color: var(--bg-dark); }
+.whatsapp-direct { background: #128c7e; }
+.whatsapp-direct:hover { background: #075e54; }
+.email { background: #ea4335; }
+.email:hover { background: #c5221f; }
+.location-footer { letter-spacing: 5px; color: var(--primary); margin-top: 20px; font-weight: bold; }
+.credits { color: rgba(255,255,255,0.3); margin-top: 20px; font-size: 0.9rem; }
 
-/* Effet au survol */
-.member-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(249, 115, 22, 0.5);
-    box-shadow: 0 15px 40px rgba(249, 115, 22, 0.15);
-}
-
-/* Icône de la carte */
-.card-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    color: #f97316;
-    font-size: 1.25rem;
-    transition: transform 0.3s ease;
-}
-
-.member-card:hover .card-icon {
-    transform: scale(1.1);
-}
-
-.card-name {
-    font-weight: 900;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
-    margin-bottom: 8px;
-}
-
-.card-role {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.9rem;
-    margin-bottom: 16px;
-}
-
-.card-tag {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    font-size: 0.7rem;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.8);
-    letter-spacing: 0.5px;
-}
-
-/* Carte spéciale DJ PADESCO */
-.padesco-special {
-    background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(255, 255, 255, 0.02));
-    border: 1px solid rgba(249, 115, 22, 0.4);
-}
-.padesco-special .card-tag {
-    background: #f97316;
-    color: #fff;
-}
-
-/* Animations Keyframes */
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsive */
+/* RESPONSIVE */
 @media (max-width: 768px) {
-    .team-section-title { font-size: 1.8rem; }
-    .team-subtitle { font-size: 0.95rem; }
-    .team-grid { grid-template-columns: 1fr; }
+    .desktop-nav { display: none; /* Cache le menu sur petit écran pour faire propre */ }
+    .hero-section h1 { font-size: 2.5rem; }
+    .event-item { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
