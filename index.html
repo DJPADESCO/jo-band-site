@@ -1,115 +1,155 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JO BAND | Le Collectif d'Élite du Togo</title>
-    
-    <!-- Pré-connexion aux serveurs de polices -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Polices Premium -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Syncopate:wght@700&display=swap" rel="stylesheet">
-    
-    <!-- Icônes -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Framework CSS (Tailwind) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JO BAND | Partout où ça bouge, JO BAND est là</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Liens vers tes modules (fichiers séparés) -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Ton CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-[#020617] text-white selection:bg-orange-500 selection:text-white">
 
-    <!-- 1. PRELOADER (L'écran de chargement qui s'enlève via script.js) -->
-    <div id="preloader" class="fixed inset-0 z-[100] bg-[#020617] flex flex-col items-center justify-center transition-opacity duration-700">
-        <div class="relative">
-            <div class="w-20 h-20 border-2 border-orange-500/20 border-t-orange-500 rounded-full animate-spin"></div>
-            <i class="fa-solid fa-bolt absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-orange-500 animate-pulse"></i>
-        </div>
-        <p class="mt-4 font-black tracking-[0.5em] text-[10px] text-orange-500/50 uppercase">JO BAND • CHARGEMENT</p>
-    </div>
+<body class="bg-black text-white overflow-x-hidden">
 
-    <!-- 2. NAVIGATION -->
-    <nav class="fixed top-0 w-full z-50 px-6 py-5 flex justify-between items-center transition-all duration-300" id="navbar">
-        <div class="flex items-center gap-2">
-            <span class="text-2xl font-black italic tracking-tighter text-orange-500 font-[Syncopate]">JO BAND</span>
-        </div>
-        
-        <div class="flex items-center gap-4">
-            <a href="https://wa.me/22897668021" class="group relative px-6 py-2 overflow-hidden rounded-full bg-white text-black text-[11px] font-black uppercase tracking-widest transition-all">
-                <span class="relative z-10 group-hover:text-white transition-colors duration-300">Réservation</span>
-                <div class="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-            </a>
-        </div>
-    </nav>
+    <!-- Glow background -->
+    <div class="hero-glow"></div>
 
-    <!-- 3. SECTION HERO (Accueil) -->
-    <header class="relative min-h-screen flex items-center justify-center pt-20 px-6 overflow-hidden">
-        <!-- Effet de lumière en fond -->
-        <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[100vw] h-[100vw] bg-orange-500/10 rounded-full blur-[120px]"></div>
-        </div>
-        
-        <div class="text-center z-10 max-w-4xl">
-            <div class="inline-block px-4 py-1 mb-6 rounded-full border border-orange-500/30 bg-orange-500/5 text-orange-500 text-[10px] font-bold tracking-[0.3em] uppercase">
-                <i class="fa-solid fa-circle-check mr-2"></i> Artistes • Comédie • DJ • Vidéo
+    <!-- NAVBAR -->
+    <header class="nav-glass fixed top-0 left-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+            <div>
+                <h1 class="logo text-xl font-bold tracking-[0.3em]">
+                    JO BAND
+                </h1>
+                <p class="text-xs text-white/40 uppercase">
+                    Partout où ça bouge, JO BAND est là
+                </p>
             </div>
-            <h1 class="text-[14vw] md:text-[9rem] font-black leading-[0.85] tracking-tighter uppercase italic opacity-95">
-                ON EST <br><span class="text-orange-500">LÀ !</span>
-            </h1>
-            <p class="mt-8 text-white/50 text-sm md:text-lg max-w-xl mx-auto font-light leading-relaxed">
-                Le collectif qui redéfinit l'animation au Togo. Mariages, Concerts, Événements de prestige.
-            </p>
-            <div class="mt-12">
-                <a href="#team" class="text-[11px] font-black tracking-widest uppercase py-4 px-8 border border-white/10 rounded-2xl hover:bg-white hover:text-black transition-all">
-                    Découvrir l'équipe
+
+            <nav class="hidden md:flex gap-8 text-sm text-white/60">
+                <a href="#home" class="hover:text-orange-500 transition">
+                    Accueil
                 </a>
-            </div>
+
+                <a href="#team" class="hover:text-orange-500 transition">
+                    Équipe
+                </a>
+
+                <a href="#contact" class="hover:text-orange-500 transition">
+                    Contact
+                </a>
+            </nav>
         </div>
     </header>
 
-    <!-- 4. SECTION ÉQUIPE (Gérée dynamiquement par script.js) -->
-    <section id="team" class="py-32 px-6 max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-4">
-            <div class="max-w-xl text-left">
-                <h3 class="text-orange-500 text-[10px] font-black tracking-[0.5em] uppercase mb-4">L'Élite</h3>
-                <h2 class="text-4xl md:text-6xl font-black italic uppercase leading-none">Nos Maîtres <br>du Show</h2>
+    <!-- HERO -->
+    <section id="home" class="min-h-screen flex items-center justify-center px-6">
+
+        <div class="max-w-5xl text-center relative z-10">
+
+            <p class="section-title mb-8">
+                Comédie • Humour • Animation
+            </p>
+
+            <h2 class="text-5xl md:text-7xl font-black leading-tight mb-8">
+                PARTOUT OÙ ÇA BOUGE,
+                <br>
+                <span class="text-orange-500">
+                    JO BAND EST LÀ
+                </span>
+            </h2>
+
+            <p class="text-white/60 max-w-2xl mx-auto text-lg mb-10">
+                JO BAND est un groupe de comédie, humour, animation,
+                mariage, spectacles, vidéos et divertissement à Lomé.
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://www.tiktok.com/@jobandofficiel?_r=1&_t=ZS-96MQKFp8Yxk"
+                    target="_blank"
+                    class="bg-orange-500 px-8 py-4 rounded-2xl font-bold text-black hover:scale-105 transition">
+                    TikTok
+                </a>
+
+                <a href="https://www.youtube.com/@JoBandofficiel"
+                    target="_blank"
+                    class="border border-white/10 px-8 py-4 rounded-2xl hover:bg-white/5 transition">
+                    YouTube
+                </a>
+
+                <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C"
+                    target="_blank"
+                    class="border border-green-500 text-green-400 px-8 py-4 rounded-2xl hover:bg-green-500/10 transition">
+                    Chaîne WhatsApp
+                </a>
             </div>
-            <div class="hidden md:block h-[1px] flex-1 bg-white/10 mx-10 mb-4"></div>
         </div>
-        
-        <!-- C'est ici que le JS va injecter les cartes des 13 membres -->
-        <div id="team-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8"></div>
     </section>
 
-    <!-- 5. FOOTER & SIGNATURE -->
-    <footer class="mt-20 py-20 px-6 border-t border-white/5 bg-black/20 text-center">
-        <div class="flex justify-center gap-10 mb-12">
-            <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="text-white/20 hover:text-white transition-colors"><i class="fa-brands fa-tiktok text-2xl"></i></a>
-            <a href="https://www.youtube.com/@JoBandofficiel" target="_blank" class="text-white/20 hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-2xl"></i></a>
-            <a href="https://wa.me/22897668021" target="_blank" class="text-white/20 hover:text-green-500 transition-colors"><i class="fa-brands fa-whatsapp text-2xl"></i></a>
+    <!-- TEAM -->
+    <section id="team" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+
+            <p class="section-title mb-5">
+                NOTRE ÉQUIPE
+            </p>
+
+            <h3 class="text-center text-4xl font-black mb-14">
+                Les membres du JO BAND
+            </h3>
+
+            <!-- LE JS AJOUTE LES MEMBRES ICI -->
+            <div id="team-container"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+
         </div>
-        
-        <p class="text-[10px] text-white/20 tracking-[0.5em] uppercase font-bold">© 2024 JO BAND OFFICIAL • LOMÉ TOGO</p>
-        
-        <!-- TA SIGNATURE PERSONNALISÉE -->
-        <div class="mt-12 group cursor-default">
-            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/5 border border-white/5 group-hover:border-orange-500/30 transition-all duration-500">
-                <div class="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center text-black">
-                    <i class="fa-solid fa-code text-[12px]"></i>
-                </div>
-                <div class="text-left">
-                    <p class="text-[8px] font-black text-white/30 uppercase tracking-widest leading-none mb-1">Architecte Web</p>
-                    <p class="text-[11px] font-black text-white group-hover:text-orange-500 transition-colors tracking-tighter">DESIGNED BY DJ PADESCO</p>
-                </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-24 px-6">
+        <div class="max-w-5xl mx-auto text-center">
+
+            <p class="section-title mb-5">
+                CONTACT
+            </p>
+
+            <h3 class="text-4xl font-black mb-8">
+                Réservez JO BAND
+            </h3>
+
+            <p class="text-white/50 mb-10">
+                Mariages • Concerts • Soirées • Animation • Humour
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-5 justify-center">
+
+                <a href="tel:+22897668021"
+                    class="bg-white/5 border border-white/10 px-8 py-5 rounded-2xl hover:border-orange-500 transition">
+                    📞 +228 97 66 80 21
+                </a>
+
+                <a href="tel:+22870002539"
+                    class="bg-white/5 border border-white/10 px-8 py-5 rounded-2xl hover:border-blue-500 transition">
+                    📞 +228 70 00 25 39
+                </a>
+
             </div>
         </div>
-    </footer>
+    </section>
 
-    <!-- Appel du fichier logique -->
+    <!-- TON JS -->
     <script src="script.js"></script>
+
 </body>
 </html>
