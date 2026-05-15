@@ -1,21 +1,22 @@
-/* Polices et Bases */
+/* Polices et bases */
 body {
     font-family: 'Inter', sans-serif;
+    background: #050814;
+    color: white;
+    overflow-x: hidden;
 }
 
 .logo {
     font-family: 'Syncopate', sans-serif;
 }
 
-/* Effets Premium */
-.nav-glass {
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+html {
+    scroll-behavior: smooth;
 }
 
+/* Fond premium */
 .hero-glow {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -23,34 +24,82 @@ body {
     height: 80vw;
     background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
     pointer-events: none;
+    z-index: -1;
 }
 
+/* Barre de navigation */
+.nav-glass {
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Titres de section */
 .section-title {
     font-family: 'Syncopate', sans-serif;
     font-size: 0.8rem;
     letter-spacing: 0.5em;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.35);
     text-align: center;
     text-transform: uppercase;
 }
 
-/* Cartes Membres */
+/* Cartes */
+.glass-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
 .member-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 24px;
     padding: 2rem 1.5rem;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .member-card:hover {
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(249, 115, 22, 0.5);
-    transform: translateY(-10px);
+    transform: translateY(-8px);
 }
 
 .padesco-special {
-    background: linear-gradient(145deg, rgba(249, 115, 22, 0.1), rgba(0, 0, 0, 0));
+    background: linear-gradient(145deg, rgba(249, 115, 22, 0.10), rgba(0, 0, 0, 0));
     border-color: rgba(249, 115, 22, 0.3);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* Animations */
+.reveal {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Liens */
+a {
+    text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .section-title {
+        letter-spacing: 0.3em;
+        font-size: 0.7rem;
+    }
+
+    .hero-glow {
+        width: 120vw;
+        height: 120vw;
+    }
 }
