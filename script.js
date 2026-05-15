@@ -3,160 +3,125 @@
 // ===============================
 
 const performers = [
-  {
-    name: "DJ PADESCO",
-    role: "Comédien, vidéaste & DJ",
-    tag: "POLYVALENT",
-    icon: "fa-headphones",
-    special: true
-  },
-  {
-    name: "NANA SIKA",
-    role: "Comédien & vidéaste",
-    tag: "ARTISTE",
-    icon: "fa-video",
-    special: false
-  },
-  {
-    name: "CLAUDE",
-    role: "Humoriste",
-    tag: "HUMOUR",
-    icon: "fa-face-laugh",
-    special: false
-  },
-  {
-    name: "GÉDÉON",
-    role: "Humoriste & danseur",
-    tag: "DANSE / HUMOUR",
-    icon: "fa-person-running",
-    special: false
-  },
-  {
-    name: "ESTHER",
-    role: "Humoriste",
-    tag: "HUMOUR",
-    icon: "fa-masks-theater",
-    special: false
-  },
-  {
-    name: "PRISCA",
-    role: "Humoriste",
-    tag: "HUMOUR",
-    icon: "fa-face-smile",
-    special: false
-  },
-  {
-    name: "MAKAFUI",
-    role: "Artiste",
-    tag: "ARTISTE",
-    icon: "fa-star",
-    special: false
-  },
-  {
-    name: "JEAN",
-    role: "Humoriste & artiste chanteur",
-    tag: "CHANT",
-    icon: "fa-microphone-lines",
-    special: false
-  },
-  {
-    name: "THE GACHA",
-    role: "Humoriste & artiste chanteur",
-    tag: "CHANT",
-    icon: "fa-music",
-    special: false
-  }
+    { name: "DJ PADESCO", role: "Comédien, vidéaste & DJ", tag: "POLYVALENT", icon: "fa-headphones", special: true },
+    { name: "NANA SIKA", role: "Comédienne & vidéaste", tag: "ARTISTE", icon: "fa-video", special: false },
+    { name: "CLAUDE", role: "Humoriste", tag: "HUMOUR", icon: "fa-face-laugh", special: false },
+    { name: "GÉDÉON", role: "Humoriste & danseur", tag: "DANSE / HUMOUR", icon: "fa-person-running", special: false },
+    { name: "ESTHER", role: "Humoriste", tag: "HUMOUR", icon: "fa-masks-theater", special: false },
+    { name: "PRISCA", role: "Humoriste", tag: "HUMOUR", icon: "fa-face-smile", special: false },
+    { name: "MAKAFUI", role: "Artiste", tag: "ARTISTE", icon: "fa-star", special: false },
+    { name: "JEAN", role: "Humoriste & artiste chanteur", tag: "CHANT", icon: "fa-microphone-lines", special: false },
+    { name: "THE GACHA", role: "Humoriste & artiste chanteur", tag: "CHANT", icon: "fa-music", special: false }
 ];
 
 const staff = [
-  {
-    name: "JOËL",
-    role: "Superviseur",
-    tag: "STAFF",
-    icon: "fa-user-tie",
-    special: false
-  },
-  {
-    name: "DG À CONFIRMER",
-    role: "Fondateur",
-    tag: "DIRECTION",
-    icon: "fa-crown",
-    special: false
-  }
+    { name: "JOËL", role: "Superviseur", tag: "STAFF", icon: "fa-user-tie", special: false },
+    { name: "DG À CONFIRMER", role: "Fondateur", tag: "DIRECTION", icon: "fa-crown", special: false }
 ];
 
 const cameraTeam = [
-  {
-    name: "AROLE & L&H",
-    role: "Équipe caméra / visuel",
-    tag: "VISUEL",
-    icon: "fa-camera-retro",
-    special: false
-  }
+    { name: "AROLE & L&H", role: "Équipe caméra / visuel", tag: "VISUEL", icon: "fa-camera-retro", special: false }
 ];
 
 // ===============================
-// CREER UNE CARTE MEMBRE
+// CREER UNE CARTE MEMBRE (Template corrigé)
 // ===============================
 
 function createMemberCard(member) {
-  return `
-    <div class="member-card ${member.special ? "padesco-special" : ""}">
-      <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-5 text-orange-500">
-        <i class="fa-solid ${member.icon} text-xl"></i>
-      </div>
-
-      <h4 class="font-black text-lg uppercase tracking-tight mb-2">
-        ${member.name}
-      </h4>
-
-      <p class="text-white/50 text-sm mb-4">
-        ${member.role}
-      </p>
-
-      <span class="inline-block px-4 py-2 rounded-full bg-white/10 text-[11px] font-bold text-white/70">
-        ${member.tag}
-      </span>
-    </div>
-  `;
+    const specialClass = member.special ? "padesco-special" : "";
+    
+    // Utilisation des backticks (`) pour une injection HTML propre
+    return `
+        <div class="member-card ${specialClass}">
+            <div class="card-icon">
+                <i class="fa-solid ${member.icon}"></i>
+            </div>
+            <h4 class="card-name">${member.name}</h4>
+            <p class="card-role">${member.role}</p>
+            <span class="card-tag">${member.tag}</span>
+        </div>
+    `;
 }
 
 // ===============================
-// AFFICHER L'EQUIPE
+// AFFICHER L'EQUIPE (avec filtrage)
 // ===============================
 
-function renderTeam() {
-  const container = document.getElementById("team-container");
-  if (!container) return;
+function renderTeam(searchTerm = "") {
+    const container = document.getElementById("team-container");
+    if (!container) return;
 
-  container.innerHTML = `
-    <div class="team-category">
-      <h3 class="team-category-title">Artistes / Humoristes</h3>
-      <div class="team-grid">
-        ${performers.map(createMemberCard).join("")}
-      </div>
-    </div>
+    // Fonction d'aide pour filtrer un tableau selon la recherche
+    const filterData = (teamArray) => {
+        return teamArray.filter(member => {
+            const term = searchTerm.toLowerCase();
+            return member.name.toLowerCase().includes(term) || 
+                   member.role.toLowerCase().includes(term) || 
+                   member.tag.toLowerCase().includes(term);
+        });
+    };
 
-    <div class="team-category">
-      <h3 class="team-category-title">Direction / Supervision</h3>
-      <div class="team-grid">
-        ${staff.map(createMemberCard).join("")}
-      </div>
-    </div>
+    const filteredPerformers = filterData(performers);
+    const filteredStaff = filterData(staff);
+    const filteredCamera = filterData(cameraTeam);
 
-    <div class="team-category">
-      <h3 class="team-category-title">Caméra / Visuel</h3>
-      <div class="team-grid">
-        ${cameraTeam.map(createMemberCard).join("")}
-      </div>
-    </div>
-  `;
+    let htmlOutput = "";
+
+    // On n'affiche la catégorie que si elle contient des membres (utile lors d'une recherche)
+    if (filteredPerformers.length > 0) {
+        htmlOutput += `
+            <div class="team-category">
+                <h3 class="team-category-title">Artistes / Humoristes</h3>
+                <div class="team-grid">
+                    ${filteredPerformers.map(createMemberCard).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    if (filteredStaff.length > 0) {
+        htmlOutput += `
+            <div class="team-category">
+                <h3 class="team-category-title">Direction / Supervision</h3>
+                <div class="team-grid">
+                    ${filteredStaff.map(createMemberCard).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    if (filteredCamera.length > 0) {
+        htmlOutput += `
+            <div class="team-category">
+                <h3 class="team-category-title">Caméra / Visuel</h3>
+                <div class="team-grid">
+                    ${filteredCamera.map(createMemberCard).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    // Message si aucun résultat n'est trouvé
+    if (htmlOutput === "") {
+        htmlOutput = `<p style="text-align:center; color: rgba(255,255,255,0.5);">Aucun membre ne correspond à votre recherche.</p>`;
+    }
+
+    container.innerHTML = htmlOutput;
 }
 
 // ===============================
-// DEMARRAGE
+// DEMARRAGE ET EVENEMENTS
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderTeam();
+    // Affichage initial
+    renderTeam();
+
+    // Ajout de la fonctionnalité de recherche en temps réel
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            renderTeam(e.target.value);
+        });
+    }
 });
