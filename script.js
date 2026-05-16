@@ -129,9 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ✨ NOUVEAU : Service Worker pour la PWA (Application installable)
+        // ✨ Activation officielle de la PWA (Application installable)
     if ('serviceWorker' in navigator) {
-        // Logique PWA prête à être activée si tu ajoutes un fichier sw.js à la racine
-        console.log("PWA Ready");
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('Application JO BAND prête à être installée !', reg))
+                .catch(err => console.log('Erreur installation PWA :', err));
+        });
     }
-});
