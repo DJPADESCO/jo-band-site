@@ -117,20 +117,39 @@
             <div class="videos-container">
                 <div class="video-card">
                     <h3 data-i18n="yt-feed-title">Nos Dernières Vidéos</h3>
+                    <!--
+                        PLAYLIST AUTO YOUTUBE :
+                        Remplace UU_VOTRE_CHANNEL_ID par ton vrai ID de playlist uploads.
+                        Pour le trouver : va sur ta chaine YouTube -> About -> partager -> copier l'ID de chaine
+                        Puis remplace "UC" par "UU" au début. Exemple : UCabc123 devient UUabc123
+                        Les parametres autoplay=1&loop=1 font enchainer les videos automatiquement.
+                    -->
                     <div class="video-wrapper">
                         <iframe
-                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_HERE"
-                            title="JO BAND YouTube"
+                            id="yt-playlist-player"
+                            src="https://www.youtube.com/embed/videoseries?list=UU_VOTRE_CHANNEL_ID&autoplay=1&loop=1&rel=0"
+                            title="JO BAND - Toutes nos videos"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen>
                         </iframe>
                     </div>
-                    <div class="yt-subscribe-widget-box">
-                        <p data-i18n="subscribe-prompt">Abonne-toi directement ici :</p>
-                        <div class="g-ytsubscribe" data-channel="jobandofficiel" data-layout="full" data-count="default"></div>
-                    </div>
+                    <p style="font-size:0.75rem; color:#8892b0; text-align:center; margin-top:8px;" data-i18n="playlist-info">
+                        Les videos se suivent automatiquement. Nouvelle video = elle apparait ici.
+                    </p>
                 </div>
+            </div>
+
+            <div class="tiktok-section" style="margin-top: 30px;">
+                <h3><i class="fa-brands fa-tiktok"></i> TikTok JO BAND</h3>
+                <p data-i18n="tiktok-desc">TikTok ne permet pas l'integration directe. Clique ci-dessous pour voir nos derniers sketchs !</p>
+                <div class="tiktok-videos-grid" id="tiktok-grid">
+                    <!-- Les vignettes TikTok sont generees depuis script.js -->
+                </div>
+                <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-tiktok-profile">
+                    <i class="fa-brands fa-tiktok"></i>
+                    <span data-i18n="tiktok-btn">Voir tous nos TikToks</span>
+                </a>
             </div>
 
             <h2 class="title-gold" style="margin-top: 40px;" data-i18n="packages-title">Nos Formules Prestations</h2>
