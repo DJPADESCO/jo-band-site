@@ -129,11 +129,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-        // ✨ Activation officielle de la PWA (Application installable)
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('Application JO BAND prête à être installée !', reg))
-                .catch(err => console.log('Erreur installation PWA :', err));
-        });
-    }
+        'use strict';
+
+// Enregistrement du Service Worker après le chargement complet
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => {
+        if (window.__DEBUG__) console.log('Service Worker registered');
+      })
+      .catch(err => {
+        console.error('SW registration failed:', err);
+      });
+  });
+}
+
+// Disparition du loader propre
+function hideLoader() {
+  const loader = document.getElementById('loader') || document.querySelector('.loading-screen');
+  if (loader) {
+    loader.style.display = 'none'; // Utilisation directe pour être sûr que ça disparaisse
+    console.log("Écran de chargement retiré !");
+  }
+}
+
+// 🚀 Déclenchement ultra-rapide au chargement de la page
+window.addEventListener('load', () => {
+  hideLoader();
+});
+
+// 🛡️ Sécurité : Si le navigateur est capricieux, on force l'affichage après 2 secondes max
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(hideLoader, 2000); 
+});
