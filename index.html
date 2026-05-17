@@ -26,208 +26,201 @@
     <header class="main-header">
         <div class="header-container">
             <div class="logo-box">
-                <img src="images/logo.jpg" alt="JO BAND" class="site-logo" onerror="this.style.display='none'">
+                <img src="images/logo.jpg" alt="JO BAND" class="header-logo" onerror="this.style.display='none'">
+                <div>
+                    <h1 class="brand-title">JO BAND</h1>
+                    <p class="brand-subtitle" data-i18n="slogan">Partout où ça bouge, Jo Band est là.</p>
+                </div>
             </div>
-            <div class="header-right">
-                <a href="https://youtube.com/@jobandofficiel/live" target="_blank" class="live-badge">
-                    <span class="live-dot"></span>
-                    <span data-i18n="live-text">EN LIVE</span>
-                </a>
-                <button id="theme-toggle" class="theme-btn-icon" aria-label="Changer le thème">
-                    <i class="fa-solid fa-moon"></i>
+            <div class="header-controls">
+                <button id="theme-toggle" class="control-btn" title="Changer le thème">
+                    <i class="fa-solid fa-palette"></i>
                 </button>
                 <div class="lang-selector">
                     <button class="lang-btn active" data-lang="fr">FR</button>
                     <button class="lang-btn" data-lang="en">EN</button>
                 </div>
-                <button class="share-action-trigger icon-btn" id="share-top" aria-label="Partager">
-                    <i class="fa-solid fa-share-nodes"></i>
-                </button>
             </div>
         </div>
     </header>
 
-    <main class="main-content">
-
+    <main class="app-container">
+        
         <section id="tab-accueil" class="tab-content active">
-            <div class="hero">
-                <h1 class="main-title">JO BAND</h1>
-                <p class="slogan" data-i18n="slogan">"Partout où ça bouge, Jo Band est là."</p>
-                <div class="social-buttons">
-                    <a href="https://www.youtube.com/@jobandofficiel" target="_blank" class="btn-social yt">
-                        <i class="fa-brands fa-youtube"></i> YouTube
+            <div class="hero-section">
+                <div class="live-badge">
+                    <span class="pulse-dot"></span>
+                    <span data-i18n="live-text">EN LIVE</span>
+                </div>
+                <h2 class="hero-main-title">JO BAND</h2>
+                <p class="hero-desc" id="about-text">
+                    Le collectif artistique incontournable du Togo. Humour, prestations DJ, chants vibrants et productions vidéo de haute qualité : nous transformons chaque instant en un événement mémorable.
+                </p>
+                <div class="audio-controls-row">
+                    <button id="btn-play" class="audio-action-btn" title="Écouter la présentation"><i class="fa-solid fa-volume-high"></i></button>
+                    <button id="btn-pause" class="audio-action-btn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+                    <button id="btn-stop" class="audio-action-btn" title="Arrêter"><i class="fa-solid fa-stop"></i></button>
+                </div>
+            </div>
+
+            <div id="pwa-install-banner" class="promo-card install-card" style="display: none;">
+                <div class="promo-icon-box gold-icon">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                </div>
+                <div class="promo-text-box">
+                    <h3>JO BAND sur votre écran !</h3>
+                    <p>Installez l'application officielle sur votre téléphone pour ne rien manquer.</p>
+                    <button id="btn-pwa-install" class="action-gold-btn">
+                        <i class="fa-solid fa-download"></i> Installer l'application
+                    </button>
+                </div>
+            </div>
+
+            <div class="promo-card quote-card">
+                <div class="promo-icon-box">
+                    <i class="fa-solid fa-quote-left"></i>
+                </div>
+                <div class="promo-text-box">
+                    <h3 data-i18n="quote-title">La punchline du jour</h3>
+                    <p id="daily-quote" class="quote-text">Chargement de la motivation quotidienne...</p>
+                </div>
+            </div>
+
+            <div class="promo-card whatsapp-booking-card">
+                <div class="promo-icon-box whatsapp-icon">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </div>
+                <div class="promo-text-box">
+                    <h3 data-i18n="wa-booking-title">Réservation Instantanée</h3>
+                    <p data-i18n="wa-booking-desc">Discutez directement avec notre management sur WhatsApp pour bloquer votre date rapidement.</p>
+                    <a id="whatsapp-direct-btn" href="https://wa.me/22870002539?text=Bonjour%20JO%20BAND%2C%20je%20viens%20de%20visiter%20votre%20application%20et%20je%20souhaite%20r%C3%A9server%20vos%20services%20pour%20un%20%C3%A9v%C3%A9nement.%20Pouvons-nous%20en%20discuter%20%3F" target="_blank" class="action-whatsapp-btn">
+                        <i class="fa-brands fa-whatsapp"></i> Envoyer un message
                     </a>
-                    <div class="social-row">
-                        <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-social tk">
-                            <i class="fa-brands fa-tiktok"></i> TikTok
-                        </a>
-                        <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="btn-social wa-chan">
-                            <i class="fa-brands fa-whatsapp"></i>
-                            <span data-i18n="wa-channel">Chaîne</span>
-                        </a>
+                </div>
+            </div>
+
+            <div class="section-block">
+                <h3 class="section-title-accent" data-i18n="why-us-title">Pourquoi nous choisir ?</h3>
+                <div class="features-grid">
+                    <div class="feature-item-box">
+                        <i class="fa-solid fa-masks-theater text-gold"></i>
+                        <h4>Collectif Pluridisciplinaire</h4>
+                        <p>Humoristes, chanteurs, danseurs et techniciens de l'image unis pour une prise en charge complète.</p>
                     </div>
-                </div>
-            </div>
-
-            <div class="about-section">
-                <h2 class="title-gold" data-i18n="history-title">Notre Histoire</h2>
-                <div class="tts-player">
-                    <button id="btn-play" class="tts-btn" aria-label="Lire"><i class="fa-solid fa-play"></i></button>
-                    <button id="btn-pause" class="tts-btn" aria-label="Pause"><i class="fa-solid fa-pause"></i></button>
-                    <button id="btn-stop" class="tts-btn" aria-label="Arrêter"><i class="fa-solid fa-stop"></i></button>
-                </div>
-                <p id="about-text" data-i18n="about-text">Né de la passion commune pour le rire et la scène, JO BAND est un collectif d'artistes togolais unique. Comédiens, chanteurs, DJ et vidéastes : nous fusionnons nos talents pour créer une machine à bonne humeur.</p>
-            </div>
-
-            <div class="stats-section">
-                <div class="stat-card">
-                    <div class="stat-number" data-target="500">0</div>
-                    <div class="stat-label" data-i18n="stat-views">K Vues Réseaux</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" data-target="13">0</div>
-                    <div class="stat-label" data-i18n="stat-staff">Artistes & Staff</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" data-target="150">0</div>
-                    <div class="stat-label" data-i18n="stat-shows">Shows Réussis</div>
-                </div>
-            </div>
-
-            <div class="testimonials-section">
-                <h2 class="title-gold" data-i18n="review-title">Avis de nos Clients</h2>
-                <div class="testimonial-card">
-                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                    <p class="review-text">"Une ambiance de folie pour notre mariage ! DJ PADESCO a mis le feu et les sketchs du collectif ont fait pleurer de rire toute la salle !"</p>
-                    <span class="review-author">- Rémi K. (Lomé)</span>
+                    <div class="feature-item-box">
+                        <i class="fa-solid fa-sliders text-gold"></i>
+                        <h4>Duo DJ Exceptionnel</h4>
+                        <p>Ambiance non-stop. Quand DJ PADESCO assure le show sur scène, DJ ZÉKA prend la relève aux platines.</p>
+                    </div>
+                    <div class="feature-item-box">
+                        <i class="fa-solid fa-map-location-dot text-gold"></i>
+                        <h4>Mobilité Totale</h4>
+                        <p>Mariages, concerts, anniversaires et tournages, nous nous déplaçons partout où ça bouge.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="tab-membres" class="tab-content">
-            <h2 class="title-gold" style="margin-top: 20px;" data-i18n="tab-collectif-title">Le Collectif</h2>
-            <p class="section-subtitle" data-i18n="collectif-subtitle">Cliquez sur un profil pour en savoir plus</p>
-            <div id="team-grid" class="team-grid"></div>
+            <h2 class="title-gold" data-i18n="team-title">Le Collectif</h2>
+            <div class="members-grid" id="container-membres">
+                </div>
+
+            <div class="section-block border-top-gold">
+                <h3 class="section-title-accent"><i class="fa-solid fa-camera"></i> Coulisses & Événements</h3>
+                <p class="section-subtitle">Découvrez l'envers du décor de nos tournages et la ferveur de nos spectacles en direct.</p>
+                <div class="coulisses-grid">
+                    <div class="coulisse-card">
+                        <div class="coulisse-media-placeholder">
+                            <i class="fa-solid fa-clapperboard"></i>
+                        </div>
+                        <div class="coulisse-info">
+                            <h4>Session Tournage Sketch</h4>
+                            <p>Dans les coulisses de notre dernière production vidéo humoristique.</p>
+                        </div>
+                    </div>
+                    <div class="coulisse-card">
+                        <div class="coulisse-media-placeholder">
+                            <i class="fa-solid fa-compact-disc"></i>
+                        </div>
+                        <div class="coulisse-info">
+                            <h4>Show en Direct - Lomé</h4>
+                            <p>DJ PADESCO et toute l'équipe sur scène devant un public en feu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="tab-videos" class="tab-content">
-            <h2 class="title-gold" style="margin-top: 20px;" data-i18n="tab-videos-title">Le Coin du Rire</h2>
-            <p class="section-subtitle" data-i18n="videos-subtitle">Découvrez nos meilleurs sketchs et exclusivités</p>
-
-            <div class="videos-container">
-                <div class="video-card">
-                    <h3 data-i18n="yt-feed-title">Nos Dernières Vidéos</h3>
-                    <!--
-                        PLAYLIST AUTO YOUTUBE :
-                        Remplace UU_VOTRE_CHANNEL_ID par ton vrai ID de playlist uploads.
-                        Pour le trouver : va sur ta chaine YouTube -> About -> partager -> copier l'ID de chaine
-                        Puis remplace "UC" par "UU" au début. Exemple : UCabc123 devient UUabc123
-                        Les parametres autoplay=1&loop=1 font enchainer les videos automatiquement.
-                    -->
-                    <div class="video-wrapper">
-                        <iframe
-                            id="yt-playlist-player"
-                            src="https://www.youtube.com/embed/videoseries?list=UUxj3ygXxMVzbKmq4ctSCN5Q&autoplay=1&loop=1&rel=0"
-                            title="JO BAND - Toutes nos videos"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <p style="font-size:0.75rem; color:#8892b0; text-align:center; margin-top:8px;" data-i18n="playlist-info">
-                        Les videos se suivent automatiquement. Nouvelle video = elle apparait ici.
-                    </p>
-                </div>
-            </div>
-
-            <div class="tiktok-section" style="margin-top: 30px;">
-                <h3><i class="fa-brands fa-tiktok"></i> TikTok JO BAND</h3>
-                <p data-i18n="tiktok-desc">TikTok ne permet pas l'integration directe. Clique ci-dessous pour voir nos derniers sketchs !</p>
-                <div class="tiktok-videos-grid" id="tiktok-grid">
-                    <!-- Les vignettes TikTok sont generees depuis script.js -->
-                </div>
-                <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-tiktok-profile">
-                    <i class="fa-brands fa-tiktok"></i>
-                    <span data-i18n="tiktok-btn">Voir tous nos TikToks</span>
-                </a>
-            </div>
-
-            <h2 class="title-gold" style="margin-top: 40px;" data-i18n="packages-title">Nos Formules Prestations</h2>
-            <div class="packages-grid">
-                <div class="package-card">
-                    <div class="package-badge" data-i18n="badge-pop">Populaire</div>
-                    <h3 data-i18n="pack-standard-title">Formule Standard</h3>
-                    <p class="package-desc" data-i18n="pack-standard-desc">Ambiance explosive pour vos soirées, mariages et anniversaires.</p>
-                    <ul class="package-features">
-                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-1">Show Humour sur scène</span></li>
-                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-2">Animation DJ par DJ PADESCO</span></li>
-                    </ul>
-                </div>
-                <div class="package-card premium">
-                    <div class="package-badge gold" data-i18n="badge-vip">Grand Standing</div>
-                    <h3 data-i18n="pack-vip-title">Formule Premium VIP</h3>
-                    <p class="package-desc" data-i18n="pack-vip-desc">Le show complet clé en main avec couverture média totale.</p>
-                    <ul class="package-features">
-                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-1">Show Humour complet</span></li>
-                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-2">Animation DJ Premium</span></li>
-                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-3">Captation vidéo par Arole &amp; L&amp;H</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="agenda-box">
-                <h3><i class="fa-solid fa-calendar-days text-gold"></i> <span data-i18n="agenda-title">Fil d'actualité Actuel</span></h3>
-                <p data-i18n="agenda-desc">Actuellement en tournage de la prochaine saison de vidéos humoristiques. Restez connectés ! Le groupe reste disponible pour toutes vos réservations privées ou publiques sur l'année 2026.</p>
+            <h2 class="title-gold" data-i18n="videos-title">Nos Vidéos</h2>
+            <div class="videos-grid" id="container-videos">
+                <p class="loading-text">Synchronisation avec la chaîne YouTube officielle...</p>
             </div>
         </section>
 
         <section id="tab-contact" class="tab-content">
-            <h2 class="title-gold" style="margin-top: 20px;" data-i18n="tab-contact-title">Réserver le Show</h2>
-            <p class="section-subtitle" data-i18n="contact-subtitle">Planifiez votre événement avec l'équipe du JO BAND</p>
+            <h2 class="title-gold" data-i18n="contact-title">Contact & Réservation</h2>
+            <div class="contact-layout-box">
+                
+                <form id="formspree-contact" class="booking-form-clean">
+                    <div class="form-input-group">
+                        <label for="input-name" data-i18n="form-name">Votre Nom complet / Entreprise *</label>
+                        <input type="text" id="input-name" name="nom" required placeholder="Ex: M. Jean Koffi">
+                    </div>
+                    <div class="form-input-group">
+                        <label for="input-phone" data-i18n="form-phone">Numéro de téléphone (WhatsApp de préférence) *</label>
+                        <input type="tel" id="input-phone" name="telephone" required placeholder="Ex: +228 90 00 00 00">
+                    </div>
+                    <div class="form-input-group">
+                        <label for="select-event">Type d'événement *</label>
+                        <select id="select-event" name="type_evenement" required>
+                            <option value="" disabled selected>Choisissez le type d'événement</option>
+                            <option value="Mariage">Mariage</option>
+                            <option value="Anniversaire">Anniversaire</option>
+                            <option value="Concert">Concert / Festival</option>
+                            <option value="Autre">Autre prestation</option>
+                        </select>
+                    </div>
+                    <div class="form-input-group">
+                        <label for="input-date">Date prévue de l'événement *</label>
+                        <input type="date" id="input-date" name="date_evenement" required>
+                    </div>
+                    <div class="form-input-group">
+                        <label for="input-location">Ville / Lieu de la prestation *</label>
+                        <input type="text" id="input-location" name="lieu" required placeholder="Ex: Lomé, Togo">
+                    </div>
+                    <div class="form-input-group">
+                        <label for="input-message" data-i18n="form-message">Précisions sur votre projet (Attentes particulières, durée...) *</label>
+                        <textarea id="input-message" name="message" rows="4" required placeholder="Décrivez votre événement ici. Nous discuterons du prix ensemble par la suite."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-form-btn" data-i18n="form-submit">Envoyer la demande</button>
+                    <div id="form-status-message" class="form-status-box"></div>
+                </form>
 
-            <form id="contact-form" action="https://formspree.io/f/xbdwnyer" method="POST" class="styled-form">
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="Votre Nom complet" required>
+                <div class="social-channels-block">
+                    <h3 data-i18n="follow-us">Suivez-nous</h3>
+                    <div class="social-buttons-flex">
+                        <a href="https://www.youtube.com/@jobandofficiel" target="_blank" class="social-pill youtube-color" title="YouTube JO BAND">
+                            <i class="fa-brands fa-youtube"></i> YouTube
+                        </a>
+                        <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="social-pill tiktok-color" title="TikTok JO BAND">
+                            <i class="fa-brands fa-tiktok"></i> TikTok
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="social-pill whatsapp-color" title="Chaîne WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i> Chaîne WhatsApp
+                        </a>
+                    </div>
+                    <div class="backup-phones-box">
+                        <p><strong><i class="fa-solid fa-phone"></i> Contacts direct urgences :</strong></p>
+                        <p>+228 97 66 80 21 / +228 70 00 25 39</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Votre Adresse Email" required>
-                </div>
-                <div class="form-group">
-                    <textarea name="message" rows="5" placeholder="Détails de votre événement (Date, lieu, type de fête...)" required></textarea>
-                </div>
-                <button type="submit" class="btn-submit" data-i18n="btn-submit">ENVOYER LA DEMANDE</button>
-            </form>
-            <div id="form-status" class="form-status-box" style="display:none;"></div>
 
-            <div class="direct-contact-container">
-                <h3 data-i18n="wa-direct-title">Contact Rapide WhatsApp</h3>
-                <div class="contact-buttons-row">
-                    <a href="https://wa.me/22897668021" target="_blank" class="wa-direct-btn">
-                        <i class="fa-brands fa-whatsapp"></i> Ligne 1 (+228 97 66 80 21)
-                    </a>
-                    <a href="https://wa.me/22870002539" target="_blank" class="wa-direct-btn">
-                        <i class="fa-brands fa-whatsapp"></i> Ligne 2 (+228 70 00 25 39)
-                    </a>
-                </div>
             </div>
         </section>
-
     </main>
-
-    <div id="member-modal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <button class="close-modal" id="close-modal" aria-label="Fermer">&times;</button>
-            <div class="modal-img-container">
-                <img id="modal-img" src="" alt="" onerror="this.style.display='none'; document.getElementById('modal-img-fallback').style.display='flex';">
-                <div id="modal-img-fallback" class="modal-fallback-icon" style="display:none;">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-            </div>
-            <h2 id="modal-name"></h2>
-            <h4 id="modal-role" class="text-gold"></h4>
-            <p id="modal-desc" class="modal-desc-text">Membre incontournable du JO BAND, apportant une énergie unique à chaque événement.</p>
-        </div>
-    </div>
 
     <nav class="bottom-nav">
         <button class="nav-item active" data-tab="tab-accueil">
@@ -248,14 +241,26 @@
         </button>
     </nav>
 
+    <div id="modal-member" class="modal-overlay">
+        <div class="modal-card">
+            <button id="modal-close" class="modal-close-btn">&times;</button>
+            <div class="modal-image-frame">
+                <div class="modal-avatar-placeholder">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+            <h2 id="modal-name"></h2>
+            <h4 id="modal-role" class="text-gold"></h4>
+            <p id="modal-desc" class="modal-desc-text">Membre incontournable du JO BAND, apportant une énergie unique à chaque événement.</p>
+        </div>
+    </div>
+
     <footer class="footer">
         <button id="share-bottom" class="share-btn-footer share-action-trigger">
-            <i class="fa-solid fa-share-nodes"></i>
-            <span data-i18n="share-site">Partager le site</span>
+            <i class="fa-solid fa-share-nodes"></i> <span data-i18n="share-text">Partager l'application</span>
         </button>
-        <p class="signature">Architected by <strong>DJ PADESCO</strong></p>
+        <p class="footer-copyright">&copy; 2026 JO BAND. Fait avec ❤️ au Togo. App créée par DJ PADESCO.</p>
     </footer>
 
-    <script src="script.js"></script>
 </body>
 </html>
