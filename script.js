@@ -131,34 +131,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         'use strict';
 
-// Enregistrement du Service Worker après le chargement complet
+/**
+ * Enregistrement du Service Worker
+ */
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw.js')
-      .then(() => {
+      .then(function() {
         if (window.__DEBUG__) console.log('Service Worker registered');
       })
-      .catch(err => {
-        console.error('SW registration failed:', err);
+      .catch(function(err) {
+        console.error('Service Worker registration failed:', err);
       });
   });
 }
 
-// Disparition du loader propre
+/**
+ * Gestion du retrait de l'ecran de chargement
+ */
 function hideLoader() {
-  const loader = document.getElementById('loader') || document.querySelector('.loading-screen');
+  var loader = document.getElementById('loader') || document.querySelector('.loading-screen');
   if (loader) {
-    loader.style.display = 'none'; // Utilisation directe pour être sûr que ça disparaisse
-    console.log("Écran de chargement retiré !");
+    loader.style.display = 'none';
   }
 }
 
-// 🚀 Déclenchement ultra-rapide au chargement de la page
-window.addEventListener('load', () => {
-  hideLoader();
-});
+// Declenchement des le chargement complet de la page
+window.addEventListener('load', hideLoader);
 
-// 🛡️ Sécurité : Si le navigateur est capricieux, on force l'affichage après 2 secondes max
-window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(hideLoader, 2000); 
-});
+// Securite : Force l'affichage si l'evenement load est retarde
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(hideLoader, 1500);
+  });
+} else {
+  setTimeout(hideLoader, 1500);
+}
