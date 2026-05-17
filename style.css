@@ -1,3 +1,7 @@
+/* ===================================================
+   JO BAND — style.css (version corrigée & complète)
+   =================================================== */
+
 :root {
     --gold:       #d4af37;
     --navy:       #0a192f;
@@ -15,19 +19,15 @@ body.theme-gold-intense {
     --gold:       #ffdf6d;
 }
 
-* {
-    box-sizing: border-box;
-    margin:     0;
-    padding:    0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background:   var(--navy);
-    color:        var(--text-main);
-    font-family:  'Outfit', sans-serif;
+    background:     var(--navy);
+    color:          var(--text-main);
+    font-family:    'Outfit', sans-serif;
     padding-bottom: 85px;
-    overflow-x:   hidden;
-    transition:   background 0.3s, color 0.3s;
+    overflow-x:     hidden;
+    transition:     background 0.3s, color 0.3s;
 }
 
 h1, h2, h3, h4 {
@@ -43,7 +43,7 @@ h1, h2, h3, h4 {
     margin-bottom:  15px;
 }
 
-.text-gold       { color: var(--gold); }
+.text-gold { color: var(--gold); }
 
 .section-subtitle {
     text-align:    center;
@@ -82,8 +82,8 @@ h1, h2, h3, h4 {
 }
 
 .splash-content p {
-    font-size: 0.9rem;
-    color:     #8892b0;
+    font-size:  0.9rem;
+    color:      #8892b0;
     margin-top: 10px;
 }
 
@@ -98,14 +98,14 @@ h1, h2, h3, h4 {
 }
 
 .loader-bar::after {
-    content:   '';
-    display:   block;
-    width:     40%;
-    height:    100%;
+    content:    '';
+    display:    block;
+    width:      40%;
+    height:     100%;
     background: var(--gold);
-    position:  absolute;
+    position:   absolute;
     top: 0; left: 0;
-    animation: loadingMove 1.5s infinite ease-in-out;
+    animation:  loadingMove 1.5s infinite ease-in-out;
 }
 
 @keyframes loadingMove {
@@ -134,7 +134,7 @@ h1, h2, h3, h4 {
 /* ─── HEADER ─── */
 
 .main-header {
-    padding:       12px 4%;
+    padding:       10px 4%;
     background:    rgba(10, 25, 47, 0.97);
     position:      sticky;
     top:           0;
@@ -146,43 +146,64 @@ h1, h2, h3, h4 {
     display:         flex;
     justify-content: space-between;
     align-items:     center;
+    gap:             8px;
 }
 
+/* Logo box (image + brand text) */
 .logo-box {
     display:     flex;
     align-items: center;
+    gap:         8px;
+    flex-shrink: 0;
 }
 
-.site-logo {
-    height:      38px;
-    width:       auto;
-    object-fit:  contain;
-    display:     block;
-    border-radius: 4px;
+.header-logo {
+    height:        36px;
+    width:         36px;
+    object-fit:    cover;
+    border-radius: 8px;
+    display:       block;
 }
 
-.header-right {
+.brand-text {
+    display:        flex;
+    flex-direction: column;
+    line-height:    1.1;
+}
+
+.brand-title {
+    font-family:    'Bebas Neue', sans-serif;
+    font-size:      1.3rem;
+    color:          var(--gold);
+    letter-spacing: 2px;
+}
+
+.brand-subtitle {
+    font-size:  0.6rem;
+    color:      #8892b0;
+    font-style: italic;
+    white-space: nowrap;
+    overflow:   hidden;
+    text-overflow: ellipsis;
+    max-width:  150px;
+}
+
+/* Header right side controls */
+.header-controls {
     display:     flex;
     align-items: center;
-    gap:         10px;
+    gap:         8px;
+    flex-wrap:   nowrap;
 }
 
-.icon-btn {
-    background: none;
-    border:     none;
-    color:      var(--gold);
-    font-size:  1.2rem;
-    cursor:     pointer;
-    padding:    4px;
-}
-
-.theme-btn-icon {
+.control-btn {
     background: none;
     border:     none;
     color:      var(--gold);
     font-size:  1.1rem;
     cursor:     pointer;
     padding:    5px;
+    line-height: 1;
 }
 
 /* ─── LIVE BADGE ─── */
@@ -190,23 +211,26 @@ h1, h2, h3, h4 {
 .live-badge {
     display:         flex;
     align-items:     center;
-    gap:             6px;
-    background:      rgba(255, 0, 0, 0.15);
+    gap:             5px;
+    background:      rgba(255, 0, 0, 0.12);
     border:          1px solid #ff0000;
-    padding:         5px 10px;
+    padding:         4px 8px;
     border-radius:   20px;
     color:           #fff;
-    font-size:       0.7rem;
+    font-size:       0.65rem;
     font-weight:     bold;
     text-decoration: none;
+    white-space:     nowrap;
 }
 
-.live-dot {
-    width:         8px;
-    height:        8px;
+/* replaces .live-dot from old CSS — HTML uses .pulse-dot */
+.pulse-dot {
+    width:         7px;
+    height:        7px;
     background:    #ff0000;
     border-radius: 50%;
     animation:     blink 1s infinite;
+    flex-shrink:   0;
 }
 
 @keyframes blink {
@@ -243,6 +267,8 @@ h1, h2, h3, h4 {
 
 /* ─── TABS ─── */
 
+.app-container { max-width: 680px; margin: 0 auto; }
+
 .tab-content {
     display:   none;
     padding:   15px 4%;
@@ -256,79 +282,37 @@ h1, h2, h3, h4 {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── HERO ─── */
+/* ─── HERO SECTION ─── */
 
-.hero {
-    padding:    25px 0;
+.hero-section {
+    padding:    25px 0 20px;
     text-align: center;
 }
 
-.main-title {
+.hero-main-title {
     font-size:   4rem;
     color:       var(--gold);
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 4px 8px rgba(0,0,0,0.4);
     line-height: 1;
+    margin-bottom: 10px;
 }
 
-.slogan {
-    font-size:  1.1rem;
-    font-style: italic;
-    color:      #8892b0;
-    margin-top: 5px;
+.hero-desc {
+    font-size:   0.95rem;
+    line-height: 1.5;
+    color:       #a8b2d1;
+    margin-bottom: 16px;
 }
 
-/* ─── SOCIAL BUTTONS ─── */
-
-.social-buttons {
-    display:        flex;
-    flex-direction: column;
-    gap:            10px;
-    max-width:      400px;
-    margin:         20px auto;
-}
-
-.btn-social {
-    display:         flex;
-    align-items:     center;
-    justify-content: center;
-    gap:             8px;
-    padding:         12px;
-    border-radius:   10px;
-    color:           white;
-    text-decoration: none;
-    font-weight:     bold;
-    font-size:       0.95rem;
-}
-
-.yt     { background: #FF0000; }
-.tk     { background: #000000; border: 1px solid #333; }
-.wa-chan { background: var(--wa-green); }
-
-.social-row {
-    display:               grid;
-    grid-template-columns: 1fr 1fr;
-    gap:                   10px;
-}
-
-/* ─── ABOUT SECTION ─── */
-
-.about-section {
-    background:    var(--navy-light);
-    border-radius: 14px;
-    padding:       20px;
-    margin:        20px 0;
-    border:        1px solid rgba(212, 175, 55, 0.05);
-    text-align:    center;
-}
-
-.tts-player {
+/* Audio TTS buttons */
+.audio-controls-row {
     display:         flex;
     justify-content: center;
     gap:             12px;
-    margin-bottom:   12px;
+    margin-top:      6px;
 }
 
-.tts-btn {
+.audio-action-btn {
     background:    var(--navy-blue);
     border:        1px solid var(--gold);
     color:         var(--gold);
@@ -340,13 +324,11 @@ h1, h2, h3, h4 {
     justify-content: center;
     cursor:        pointer;
     font-size:     0.9rem;
+    transition:    background 0.2s;
 }
 
-#about-text {
-    font-size:   0.95rem;
-    line-height: 1.5;
-    text-align:  justify;
-    color:       #a8b2d1;
+.audio-action-btn:hover {
+    background: rgba(212, 175, 55, 0.15);
 }
 
 /* ─── STATS ─── */
@@ -379,42 +361,177 @@ h1, h2, h3, h4 {
     text-transform: uppercase;
 }
 
-/* ─── TESTIMONIALS ─── */
+/* ─── PROMO CARDS (shared layout) ─── */
 
-.testimonials-section {
-    background:    rgba(212, 175, 55, 0.03);
-    border:        1px dashed rgba(212, 175, 55, 0.2);
+.promo-card {
+    background:    var(--navy-light);
     border-radius: 14px;
-    padding:       18px;
-    margin-top:    20px;
+    padding:       16px;
+    margin-bottom: 14px;
+    border:        1px solid rgba(212, 175, 55, 0.06);
+    display:       flex;
+    align-items:   flex-start;
+    gap:           14px;
 }
 
-.testimonial-card { text-align: center; }
+.promo-icon-box {
+    width:           44px;
+    height:          44px;
+    border-radius:   10px;
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    font-size:       1.3rem;
+    flex-shrink:     0;
+}
 
-.stars {
-    color:         var(--gold);
-    margin-bottom: 5px;
+.gold-icon  { background: rgba(212, 175, 55, 0.15); color: var(--gold); }
+.blue-icon  { background: rgba(50, 100, 220, 0.15); color: #6fa3ef; }
+.green-icon { background: rgba(37, 211, 102, 0.12); color: var(--wa-green); }
+
+.promo-text-box { flex: 1; }
+
+.promo-text-box h3 {
     font-size:     1rem;
+    color:         #fff;
+    margin-bottom: 4px;
 }
 
-.review-text {
-    font-style:  italic;
+.promo-text-box p {
+    font-size:     0.82rem;
+    color:         #8892b0;
+    margin-bottom: 10px;
+    line-height:   1.4;
+}
+
+/* PWA install card */
+.install-card { border-color: rgba(212, 175, 55, 0.25); }
+
+.action-gold-btn {
+    display:         inline-flex;
+    align-items:     center;
+    gap:             6px;
+    background:      var(--gold);
+    color:           var(--navy);
+    border:          none;
+    padding:         9px 14px;
+    border-radius:   8px;
+    font-weight:     bold;
+    font-size:       0.82rem;
+    cursor:          pointer;
+    font-family:     'Outfit', sans-serif;
+}
+
+/* Quote card */
+.quote-text {
     font-size:   0.9rem;
-    color:       #a8b2d1;
+    font-style:  italic;
+    color:       var(--text-main);
     line-height: 1.4;
 }
 
-.review-author {
-    display:    block;
-    font-size:  0.8rem;
-    margin-top: 8px;
-    color:      var(--gold);
-    font-weight: bold;
+/* WhatsApp booking card */
+.action-whatsapp-btn {
+    display:         inline-flex;
+    align-items:     center;
+    gap:             6px;
+    background:      var(--wa-green);
+    color:           #fff;
+    text-decoration: none;
+    padding:         9px 14px;
+    border-radius:   8px;
+    font-weight:     bold;
+    font-size:       0.82rem;
 }
 
-/* ─── TEAM GRID ─── */
+/* ─── SECTION BLOCK ─── */
 
-.team-grid {
+.section-block {
+    margin: 20px 0;
+}
+
+.border-top-gold {
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    padding-top: 20px;
+}
+
+.section-title-accent {
+    font-size:     1.3rem;
+    color:         #fff;
+    margin-bottom: 14px;
+    display:       flex;
+    align-items:   center;
+    gap:           8px;
+}
+
+/* ─── FEATURES GRID ─── */
+
+.features-grid {
+    display:        flex;
+    flex-direction: column;
+    gap:            12px;
+}
+
+.feature-item-box {
+    background:    var(--navy-light);
+    border-radius: 12px;
+    padding:       14px;
+    border-left:   3px solid var(--gold);
+}
+
+.feature-item-box i {
+    font-size:     1.4rem;
+    margin-bottom: 6px;
+    display:       block;
+}
+
+.feature-item-box h4 {
+    font-size:     1rem;
+    color:         #fff;
+    margin-bottom: 4px;
+}
+
+.feature-item-box p {
+    font-size:   0.82rem;
+    color:       #8892b0;
+    line-height: 1.4;
+}
+
+/* ─── SOCIAL BUTTONS SECTION ─── */
+
+.social-buttons-section {
+    display:        flex;
+    flex-direction: column;
+    gap:            10px;
+    margin: 20px 0;
+}
+
+.btn-social {
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    gap:             8px;
+    padding:         12px;
+    border-radius:   10px;
+    color:           white;
+    text-decoration: none;
+    font-weight:     bold;
+    font-size:       0.95rem;
+}
+
+.yt      { background: #FF0000; }
+.tk      { background: #000000; border: 1px solid #333; }
+.wa-chan  { background: var(--wa-green); }
+
+.social-row {
+    display:               grid;
+    grid-template-columns: 1fr 1fr;
+    gap:                   10px;
+}
+
+/* ─── MEMBERS GRID ─── */
+
+.members-grid {
     display:               grid;
     grid-template-columns: repeat(2, 1fr);
     gap:                   10px;
@@ -474,35 +591,60 @@ h1, h2, h3, h4 {
     margin-top:     2px;
 }
 
-/* ─── VIDEO PLAYER (PLAYLIST AUTO) ─── */
+/* ─── COULISSES ─── */
 
-.videos-container {
+.coulisses-grid {
     display:        flex;
     flex-direction: column;
-    gap:            20px;
+    gap:            12px;
 }
 
-.video-card {
+.coulisse-card {
     background:    var(--navy-light);
-    border-radius: 14px;
-    padding:       12px;
+    border-radius: 12px;
+    padding:       14px;
+    display:       flex;
+    align-items:   center;
+    gap:           12px;
     border:        1px solid rgba(212, 175, 55, 0.05);
 }
 
-.video-card h3 {
-    font-size:     1.1rem;
-    margin-bottom: 8px;
-    color:         #fff;
-    font-weight:   normal;
+.coulisse-placeholder {
+    width:           56px;
+    height:          56px;
+    background:      var(--navy-blue);
+    border-radius:   10px;
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    color:           var(--gold);
+    font-size:       1.5rem;
+    flex-shrink:     0;
 }
 
-.video-section-title {
-    font-size:     1.3rem;
-    margin-bottom: 12px;
+.coulisse-info h4 {
+    font-size:     0.95rem;
     color:         #fff;
+    margin-bottom: 3px;
 }
 
-.video-wrapper {
+.coulisse-info p {
+    font-size:   0.78rem;
+    color:       #8892b0;
+    line-height: 1.3;
+}
+
+/* ─── VIDEO SECTION ─── */
+
+.video-main-card {
+    background:    var(--navy-light);
+    border-radius: 14px;
+    padding:       12px;
+    margin-bottom: 20px;
+    border:        1px solid rgba(212, 175, 55, 0.05);
+}
+
+.video-ratio-container {
     position:      relative;
     padding-bottom: 56.25%;
     height:        0;
@@ -511,12 +653,20 @@ h1, h2, h3, h4 {
     background:    #000;
 }
 
-.video-wrapper iframe {
+.video-ratio-container iframe {
     position: absolute;
     top: 0; left: 0;
     width:    100%;
     height:   100%;
     border:   0;
+}
+
+.video-caption {
+    font-size:  0.78rem;
+    color:      #8892b0;
+    font-style: italic;
+    text-align: center;
+    margin-top: 8px;
 }
 
 /* ─── TIKTOK SECTION ─── */
@@ -527,53 +677,7 @@ h1, h2, h3, h4 {
     padding:       20px;
     text-align:    center;
     border:        1px solid rgba(255, 255, 255, 0.05);
-    margin-top:    20px;
-}
-
-.tiktok-section h3 {
-    font-size:     1.3rem;
-    margin-bottom: 5px;
-}
-
-.tiktok-section p {
-    font-size:     0.85rem;
-    color:         #8892b0;
-    margin-bottom: 15px;
-}
-
-.tiktok-videos-grid {
-    display:               grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap:                   10px;
-    margin-bottom:         15px;
-}
-
-.tiktok-thumb {
-    position:      relative;
-    aspect-ratio:  9 / 16;
-    border-radius: 10px;
-    overflow:      hidden;
-    background:    var(--navy-blue);
-    border:        1px solid rgba(255, 255, 255, 0.05);
-}
-
-.tiktok-thumb img {
-    width:      100%;
-    height:     100%;
-    object-fit: cover;
-}
-
-.tiktok-thumb .play-overlay {
-    position:        absolute;
-    top: 0; left: 0;
-    width:           100%;
-    height:          100%;
-    background:      rgba(0, 0, 0, 0.4);
-    display:         flex;
-    align-items:     center;
-    justify-content: center;
-    color:           #fff;
-    font-size:       2rem;
+    margin-bottom: 20px;
 }
 
 .btn-tiktok-profile {
@@ -590,9 +694,12 @@ h1, h2, h3, h4 {
     font-weight:     bold;
     font-size:       0.95rem;
     width:           100%;
+    margin-top:      10px;
 }
 
 /* ─── PACKAGES ─── */
+
+.packages-section { margin-top: 10px; }
 
 .packages-grid {
     display:        flex;
@@ -656,31 +763,9 @@ h1, h2, h3, h4 {
     margin-bottom: 4px;
 }
 
-/* ─── AGENDA ─── */
+/* ─── BOOKING FORM ─── */
 
-.agenda-box {
-    background:  var(--navy-blue);
-    border-left: 4px solid var(--gold);
-    border-radius: 6px;
-    padding:     14px;
-    margin-top:  20px;
-}
-
-.agenda-box h3 {
-    font-size: 1.1rem;
-    color:     #fff;
-}
-
-.agenda-box p {
-    font-size:   0.8rem;
-    color:       #a8b2d1;
-    margin-top:  4px;
-    line-height: 1.4;
-}
-
-/* ─── CONTACT FORM ─── */
-
-.styled-form {
+.booking-form {
     background:    var(--navy-light);
     padding:       18px;
     border-radius: 14px;
@@ -688,30 +773,44 @@ h1, h2, h3, h4 {
     margin-top:    15px;
 }
 
-.form-group { margin-bottom: 10px; }
-
-input, textarea {
-    width:       100%;
-    background:  var(--navy-blue);
-    border:      1px solid rgba(212, 175, 55, 0.15);
-    padding:     12px;
-    color:       #fff;
-    border-radius: 8px;
-    font-family: 'Outfit', sans-serif;
-    font-size:   0.9rem;
+.form-input-group {
+    margin-bottom: 12px;
+    display:       flex;
+    flex-direction: column;
+    gap:           5px;
 }
 
-input:focus, textarea:focus {
+.form-input-group label {
+    font-size:   0.82rem;
+    color:       #8892b0;
+    font-weight: 600;
+}
+
+input, textarea, select {
+    width:         100%;
+    background:    var(--navy-blue);
+    border:        1px solid rgba(212, 175, 55, 0.15);
+    padding:       11px 12px;
+    color:         #fff;
+    border-radius: 8px;
+    font-family:   'Outfit', sans-serif;
+    font-size:     0.9rem;
+    appearance:    none;
+}
+
+input:focus, textarea:focus, select:focus {
     outline:      none;
     border-color: var(--gold);
 }
 
-.btn-submit {
+select option { background: var(--navy-blue); }
+
+.submit-form-btn {
     width:          100%;
     background:     var(--gold);
     color:          var(--navy);
     border:         none;
-    padding:        12px;
+    padding:        13px;
     border-radius:  8px;
     font-weight:    bold;
     font-size:      1rem;
@@ -719,46 +818,53 @@ input:focus, textarea:focus {
     text-transform: uppercase;
     font-family:    'Outfit', sans-serif;
     letter-spacing: 1px;
+    margin-top:     4px;
+    transition:     opacity 0.2s;
 }
 
+.submit-form-btn:hover { opacity: 0.88; }
+
 .form-status-box {
-    margin-top:  10px;
-    padding:     10px;
+    margin-top:   10px;
+    padding:      10px;
     border-radius: 8px;
-    text-align:  center;
-    font-weight: bold;
-    font-size:   0.85rem;
+    text-align:   center;
+    font-weight:  bold;
+    font-size:    0.85rem;
+    display:      none;
 }
 
 .form-status-box.success {
+    display:    block;
     background: rgba(37, 211, 102, 0.15);
     color:      var(--wa-green);
     border:     1px solid var(--wa-green);
 }
 
 .form-status-box.error {
+    display:    block;
     background: rgba(255, 0, 0, 0.15);
     color:      #ff4444;
     border:     1px solid #ff4444;
 }
 
-/* ─── WHATSAPP DIRECT ─── */
+/* ─── DIRECT CONTACT BLOCK ─── */
 
-.direct-contact-container {
-    text-align:    center;
-    margin-top:    25px;
+.direct-contact-block {
     background:    var(--navy-light);
-    padding:       15px;
     border-radius: 14px;
+    padding:       16px;
+    margin-top:    20px;
+    text-align:    center;
 }
 
-.direct-contact-container h3 {
+.direct-contact-block h3 {
     font-size:     1.1rem;
-    margin-bottom: 10px;
     color:         #fff;
+    margin-bottom: 12px;
 }
 
-.contact-buttons-row {
+.wa-buttons-col {
     display:        flex;
     flex-direction: column;
     gap:            8px;
@@ -779,9 +885,45 @@ input:focus, textarea:focus {
     font-size:       0.85rem;
 }
 
+/* ─── SOCIAL CHANNELS BLOCK ─── */
+
+.social-channels-block {
+    margin-top:  20px;
+    text-align:  center;
+}
+
+.social-channels-block h3 {
+    font-size:     1.1rem;
+    color:         #fff;
+    margin-bottom: 12px;
+}
+
+.social-pills-row {
+    display:         flex;
+    justify-content: center;
+    gap:             8px;
+    flex-wrap:       wrap;
+}
+
+.social-pill {
+    display:         flex;
+    align-items:     center;
+    gap:             6px;
+    padding:         8px 14px;
+    border-radius:   20px;
+    font-size:       0.82rem;
+    font-weight:     bold;
+    text-decoration: none;
+    color:           #fff;
+}
+
+.yt-pill { background: #FF0000; }
+.tk-pill { background: #000; border: 1px solid #fff; }
+.wa-pill { background: var(--wa-green); }
+
 /* ─── MEMBER MODAL ─── */
 
-.modal {
+.modal-overlay {
     position:        fixed;
     top: 0; left: 0;
     width:           100%;
@@ -793,120 +935,9 @@ input:focus, textarea:focus {
     justify-content: center;
 }
 
-.modal-content {
+.modal-card {
     background:    var(--navy);
     padding:       25px;
     border-radius: 16px;
     width:         88%;
-    max-width:     380px;
-    text-align:    center;
-    position:      relative;
-    border:        1px solid var(--gold);
-}
-
-.close-modal {
-    position:    absolute;
-    top:         10px;
-    right:       15px;
-    font-size:   1.6rem;
-    color:       #fff;
-    cursor:      pointer;
-    background:  none;
-    border:      none;
-    line-height: 1;
-}
-
-.modal-img-container {
-    width:         100px;
-    height:        100px;
-    border-radius: 50%;
-    overflow:      hidden;
-    margin:        0 auto 15px;
-    border:        2px solid var(--gold);
-}
-
-.modal-img-container img {
-    width:      100%;
-    height:     100%;
-    object-fit: cover;
-}
-
-.modal-fallback-icon {
-    width:           100%;
-    height:          100%;
-    background:      var(--navy-blue);
-    display:         flex;
-    align-items:     center;
-    justify-content: center;
-    color:           var(--gold);
-    font-size:       2.5rem;
-}
-
-#modal-name {
-    font-size:     1.6rem;
-    color:         #fff;
-}
-
-.modal-desc-text {
-    margin-top: 12px;
-    font-size:  0.88rem;
-    color:      #a8b2d1;
-    line-height: 1.4;
-}
-
-/* ─── BOTTOM NAV ─── */
-
-.bottom-nav {
-    position:              fixed;
-    bottom: 0; left: 0; right: 0;
-    height:                62px;
-    background:            #060e1a;
-    border-top:            1px solid rgba(212, 175, 55, 0.18);
-    display:               grid;
-    grid-template-columns: repeat(4, 1fr);
-    z-index:               2000;
-    box-shadow:            0 -4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.nav-item {
-    background:      none;
-    border:          none;
-    color:           #8892b0;
-    display:         flex;
-    flex-direction:  column;
-    align-items:     center;
-    justify-content: center;
-    gap:             3px;
-    cursor:          pointer;
-    font-family:     'Outfit', sans-serif;
-    transition:      color 0.2s;
-}
-
-.nav-item i    { font-size: 1.1rem; }
-.nav-item span { font-size: 0.65rem; font-weight: bold; }
-.nav-item.active { color: var(--gold); }
-
-/* ─── FOOTER ─── */
-
-.footer {
-    padding:    15px 4% 90px;
-    text-align: center;
-    border-top: 1px solid rgba(212, 175, 55, 0.04);
-}
-
-.share-btn-footer {
-    background:    var(--navy-blue);
-    border:        1px solid rgba(212, 175, 55, 0.2);
-    color:         var(--text-main);
-    padding:       8px 16px;
-    border-radius: 20px;
-    font-size:     0.8rem;
-    cursor:        pointer;
-    margin-bottom: 12px;
-    font-family:   'Outfit', sans-serif;
-}
-
-.signature {
-    font-size: 0.8rem;
-    color:     #8892b0;
-}
+    max-width:   
