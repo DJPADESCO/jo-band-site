@@ -1,486 +1,313 @@
 'use strict';
 
-var deferredPrompt = null;
-
-var membres = [
-  { id: 'padesco',   nom: 'DJ PADESCO',   role: 'DJ / Humoriste / Vidéaste' },
-  { id: 'joel',      nom: 'JOEL',          role: 'Management' },
-  { id: 'fondateur', nom: 'LE FONDATEUR',  role: 'Fondateur' },
-  { id: 'nanasika',  nom: 'NANA SIKA',     role: 'Humoriste & Vidéaste' },
-  { id: 'gedeon',    nom: 'GEDEON',        role: 'Humoriste & Danseur' },
-  { id: 'jean',      nom: 'JEAN',          role: 'Humoriste / Artiste Chanteur' },
-  { id: 'gacha',     nom: 'THE GACHA',     role: 'Humoriste / Artiste Chanteur' },
-  { id: 'arole',     nom: 'AROLE',         role: 'Cameraman' },
-  { id: 'lh',        nom: 'L&H',           role: 'Cameraman' },
-  { id: 'dkpopi',    nom: 'DK POPI',       role: 'Humoriste' },
-  { id: 'esther',    nom: 'ESTHER',        role: 'Humoriste' },
-  { id: 'prisca',    nom: 'PRISCA',        role: 'Humoriste' },
-  { id: 'makafui',   nom: 'MAKAFUI',       role: 'Humoriste' }
+const members = [
+    { name: "DJ PADESCO",   id: "padesco",   role: "DJ / Humoriste" },
+    { name: "JOEL",         id: "joel",      role: "Management" },
+    { name: "LE FONDATEUR", id: "fondateur", role: "Fondateur" },
+    { name: "NANA SIKA",    id: "nanasika",  role: "Comedien & Videaste" },
+    { name: "GEDEON",       id: "gedeon",    role: "Humoriste" },
+    { name: "JEAN",         id: "jean",      role: "Artiste Chanteur" },
+    { name: "THE GACHA",    id: "gacha",     role: "Artiste Chanteur" },
+    { name: "AROLE",        id: "arole",     role: "Cameraman" },
+    { name: "L&H",          id: "lh",        role: "Cameraman" },
+    { name: "DK POPI",      id: "dkpopi",    role: "Humoriste" },
+    { name: "ESTHER",       id: "esther",    role: "Humoriste" },
+    { name: "PRISCA",       id: "prisca",    role: "Humoriste" },
+    { name: "MAKAFUI",      id: "makafui",   role: "Humoriste" }
 ];
 
-var punchlines = [
-  'Le dimanche, on répète pour vous épater toute la semaine.',
-  'Le lundi, l\'énergie JO BAND relance la semaine.',
-  'Le mardi, la créativité est notre moteur.',
-  'Le mercredi, on prend la scène d\'assaut.',
-  'Le jeudi, le show continue et le talent aussi.',
-  'Le vendredi, on chauffe avant le grand soir.',
-  'Le samedi, JO BAND met le feu à la scène.'
-];
-
-var translations = {
-  fr: {
-    nav_accueil: 'Accueil',
-    nav_collectif: 'Collectif',
-    nav_videos: 'Vidéos',
-    nav_contact: 'Contact',
-    slogan: 'Partout où ça bouge,<br>Jo Band est là.',
-    s_vues: 'Vues',
-    s_artistes: 'Artistes',
-    s_shows: 'Shows',
-    btn_reserver: 'Réserver JO BAND',
-    btn_install: "Installer l'application",
-    about_txt: 'JO BAND est un collectif artistique togolais composé de 13 artistes passionnés : humoristes, chanteurs, danseurs, cameramen et DJ. Avec plus de 500 000 vues et 150 shows, Jo Band illumine chaque scène avec énergie et créativité.',
-    tts_play: 'Écouter',
-    tts_pause: 'Pause',
-    tts_stop: 'Stop',
-    why_title: 'Pourquoi choisir JO BAND ?',
-    w1h: 'Duo DJ exclusif',
-    w1p: 'DJ PADESCO anime le show humour pendant que DJ ZEKA tient les platines. Deux talents, une seule scène.',
-    w2h: 'Polyvalence totale',
-    w2p: 'Humour, musique live, danse, vidéo : JO BAND couvre tous les formats de spectacle.',
-    w3h: 'Professionnalisme',
-    w3p: '13 artistes structurés, management dédié, 150+ shows d\'expérience au Togo.',
-    coul_title: 'Coulisses & Événements',
-    coul_sub: 'Des tournages aux spectacles, vivez nos moments en coulisses.',
-    coul_a: 'Tournage',
-    coul_b: 'Spectacle',
-    coul_c: 'Répétition',
-    coul_d: 'Backstage',
-    tt_title: 'TikTok JO BAND',
-    tt_desc: "TikTok ne permet pas l'intégration directe. Retrouvez toutes nos vidéos sur notre profil.",
-    tt_btn: 'Voir sur TikTok',
-    mgmt: 'Management',
-    f_ok: 'Message envoyé ! Nous vous répondrons très vite.',
-    f_err: 'Erreur d\'envoi. Veuillez réessayer ou nous appeler.',
-    f_nom: 'Votre nom',
-    f_tel: 'Téléphone',
-    f_event: "Type d'événement",
-    f_ev0: 'Choisir un type',
-    f_ev1: 'Mariage',
-    f_ev2: 'Anniversaire',
-    f_ev3: "Soirée d'entreprise",
-    f_ev4: 'Festival',
-    f_ev5: 'Show privé',
-    f_ev6: 'Autre',
-    f_date: "Date de l'événement",
-    f_lieu: 'Lieu',
-    f_msg: 'Message',
-    f_send: 'Envoyer la demande',
-    banner_sub: 'Installer sur votre téléphone',
-    banner_btn: 'Installer',
-    banner_skip: 'Plus tard'
-  },
-  en: {
-    nav_accueil: 'Home',
-    nav_collectif: 'Collective',
-    nav_videos: 'Videos',
-    nav_contact: 'Contact',
-    slogan: 'Wherever the party is,<br>Jo Band is there.',
-    s_vues: 'Views',
-    s_artistes: 'Artists',
-    s_shows: 'Shows',
-    btn_reserver: 'Book JO BAND',
-    btn_install: 'Install App',
-    about_txt: 'JO BAND is a Togolese artistic collective of 13 passionate artists: comedians, singers, dancers, cameramen and DJs. With over 500,000 views and 150 shows, Jo Band lights up every stage with energy and creativity.',
-    tts_play: 'Listen',
-    tts_pause: 'Pause',
-    tts_stop: 'Stop',
-    why_title: 'Why choose JO BAND?',
-    w1h: 'Exclusive DJ Duo',
-    w1p: 'DJ PADESCO hosts the comedy show while DJ ZEKA handles the decks. Two talents, one stage.',
-    w2h: 'Total versatility',
-    w2p: 'Comedy, live music, dance, video: JO BAND covers every entertainment format.',
-    w3h: 'Professionalism',
-    w3p: '13 structured artists with dedicated management and over 150 shows of experience in Togo.',
-    coul_title: 'Behind the Scenes',
-    coul_sub: 'From shoots to shows, live our backstage moments.',
-    coul_a: 'Shooting',
-    coul_b: 'Show',
-    coul_c: 'Rehearsal',
-    coul_d: 'Backstage',
-    tt_title: 'JO BAND on TikTok',
-    tt_desc: 'TikTok does not allow direct embedding. Find all our videos on our profile.',
-    tt_btn: 'View on TikTok',
-    mgmt: 'Management',
-    f_ok: 'Message sent! We will get back to you very soon.',
-    f_err: 'Send error. Please try again or call us directly.',
-    f_nom: 'Your name',
-    f_tel: 'Phone',
-    f_event: 'Event type',
-    f_ev0: 'Choose a type',
-    f_ev1: 'Wedding',
-    f_ev2: 'Birthday',
-    f_ev3: 'Corporate event',
-    f_ev4: 'Festival',
-    f_ev5: 'Private show',
-    f_ev6: 'Other',
-    f_date: 'Event date',
-    f_lieu: 'Location',
-    f_msg: 'Message',
-    f_send: 'Send request',
-    banner_sub: 'Install on your phone',
-    banner_btn: 'Install',
-    banner_skip: 'Maybe later'
-  }
+const translations = {
+    fr: {
+        "live-text":           "EN LIVE",
+        "slogan":              "\"Partout où ça bouge, Jo Band est là.\"",
+        "wa-channel":          "Chaîne",
+        "history-title":       "Notre Histoire",
+        "about-text":          "Né de la passion commune pour le rire et la scène, JO BAND est un collectif d'artistes togolais unique. Comédiens, chanteurs, DJ et vidéastes : nous fusionnons nos talents pour créer une machine à bonne humeur.",
+        "stat-views":          "K Vues Réseaux",
+        "stat-staff":          "Artistes & Staff",
+        "stat-shows":          "Shows Réussis",
+        "review-title":        "Avis de nos Clients",
+        "tab-collectif-title": "Le Collectif",
+        "collectif-subtitle":  "Cliquez sur un profil pour en savoir plus",
+        "tab-videos-title":    "Le Coin du Rire",
+        "videos-subtitle":     "Découvrez nos meilleurs sketchs et exclusivités",
+        "yt-feed-title":       "Nos Dernières Vidéos",
+        "subscribe-prompt":    "Abonne-toi directement ici :",
+        "packages-title":      "Nos Formules Prestations",
+        "badge-pop":           "Populaire",
+        "pack-standard-title": "Formule Standard",
+        "pack-standard-desc":  "Ambiance explosive pour vos soirées, mariages et anniversaires.",
+        "feat-1":              "Show Humour sur scène",
+        "feat-2":              "Animation DJ par DJ PADESCO",
+        "badge-vip":           "Grand Standing",
+        "pack-vip-title":      "Formule Premium VIP",
+        "pack-vip-desc":       "Le show complet clé en main avec couverture média totale.",
+        "feat-3":              "Captation vidéo par Arole & L&H",
+        "agenda-title":        "Fil d'actualité Actuel",
+        "agenda-desc":         "Actuellement en tournage de la prochaine saison de vidéos humoristiques. Restez connectés ! Le groupe reste disponible pour toutes vos réservations privées ou publiques sur l'année 2026.",
+        "tab-contact-title":   "Réserver le Show",
+        "contact-subtitle":    "Planifiez votre événement avec l'équipe du JO BAND",
+        "btn-submit":          "ENVOYER LA DEMANDE",
+        "wa-direct-title":     "Contact Rapide WhatsApp",
+        "nav-home":            "Accueil",
+        "nav-team":            "Collectif",
+        "nav-videos":          "Vidéos",
+        "nav-contact":         "Contact",
+        "share-site":          "Partager le site"
+    },
+    en: {
+        "live-text":           "LIVE NOW",
+        "slogan":              "\"Wherever it moves, Jo Band is there.\"",
+        "wa-channel":          "Channel",
+        "history-title":       "Our Story",
+        "about-text":          "Born from a shared passion for laughter and the stage, JO BAND is a unique Togolese artists collective. Comedians, singers, DJs, and videographers: we merge our talents to create a pure good mood machine.",
+        "stat-views":          "Social Views",
+        "stat-staff":          "Artists & Staff",
+        "stat-shows":          "Successful Shows",
+        "review-title":        "Customer Reviews",
+        "tab-collectif-title": "The Collective",
+        "collectif-subtitle":  "Click on a profile to learn more",
+        "tab-videos-title":    "The Comedy Corner",
+        "videos-subtitle":     "Discover our best sketches and exclusives",
+        "yt-feed-title":       "Our Latest Videos",
+        "subscribe-prompt":    "Subscribe right here:",
+        "packages-title":      "Our Performance Packages",
+        "badge-pop":           "Popular",
+        "pack-standard-title": "Standard Package",
+        "pack-standard-desc":  "Explosive atmosphere for your parties, weddings, and birthdays.",
+        "feat-1":              "Comedy Show on stage",
+        "feat-2":              "DJ Performance by DJ PADESCO",
+        "badge-vip":           "Luxury Standing",
+        "pack-vip-title":      "Premium VIP Package",
+        "pack-vip-desc":       "The complete turnkey show with full media coverage.",
+        "feat-3":              "Video coverage by Arole & L&H",
+        "agenda-title":        "Current News Feed",
+        "agenda-desc":         "Currently shooting the next season of comedy videos. Stay connected! The group remains available for all your private or public bookings throughout 2026.",
+        "tab-contact-title":   "Book the Show",
+        "contact-subtitle":    "Plan your event with the JO BAND crew",
+        "btn-submit":          "SEND REQUEST",
+        "wa-direct-title":     "Urgent WhatsApp Contact",
+        "nav-home":            "Home",
+        "nav-team":            "Collective",
+        "nav-videos":          "Videos",
+        "nav-contact":         "Contact",
+        "share-site":          "Share Website"
+    }
 };
 
-var currentLang = 'fr';
-var ttsUtterance = null;
+function hideSplash() {
+    var splash = document.getElementById('splash-screen');
+    if (splash) {
+        splash.style.opacity = '0';
+        splash.style.transition = 'opacity 0.4s ease';
+        setTimeout(function () {
+            splash.style.display = 'none';
+        }, 400);
+    }
+}
+
+function startCounterAnimation() {
+    var counters = document.querySelectorAll('.stat-number');
+    counters.forEach(function (counter) {
+        var target = parseInt(counter.getAttribute('data-target'), 10);
+        var increment = Math.ceil(target / 50);
+        var current = 0;
+
+        var tick = function () {
+            current += increment;
+            if (current < target) {
+                counter.textContent = current;
+                setTimeout(tick, 25);
+            } else {
+                counter.textContent = target + '+';
+            }
+        };
+        tick();
+    });
+}
+
+function applyLanguage(lang) {
+    var dict = translations[lang];
+    if (!dict) return;
+
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var key = el.getAttribute('data-i18n');
+        if (dict[key] === undefined) return;
+
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = dict[key];
+        } else {
+            el.textContent = dict[key];
+        }
+    });
+
+    var aboutEl = document.getElementById('about-text');
+    if (aboutEl) {
+        aboutEl.setAttribute('data-current-lang', lang);
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // Splash screen (Corrigé)
-  var splash = document.getElementById('splash');
-  var app = document.getElementById('app');
-  setTimeout(function () {
-    if (splash) splash.classList.add('out');
-    setTimeout(function () {
-      if (splash) splash.style.display = 'none';
-      if (app) app.style.display = 'flex';
-      animateCounters();
-    }, 500);
-  }, 1500);
+    hideSplash();
 
-  // PWA install logic (Corrigé pour la bannière)
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    var btnPwa = document.getElementById('btn-pwa');
-    var pwaBanner = document.getElementById('pwa-banner');
-    
-    if (btnPwa) btnPwa.classList.add('show');
-    if (pwaBanner) pwaBanner.classList.add('show');
-  });
+    var navItems = document.querySelectorAll('.nav-item');
+    var tabs     = document.querySelectorAll('.tab-content');
 
-  var btnPwa = document.getElementById('btn-pwa');
-  if (btnPwa) {
-    btnPwa.addEventListener('click', function () {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function () {
-          deferredPrompt = null;
-          btnPwa.classList.remove('show');
-          var pwaBanner = document.getElementById('pwa-banner');
-          if (pwaBanner) pwaBanner.classList.remove('show');
+    navItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+            navItems.forEach(function (n) { n.classList.remove('active'); });
+            tabs.forEach(function (t) { t.classList.remove('active'); });
+            item.classList.add('active');
+            var target = document.getElementById(item.getAttribute('data-tab'));
+            if (target) target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-      }
     });
-  }
 
-  var pwaInstall = document.getElementById('pwa-install');
-  if (pwaInstall) {
-    pwaInstall.addEventListener('click', function () {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function () {
-          deferredPrompt = null;
-          var pwaBanner = document.getElementById('pwa-banner');
-          if (pwaBanner) pwaBanner.classList.remove('show');
-          if (btnPwa) btnPwa.classList.remove('show');
+    startCounterAnimation();
+
+    var grid = document.getElementById('team-grid');
+    if (grid) {
+        grid.innerHTML = members.map(function (m) {
+            return [
+                '<div class="member-card" data-id="' + m.id + '" data-name="' + m.name + '" data-role="' + m.role + '">',
+                '  <img src="images/' + m.id + '.jpg" alt="' + m.name + '" class="member-img"',
+                '    onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">',
+                '  <div class="member-fallback-bg" style="display:none;"><i class="fa-solid fa-user"></i></div>',
+                '  <h3>' + m.name + '</h3>',
+                '  <p>' + m.role + '</p>',
+                '</div>'
+            ].join('');
+        }).join('');
+
+        grid.addEventListener('click', function (e) {
+            var card = e.target.closest('.member-card');
+            if (!card) return;
+            openModal(card.dataset.id, card.dataset.name, card.dataset.role);
         });
-      }
+    }
+
+    var modal      = document.getElementById('member-modal');
+    var closeBtn   = document.getElementById('close-modal');
+    var modalImg   = document.getElementById('modal-img');
+    var modalFall  = document.getElementById('modal-img-fallback');
+    var modalName  = document.getElementById('modal-name');
+    var modalRole  = document.getElementById('modal-role');
+
+    function openModal(id, name, role) {
+        if (!modal) return;
+        modalImg.src = 'images/' + id + '.jpg';
+        modalImg.alt = name;
+        modalImg.style.display = 'block';
+        modalFall.style.display = 'none';
+        modalName.textContent = name;
+        modalRole.textContent = role;
+        modal.style.display = 'flex';
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+
+    var themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+            document.body.classList.toggle('theme-gold-intense');
+            var icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('theme-gold-intense')) {
+                icon.className = 'fa-solid fa-sun';
+            } else {
+                icon.className = 'fa-solid fa-moon';
+            }
+        });
+    }
+
+    var langBtns = document.querySelectorAll('.lang-btn');
+    langBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            langBtns.forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            applyLanguage(btn.getAttribute('data-lang'));
+        });
     });
-  }
 
-  var pwaSkip = document.getElementById('pwa-skip');
-  if (pwaSkip) {
-    pwaSkip.addEventListener('click', function () {
-      var pwaBanner = document.getElementById('pwa-banner');
-      if (pwaBanner) pwaBanner.classList.remove('show');
+    var shareTriggers = document.querySelectorAll('.share-action-trigger');
+    shareTriggers.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'JO BAND Officiel',
+                    text: 'Découvrez le site officiel du JO BAND ! Humour, DJ et Événements au Togo !',
+                    url: window.location.href
+                }).catch(function () {});
+            } else {
+                alert('Copiez le lien de votre navigateur pour partager le site JO BAND !');
+            }
+        });
     });
-  }
 
-  // Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(function (err) { console.log(err); });
-  }
+    var form       = document.getElementById('contact-form');
+    var formStatus = document.getElementById('form-status');
+    if (form && formStatus) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            formStatus.style.display = 'block';
+            formStatus.className = 'form-status-box';
+            formStatus.textContent = 'Envoi en cours...';
 
-  // Navigation tabs (Corrigé)
-  var tabBtns = document.querySelectorAll('.tab-btn');
-  var pages = document.querySelectorAll('.page');
+            fetch(form.action, {
+                method:  form.method,
+                body:    new FormData(form),
+                headers: { 'Accept': 'application/json' }
+            }).then(function (response) {
+                if (response.ok) {
+                    formStatus.className = 'form-status-box success';
+                    formStatus.textContent = 'Demande envoyée ! L\'équipe vous contactera très vite.';
+                    form.reset();
+                } else {
+                    formStatus.className = 'form-status-box error';
+                    formStatus.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer ou utiliser WhatsApp.';
+                }
+            }).catch(function () {
+                formStatus.className = 'form-status-box error';
+                formStatus.textContent = 'Problème de connexion. Utilisez WhatsApp en attendant.';
+            });
+        });
+    }
 
-  tabBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var targetId = btn.getAttribute('data-page');
-      tabBtns.forEach(function (b) { b.classList.remove('active'); });
-      pages.forEach(function (p) { p.classList.remove('active'); });
-      btn.classList.add('active');
-      var target = document.getElementById(targetId);
-      if (target) target.classList.add('active');
-    });
-  });
+    var synth    = window.speechSynthesis;
+    var aboutEl  = document.getElementById('about-text');
+    var btnPlay  = document.getElementById('btn-play');
+    var btnPause = document.getElementById('btn-pause');
+    var btnStop  = document.getElementById('btn-stop');
 
-  // Punchline du jour (Corrigé)
-  var punchlineEl = document.getElementById('punchline-el');
-  if (punchlineEl) {
-    var day = new Date().getDay();
-    punchlineEl.textContent = punchlines[day];
-  }
+    if (aboutEl && btnPlay && btnPause && btnStop) {
+        btnPlay.addEventListener('click', function () {
+            synth.cancel();
+            var activeLang = document.querySelector('.lang-btn.active');
+            var lang = activeLang ? activeLang.getAttribute('data-lang') : 'fr';
+            var msg = new SpeechSynthesisUtterance(aboutEl.textContent);
+            msg.lang = lang === 'en' ? 'en-US' : 'fr-FR';
+            synth.speak(msg);
+        });
+        btnPause.addEventListener('click', function () { synth.pause(); });
+        btnStop.addEventListener('click',  function () { synth.cancel(); });
+    }
 
-  // Membres grid
-  buildMembresGrid();
-
-  // Modal (Corrigé)
-  var modal = document.getElementById('modal');
-  var modalClose = document.getElementById('modal-close');
-  if (modalClose) {
-    modalClose.addEventListener('click', function () {
-      modal.classList.remove('open');
-    });
-  }
-  if (modal) {
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) modal.classList.remove('open');
-    });
-  }
-
-  // TTS (Corrigé)
-  var ttsPlayBtn = document.getElementById('tts-play');
-  var ttsPauseBtn = document.getElementById('tts-pause');
-  var ttsStopBtn = document.getElementById('tts-stop');
-  var ttsText = document.getElementById('tts-txt');
-
-  if (ttsPlayBtn) {
-    ttsPlayBtn.addEventListener('click', function () {
-      if (!('speechSynthesis' in window)) return;
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-        return;
-      }
-      window.speechSynthesis.cancel();
-      ttsUtterance = new SpeechSynthesisUtterance(ttsText ? ttsText.textContent : '');
-      ttsUtterance.lang = currentLang === 'fr' ? 'fr-FR' : 'en-US';
-      window.speechSynthesis.speak(ttsUtterance);
-    });
-  }
-
-  if (ttsPauseBtn) {
-    ttsPauseBtn.addEventListener('click', function () {
-      if ('speechSynthesis' in window) window.speechSynthesis.pause();
-    });
-  }
-
-  if (ttsStopBtn) {
-    ttsStopBtn.addEventListener('click', function () {
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    });
-  }
-
-  // Theme toggle (Corrigé)
-  var btnTheme = document.getElementById('btn-theme');
-  if (btnTheme) {
-    btnTheme.addEventListener('click', function () {
-      document.body.classList.toggle('gold-theme');
-    });
-  }
-
-  // Language toggle
-  var btnLang = document.getElementById('btn-lang');
-  if (btnLang) {
-    btnLang.addEventListener('click', function () {
-      currentLang = currentLang === 'fr' ? 'en' : 'fr';
-      btnLang.textContent = currentLang.toUpperCase();
-      applyTranslations();
-    });
-  }
-
-  // Share
-  var btnShare = document.getElementById('btn-share');
-  if (btnShare) {
-    btnShare.addEventListener('click', function () {
-      if (navigator.share) {
-        navigator.share({
-          title: 'JO BAND Officiel',
-          text: 'Découvrez JO BAND, le collectif artistique du Togo !',
-          url: window.location.href
-        }).catch(function () {});
-      } else {
-        try {
-          navigator.clipboard.writeText(window.location.href);
-          alert('Lien copié !');
-        } catch (e) {}
-      }
-    });
-  }
-
-  // Form submit (Corrigé)
-  var btnSend = document.getElementById('btn-send');
-  if (btnSend) {
-    btnSend.addEventListener('click', function () {
-      submitForm();
-    });
-  }
-
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/sw.js').catch(function () {});
+        });
+    }
 });
-
-function buildMembresGrid() {
-  var grid = document.getElementById('membres-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  membres.forEach(function (m) {
-    var card = document.createElement('div');
-    card.className = 'membre-card';
-    card.setAttribute('data-id', m.id);
-
-    var img = document.createElement('img');
-    img.src = 'images/' + m.id + '.jpg';
-    img.alt = m.nom;
-    img.className = 'm-photo';
-    img.onerror = function () {
-      var fallback = document.createElement('div');
-      fallback.className = 'm-fallback';
-      card.replaceChild(fallback, img);
-    };
-
-    var name = document.createElement('div');
-    name.className = 'm-name';
-    name.textContent = m.nom;
-
-    var role = document.createElement('div');
-    role.className = 'm-role';
-    role.textContent = m.role;
-
-    card.appendChild(img);
-    card.appendChild(name);
-    card.appendChild(role);
-
-    card.addEventListener('click', function () {
-      openModal(m);
-    });
-
-    grid.appendChild(card);
-  });
-}
-
-function openModal(m) {
-  var modal = document.getElementById('modal');
-  var modalPhoto = document.getElementById('modal-photo');
-  var modalNom = document.getElementById('modal-name');
-  var modalRole = document.getElementById('modal-role');
-  if (!modal) return;
-
-  modalPhoto.innerHTML = '';
-  var img = document.createElement('img');
-  img.src = 'images/' + m.id + '.jpg';
-  img.alt = m.nom;
-  img.onerror = function () {
-    var fb = document.createElement('div');
-    fb.className = 'modal-photo-fb';
-    modalPhoto.replaceChild(fb, img);
-  };
-  modalPhoto.appendChild(img);
-
-  modalNom.textContent = m.nom;
-  modalRole.textContent = m.role;
-  modal.classList.add('open');
-}
-
-function animateCounters() {
-  var counters = document.querySelectorAll('.cnt');
-  counters.forEach(function (el) {
-    var target = parseInt(el.getAttribute('data-target'), 10);
-    var start = 0;
-    var duration = 1200;
-    var step = target / (duration / 16);
-    var interval = setInterval(function () {
-      start += step;
-      if (start >= target) {
-        el.textContent = target;
-        clearInterval(interval);
-      } else {
-        el.textContent = Math.floor(start);
-      }
-    }, 16);
-  });
-}
-
-function applyTranslations() {
-  var t = translations[currentLang] || translations.fr;
-  var els = document.querySelectorAll('[data-i18n]');
-  els.forEach(function (el) {
-    var key = el.getAttribute('data-i18n');
-    if (t[key] !== undefined) {
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = t[key];
-      } else {
-        if(key === 'slogan') {
-            el.innerHTML = t[key];
-        } else {
-            el.textContent = t[key];
-        }
-      }
-    }
-  });
-}
-
-function submitForm() {
-  var nom = document.getElementById('f-nom');
-  var tel = document.getElementById('f-tel');
-  var event = document.getElementById('f-event');
-  var date = document.getElementById('f-date');
-  var lieu = document.getElementById('f-lieu');
-  var message = document.getElementById('f-message');
-  var submitBtn = document.getElementById('btn-send');
-  var successEl = document.getElementById('form-ok');
-  var errorEl = document.getElementById('form-err');
-
-  if (!nom || !tel) return;
-  if (!nom.value.trim() || !tel.value.trim()) {
-    if (errorEl) {
-      errorEl.classList.add('show');
-      errorEl.textContent = 'Veuillez remplir au moins votre nom et téléphone.';
-    }
-    return;
-  }
-
-  if (submitBtn) submitBtn.disabled = true;
-  if (successEl) successEl.classList.remove('show');
-  if (errorEl) errorEl.classList.remove('show');
-
-  var body = {
-    nom: nom.value.trim(),
-    telephone: tel.value.trim(),
-    type_evenement: event ? event.value : '',
-    date: date ? date.value : '',
-    lieu: lieu ? lieu.value.trim() : '',
-    message: message ? message.value.trim() : ''
-  };
-
-  fetch('https://formspree.io/f/xbdwnyer', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(body)
-  })
-  .then(function (res) {
-    if (res.ok) {
-      if (successEl) successEl.classList.add('show');
-      nom.value = '';
-      tel.value = '';
-      if (event) event.value = '';
-      if (date) date.value = '';
-      if (lieu) lieu.value = '';
-      if (message) message.value = '';
-    } else {
-      if (errorEl) errorEl.classList.add('show');
-    }
-  })
-  .catch(function () {
-    if (errorEl) errorEl.classList.add('show');
-  })
-  .finally(function () {
-    if (submitBtn) submitBtn.disabled = false;
-  });
-}
- 
