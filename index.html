@@ -6,17 +6,16 @@
     <title>JO BAND | Application Officielle</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0a192f">
-    
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
-<body class="theme-dark">
+<body>
 
     <div id="splash-screen">
         <div class="splash-content">
+            <img src="images/logo.jpg" alt="JO BAND" class="splash-logo" onerror="this.style.display='none'">
             <div class="loader-bar"></div>
             <p>Chargement de la bonne humeur...</p>
         </div>
@@ -30,14 +29,20 @@
                 <img src="images/logo.jpg" alt="JO BAND" class="site-logo" onerror="this.style.display='none'">
             </div>
             <div class="header-right">
-                <a href="https://youtube.com/@jobandofficiel/live" target="_blank" class="live-badge" id="live-btn">
-                    <span class="live-dot"></span> <span data-i18n="live-text">EN LIVE</span>
+                <a href="https://youtube.com/@jobandofficiel/live" target="_blank" class="live-badge">
+                    <span class="live-dot"></span>
+                    <span data-i18n="live-text">EN LIVE</span>
                 </a>
-                <button id="theme-toggle" class="theme-btn-icon"><i class="fa-solid fa-moon"></i></button>
+                <button id="theme-toggle" class="theme-btn-icon" aria-label="Changer le thème">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
                 <div class="lang-selector">
                     <button class="lang-btn active" data-lang="fr">FR</button>
                     <button class="lang-btn" data-lang="en">EN</button>
                 </div>
+                <button class="share-action-trigger icon-btn" id="share-top" aria-label="Partager">
+                    <i class="fa-solid fa-share-nodes"></i>
+                </button>
             </div>
         </div>
     </header>
@@ -48,115 +53,189 @@
             <div class="hero">
                 <h1 class="main-title">JO BAND</h1>
                 <p class="slogan" data-i18n="slogan">"Partout où ça bouge, Jo Band est là."</p>
-                
                 <div class="social-buttons">
-                    <a href="https://www.youtube.com/@jobandofficiel" target="_blank" class="btn-social yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
+                    <a href="https://www.youtube.com/@jobandofficiel" target="_blank" class="btn-social yt">
+                        <i class="fa-brands fa-youtube"></i> YouTube
+                    </a>
                     <div class="social-row">
-                        <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-social tk"><i class="fa-brands fa-tiktok"></i> TikTok</a>
-                        <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="btn-social wa-chan"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="wa-channel">Chaîne</span></a>
+                        <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-social tk">
+                            <i class="fa-brands fa-tiktok"></i> TikTok
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="btn-social wa-chan">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            <span data-i18n="wa-channel">Chaîne</span>
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <div class="countdown-section">
-                <h3 data-i18n="next-show-title">🔥 Prochain Événement dans :</h3>
-                <div id="countdown-timer" class="timer-box">
-                    <div><span id="days">00</span> Jours</div>
-                    <div><span id="hours">00</span> H</div>
-                    <div><span id="minutes">00</span> Min</div>
-                    <div><span id="seconds">00</span> Sec</div>
+            <div class="about-section">
+                <h2 class="title-gold" data-i18n="history-title">Notre Histoire</h2>
+                <div class="tts-player">
+                    <button id="btn-play" class="tts-btn" aria-label="Lire"><i class="fa-solid fa-play"></i></button>
+                    <button id="btn-pause" class="tts-btn" aria-label="Pause"><i class="fa-solid fa-pause"></i></button>
+                    <button id="btn-stop" class="tts-btn" aria-label="Arrêter"><i class="fa-solid fa-stop"></i></button>
+                </div>
+                <p id="about-text" data-i18n="about-text">Né de la passion commune pour le rire et la scène, JO BAND est un collectif d'artistes togolais unique. Comédiens, chanteurs, DJ et vidéastes : nous fusionnons nos talents pour créer une machine à bonne humeur.</p>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label" data-i18n="stat-views">K Vues Réseaux</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="13">0</div>
+                    <div class="stat-label" data-i18n="stat-staff">Artistes & Staff</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="150">0</div>
+                    <div class="stat-label" data-i18n="stat-shows">Shows Réussis</div>
                 </div>
             </div>
 
-            <div class="gallery-section">
-                <h3 class="title-gold" data-i18n="gallery-title">Nos Meilleurs Moments</h3>
-                <div class="carousel-container">
-                    <div class="carousel-item">Scène & Humour</div>
-                    <div class="carousel-item">Ambiance DJ</div>
-                    <div class="carousel-item">Tournage Vidéo</div>
+            <div class="testimonials-section">
+                <h2 class="title-gold" data-i18n="review-title">Avis de nos Clients</h2>
+                <div class="testimonial-card">
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p class="review-text">"Une ambiance de folie pour notre mariage ! DJ PADESCO a mis le feu et les sketchs du collectif ont fait pleurer de rire toute la salle !"</p>
+                    <span class="review-author">- Rémi K. (Lomé)</span>
                 </div>
-            </div>
-
-            <div class="stats-section" id="stats-counter-area">
-                <div class="stat-card"><div class="stat-number" data-target="500">0</div><div class="stat-label">K Vues</div></div>
-                <div class="stat-card"><div class="stat-number" data-target="13">0</div><div class="stat-label">Artistes</div></div>
-                <div class="stat-card"><div class="stat-number" data-target="150">0</div><div class="stat-label">Shows</div></div>
             </div>
         </section>
 
         <section id="tab-membres" class="tab-content">
-            <h2 class="title-gold" style="margin-top: 20px;">Le Collectif</h2>
-            <p class="section-subtitle">Cliquez sur un profil pour en savoir plus</p>
+            <h2 class="title-gold" style="margin-top: 20px;" data-i18n="tab-collectif-title">Le Collectif</h2>
+            <p class="section-subtitle" data-i18n="collectif-subtitle">Cliquez sur un profil pour en savoir plus</p>
             <div id="team-grid" class="team-grid"></div>
         </section>
 
         <section id="tab-videos" class="tab-content">
-            
-            <div class="videos-container" style="margin-top: 20px;">
-                <h3 class="video-section-title"><i class="fa-brands fa-youtube text-gold"></i> Nos Vidéos</h3>
+            <h2 class="title-gold" style="margin-top: 20px;" data-i18n="tab-videos-title">Le Coin du Rire</h2>
+            <p class="section-subtitle" data-i18n="videos-subtitle">Découvrez nos meilleurs sketchs et exclusivités</p>
+
+            <div class="videos-container">
                 <div class="video-card">
+                    <h3 data-i18n="yt-feed-title">Nos Dernières Vidéos</h3>
                     <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID_HERE" title="JO BAND YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe
+                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_HERE"
+                            title="JO BAND YouTube"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
                     </div>
-                    <div class="yt-subscribe-widget-box" style="margin-top:10px;">
+                    <div class="yt-subscribe-widget-box">
+                        <p data-i18n="subscribe-prompt">Abonne-toi directement ici :</p>
                         <div class="g-ytsubscribe" data-channel="jobandofficiel" data-layout="full" data-count="default"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="ticket-generator-box">
-                <h3 class="title-gold">Générer mon Invitation VIP</h3>
-                <input type="text" id="fan-name" placeholder="Votre Prénom" class="form-input">
-                <button id="generate-ticket-btn" class="btn-submit">Créer le ticket</button>
-                <div id="ticket-result" class="hide">
-                    <div class="vip-ticket-preview">
-                        <h4>⭐ JO BAND VIP GUEST ⭐</h4>
-                        <p>INVITÉ SPÉCIAL : <strong id="ticket-fan-name"></strong></p>
-                        <span>Valable pour la prochaine tournée</span>
-                    </div>
-                    <p style="font-size: 0.8rem; text-align:center; margin-top:5px;">Faites une capture d'écran pour partager !</p>
+            <h2 class="title-gold" style="margin-top: 40px;" data-i18n="packages-title">Nos Formules Prestations</h2>
+            <div class="packages-grid">
+                <div class="package-card">
+                    <div class="package-badge" data-i18n="badge-pop">Populaire</div>
+                    <h3 data-i18n="pack-standard-title">Formule Standard</h3>
+                    <p class="package-desc" data-i18n="pack-standard-desc">Ambiance explosive pour vos soirées, mariages et anniversaires.</p>
+                    <ul class="package-features">
+                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-1">Show Humour sur scène</span></li>
+                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-2">Animation DJ par DJ PADESCO</span></li>
+                    </ul>
+                </div>
+                <div class="package-card premium">
+                    <div class="package-badge gold" data-i18n="badge-vip">Grand Standing</div>
+                    <h3 data-i18n="pack-vip-title">Formule Premium VIP</h3>
+                    <p class="package-desc" data-i18n="pack-vip-desc">Le show complet clé en main avec couverture média totale.</p>
+                    <ul class="package-features">
+                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-1">Show Humour complet</span></li>
+                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-2">Animation DJ Premium</span></li>
+                        <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="feat-3">Captation vidéo par Arole &amp; L&amp;H</span></li>
+                    </ul>
                 </div>
             </div>
 
+            <div class="agenda-box">
+                <h3><i class="fa-solid fa-calendar-days text-gold"></i> <span data-i18n="agenda-title">Fil d'actualité Actuel</span></h3>
+                <p data-i18n="agenda-desc">Actuellement en tournage de la prochaine saison de vidéos humoristiques. Restez connectés ! Le groupe reste disponible pour toutes vos réservations privées ou publiques sur l'année 2026.</p>
+            </div>
         </section>
 
         <section id="tab-contact" class="tab-content">
-            <h2 class="title-gold" style="margin-top: 20px;">Réserver le Show</h2>
-            
+            <h2 class="title-gold" style="margin-top: 20px;" data-i18n="tab-contact-title">Réserver le Show</h2>
+            <p class="section-subtitle" data-i18n="contact-subtitle">Planifiez votre événement avec l'équipe du JO BAND</p>
+
             <form id="contact-form" action="https://formspree.io/f/xbdwnyer" method="POST" class="styled-form">
-                <div class="form-group"><input type="text" name="name" placeholder="Votre Nom complet" required></div>
-                <div class="form-group"><input type="email" name="email" placeholder="Votre Adresse Email" required></div>
-                <div class="form-group"><textarea name="message" rows="5" placeholder="Détails de l'événement" required></textarea></div>
-                <button type="submit" class="btn-submit">ENVOYER LA DEMANDE</button>
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Votre Nom complet" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Votre Adresse Email" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="message" rows="5" placeholder="Détails de votre événement (Date, lieu, type de fête...)" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit" data-i18n="btn-submit">ENVOYER LA DEMANDE</button>
             </form>
-            <div id="form-status" class="hide form-status-box"></div>
+            <div id="form-status" class="form-status-box" style="display:none;"></div>
 
             <div class="direct-contact-container">
-                <h3>Contact Rapide WhatsApp</h3>
+                <h3 data-i18n="wa-direct-title">Contact Rapide WhatsApp</h3>
                 <div class="contact-buttons-row">
-                    <a href="https://wa.me/22897668021" target="_blank" class="wa-direct-btn"><i class="fa-brands fa-whatsapp"></i> Ligne 1 (+228 97 66 80 21)</a>
-                    <a href="https://wa.me/22870002539" target="_blank" class="wa-direct-btn"><i class="fa-brands fa-whatsapp"></i> Ligne 2 (+228 70 00 25 39)</a>
+                    <a href="https://wa.me/22897668021" target="_blank" class="wa-direct-btn">
+                        <i class="fa-brands fa-whatsapp"></i> Ligne 1 (+228 97 66 80 21)
+                    </a>
+                    <a href="https://wa.me/22870002539" target="_blank" class="wa-direct-btn">
+                        <i class="fa-brands fa-whatsapp"></i> Ligne 2 (+228 70 00 25 39)
+                    </a>
                 </div>
             </div>
         </section>
+
     </main>
 
-    <div id="member-modal" class="modal hide">
+    <div id="member-modal" class="modal" style="display:none;">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-img-placeholder"></div>
-            <h2 id="modal-name">Nom</h2>
-            <h4 id="modal-role" class="text-gold">Rôle</h4>
-            <p id="modal-desc" style="margin-top: 15px; font-size:0.9rem; color:#a8b2d1;">Membre incontournable du JO BAND, apportant une énergie unique à chaque événement.</p>
+            <button class="close-modal" id="close-modal" aria-label="Fermer">&times;</button>
+            <div class="modal-img-container">
+                <img id="modal-img" src="" alt="" onerror="this.style.display='none'; document.getElementById('modal-img-fallback').style.display='flex';">
+                <div id="modal-img-fallback" class="modal-fallback-icon" style="display:none;">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+            <h2 id="modal-name"></h2>
+            <h4 id="modal-role" class="text-gold"></h4>
+            <p id="modal-desc" class="modal-desc-text">Membre incontournable du JO BAND, apportant une énergie unique à chaque événement.</p>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <button class="nav-item active" data-tab="tab-accueil"><i class="fa-solid fa-house"></i><span>Accueil</span></button>
-        <button class="nav-item" data-tab="tab-membres"><i class="fa-solid fa-users"></i><span>Collectif</span></button>
-        <button class="nav-item" data-tab="tab-videos"><i class="fa-solid fa-clapperboard"></i><span>Vidéos</span></button>
-        <button class="nav-item" data-tab="tab-contact"><i class="fa-solid fa-paper-plane"></i><span>Contact</span></button>
+        <button class="nav-item active" data-tab="tab-accueil">
+            <i class="fa-solid fa-house"></i>
+            <span data-i18n="nav-home">Accueil</span>
+        </button>
+        <button class="nav-item" data-tab="tab-membres">
+            <i class="fa-solid fa-users"></i>
+            <span data-i18n="nav-team">Collectif</span>
+        </button>
+        <button class="nav-item" data-tab="tab-videos">
+            <i class="fa-solid fa-clapperboard"></i>
+            <span data-i18n="nav-videos">Vidéos</span>
+        </button>
+        <button class="nav-item" data-tab="tab-contact">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span data-i18n="nav-contact">Contact</span>
+        </button>
     </nav>
+
+    <footer class="footer">
+        <button id="share-bottom" class="share-btn-footer share-action-trigger">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span data-i18n="share-site">Partager le site</span>
+        </button>
+        <p class="signature">Architected by <strong>DJ PADESCO</strong></p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
