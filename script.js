@@ -1,299 +1,552 @@
 'use strict';
 
-// Liste officielle des 13 membres du collectif JO BAND
 const members = [
-    { name: "DJ PADESCO",   id: "padesco",   role: "DJ / Humoriste" },
-    { name: "JOEL",         id: "joel",      role: "Management" },
-    { name: "LE FONDATEUR", id: "fondateur", role: "Fondateur" },
-    { name: "NANA SIKA",    id: "nanasika",  role: "Comedien & Videaste" },
-    { name: "GEDEON",       id: "gedeon",    role: "Humoriste" },
-    { name: "JEAN",         id: "jean",      role: "Artiste Chanteur" },
-    { name: "THE GACHA",    id: "gacha",     role: "Artiste Chanteur" },
-    { name: "AROLE",        id: "arole",     role: "Cameraman" },
-    { name: "L&H",          id: "lh",        role: "Cameraman" },
-    { name: "DK POPI",      id: "dkpopi",    role: "Humoriste" },
-    { name: "ESTHER",       id: "esther",    role: "Humoriste" },
-    { name: "PRISCA",       id: "prisca",    role: "Humoriste" },
-    { name: "MAKAFUI",      id: "makafui",   role: "Humoriste" }
+  { id: 'padesco', name: 'DJ PADESCO', role: 'DJ / Humoriste / Videaste' },
+  { id: 'joel', name: 'JOEL', role: 'Management' },
+  { id: 'fondateur', name: 'LE FONDATEUR', role: 'Fondateur' },
+  { id: 'nanasika', name: 'NANA SIKA', role: 'Humoriste & Videaste' },
+  { id: 'gedeon', name: 'GEDEON', role: 'Humoriste & Danseur' },
+  { id: 'jean', name: 'JEAN', role: 'Humoriste / Artiste Chanteur' },
+  { id: 'gacha', name: 'THE GACHA', role: 'Humoriste / Artiste Chanteur' },
+  { id: 'arole', name: 'AROLE', role: 'Cameraman' },
+  { id: 'lh', name: 'L&H', role: 'Cameraman' },
+  { id: 'dkpopi', name: 'DK POPI', role: 'Humoriste' },
+  { id: 'esther', name: 'ESTHER', role: 'Humoriste' },
+  { id: 'prisca', name: 'PRISCA', role: 'Humoriste' },
+  { id: 'makafui', name: 'MAKAFUI', role: 'Humoriste' }
 ];
 
-// Dictionnaire complet des traductions (Français / Anglais)
 const translations = {
-    fr: {
-        "live-text":           "EN LIVE",
-        "slogan":              "Partout où ça bouge, Jo Band est là.",
-        "nav-home":            "Accueil",
-        "nav-team":            "Collectif",
-        "nav-videos":          "Vidéos",
-        "nav-contact":         "Contact",
-        "quote-title":         "La punchline du jour",
-        "wa-booking-title":    "Réservation Instantanée",
-        "wa-booking-desc":     "Discutez directement avec notre management sur WhatsApp pour bloquer votre date rapidement.",
-        "why-us-title":        "Pourquoi nous choisir ?",
-        "team-title":          "Le Collectif",
-        "videos-title":        "Nos Vidéos",
-        "contact-title":       "Contact & Réservation",
-        "form-name":           "Votre Nom complet / Entreprise *",
-        "form-phone":          "Numéro de téléphone (WhatsApp de préférence) *",
-        "form-message":        "Précisions sur votre projet (Attentes particulières, durée...) *",
-        "form-submit":         "Envoyer la demande",
-        "follow-us":           "Suivez-nous",
-        "share-text":          "Partager l'application"
-    },
-    en: {
-        "live-text":           "LIVE NOW",
-        "slogan":              "Everywhere it moves, Jo Band is there.",
-        "nav-home":            "Home",
-        "nav-team":            "Collective",
-        "nav-videos":          "Videos",
-        "nav-contact":         "Contact",
-        "quote-title":         "Punchline of the day",
-        "wa-booking-title":    "Instant Booking",
-        "wa-booking-desc":     "Chat directly with our management on WhatsApp to lock in your date quickly.",
-        "why-us-title":        "Why Choose Us?",
-        "team-title":          "The Collective",
-        "videos-title":        "Our Videos",
-        "contact-title":       "Contact & Booking",
-        "form-name":           "Your Full Name / Company *",
-        "form-phone":          "Phone Number (WhatsApp preferred) *",
-        "form-message":        "Project Details (Special requests, duration...) *",
-        "form-submit":         "Submit Request",
-        "follow-us":           "Follow Us",
-        "share-text":          "Share the app"
-    }
+  fr: {
+    splashSubtitle: 'Chargement du collectif',
+    brandTitle: 'JO BAND',
+    brandTag: 'Partout ou ca bouge, Jo Band est la.',
+    liveBadge: 'EN LIVE',
+    share: 'Partager',
+    navHome: 'Accueil',
+    navMembers: 'Collectif',
+    navVideos: 'Videos',
+    navContact: 'Contact & Reservation',
+    heroEyebrow: 'Collectif artistique du Togo',
+    heroTitle: 'Humour, musique, show et energie sur une seule scene.',
+    heroText: 'JO BAND rassemble des artistes, humoristes, videastes et musiciens pour des evenements vivants, propres et memorables.',
+    whatsappButton: 'Reserver sur WhatsApp',
+    installButton: "Installer l'application",
+    installHint: "L'installation s'affiche quand Chrome la propose.",
+    statViews: 'Vues',
+    statArtists: 'Artistes',
+    statShows: 'Shows',
+    whyTitle: 'Pourquoi choisir JO BAND',
+    why1: 'Duo scene et platines : DJ PADESCO pour le show, DJ ZEKA pour les platines.',
+    why2: 'Collectif polyvalent pour humour, musique, animation et visuels propres.',
+    why3: 'Organisation serieuse avec reservation directe via la ligne management.',
+    ttsTitle: 'Lecture vocale',
+    ttsText: 'Ecoute la description du collectif avec les boutons ci-dessous.',
+    play: 'Play',
+    pause: 'Pause',
+    stop: 'Stop',
+    membersTitle: 'Collectif JO BAND',
+    membersText: 'Les 13 membres sont generes automatiquement depuis le code.',
+    backstageTitle: 'Coulisses & Evenements',
+    backstageText: 'Une selection de moments de tournage, scenes, lives et spectacles.',
+    back1: 'Preparation plateau',
+    back2: 'Arrivee des artistes',
+    back3: 'Scene et public',
+    back4: 'Ambiance coulisse',
+    videosTitle: 'Videos JO BAND',
+    videosText: 'La playlist YouTube enchaine les publications automatiquement.',
+    tiktokText: 'TikTok bloque les embeds, donc le bouton ouvre le profil officiel.',
+    contactTitle: 'Contact & Reservation',
+    contactText: 'Remplis le formulaire ci-dessous pour une reponse rapide du management.',
+    contactLines: 'Lignes directes',
+    contactNote: 'Les prix se negocient directement avec le client.',
+    nameLabel: 'Nom',
+    phoneLabel: 'Telephone',
+    eventLabel: 'Type evenement',
+    chooseOption: 'Choisir',
+    eventWedding: 'Mariage',
+    eventBirthday: 'Anniversaire',
+    eventConcert: 'Concert',
+    eventChurch: 'Eglise / Culte',
+    eventCorporate: 'Entreprise',
+    eventOther: 'Autre',
+    dateLabel: 'Date',
+    placeLabel: 'Lieu',
+    messageLabel: 'Message',
+    sendButton: 'Envoyer la reservation'
+  },
+  en: {
+    splashSubtitle: 'Loading the collective',
+    brandTitle: 'JO BAND',
+    brandTag: 'Wherever there is movement, Jo Band is there.',
+    liveBadge: 'LIVE',
+    share: 'Share',
+    navHome: 'Home',
+    navMembers: 'Collective',
+    navVideos: 'Videos',
+    navContact: 'Contact & Booking',
+    heroEyebrow: 'Artistic collective from Togo',
+    heroTitle: 'Comedy, music, show and energy on one stage.',
+    heroText: 'JO BAND brings together artists, comedians, videographers and musicians for lively, clean and memorable events.',
+    whatsappButton: 'Book on WhatsApp',
+    installButton: 'Install app',
+    installHint: 'The install prompt appears when Chrome offers it.',
+    statViews: 'Views',
+    statArtists: 'Artists',
+    statShows: 'Shows',
+    whyTitle: 'Why choose JO BAND',
+    why1: 'Stage and decks duo: DJ PADESCO for the show, DJ ZEKA on the decks.',
+    why2: 'A versatile team for comedy, music, hosting and clean visuals.',
+    why3: 'Serious organization with direct booking through management.',
+    ttsTitle: 'Voice reading',
+    ttsText: 'Listen to the collective description with the buttons below.',
+    play: 'Play',
+    pause: 'Pause',
+    stop: 'Stop',
+    membersTitle: 'JO BAND Collective',
+    membersText: 'The 13 members are generated automatically from the code.',
+    backstageTitle: 'Backstage & Events',
+    backstageText: 'A selection of shooting moments, stages, live sessions and shows.',
+    back1: 'Stage preparation',
+    back2: 'Artists arriving',
+    back3: 'Stage and audience',
+    back4: 'Backstage mood',
+    videosTitle: 'JO BAND Videos',
+    videosText: 'The YouTube playlist automatically chains uploads.',
+    tiktokText: 'TikTok blocks embeds, so the button opens the official profile.',
+    contactTitle: 'Contact & Booking',
+    contactText: 'Fill out the form below for a quick management response.',
+    contactLines: 'Direct lines',
+    contactNote: 'Prices are negotiated directly with the client.',
+    nameLabel: 'Name',
+    phoneLabel: 'Phone',
+    eventLabel: 'Event type',
+    chooseOption: 'Choose',
+    eventWedding: 'Wedding',
+    eventBirthday: 'Birthday',
+    eventConcert: 'Concert',
+    eventChurch: 'Church / Worship',
+    eventCorporate: 'Corporate',
+    eventOther: 'Other',
+    dateLabel: 'Date',
+    placeLabel: 'Place',
+    messageLabel: 'Message',
+    sendButton: 'Send booking'
+  }
 };
 
-// Tableau des 7 expressions/citations du jour (une par jour de la semaine)
-const dailyQuotes = [
-    "Finissez la semaine en beauté et faites le plein d'énergie avec nos meilleures vidéos.", // Dimanche (index 0)
-    "Partout où ça bouge, JO BAND est là. Préparez-vous à vivre un événement inoubliable.",    // Lundi (index 1)
-    "L'humour et la musique réunis dans un seul collectif pour sublimer vos plus grands moments.", // Mardi (index 2)
-    "Quand DJ PADESCO est sur scène et DJ ZÉKA aux platines, l'ambiance n'a plus de limites.", // Mercredi (index 3)
-    "Une équipe de 13 professionnels de l'art et de l'image à votre service.",                // Jeudi (index 4)
-    "Donnez de la voix et du mouvement à vos projets avec le collectif JO BAND.",              // Vendredi (index 5)
-    "C'est le week-end ! L'ambiance est garantie avec toute l'équipe du JO BAND sur scène."     // Samedi (index 6)
-];
+const punchlines = {
+  fr: [
+    'Lundi: JO BAND lance la semaine avec du style et du son propre.',
+    'Mardi: humour, rythme et presence, le trio gagnant est en place.',
+    'Mercredi: quand la scene s’allume, JO BAND fait monter la temperature.',
+    'Jeudi: une reservation serieuse commence toujours par un bon contact.',
+    'Vendredi: la soiree devient forte quand JO BAND entre en mouvement.',
+    'Samedi: live, show et ambiance, le public garde le sourire.',
+    'Dimanche: le collectif se repose, mais la marque reste vivante.'
+  ],
+  en: [
+    'Monday: JO BAND opens the week with style and clean sound.',
+    'Tuesday: comedy, rhythm and presence, the winning trio is ready.',
+    'Wednesday: when the stage lights up, JO BAND raises the heat.',
+    'Thursday: serious booking always starts with the right contact.',
+    'Friday: the night gets stronger when JO BAND takes over.',
+    'Saturday: live, show and energy keep the crowd smiling.',
+    'Sunday: the team rests, but the brand stays alive.'
+  ]
+};
 
-// Variable globale pour stocker l'événement d'installation PWA
-let deferredPrompt = null;
+const groupDescription = {
+  fr: 'JO BAND rassemble des artistes, humoristes, videastes et musiciens pour des evenements vivants, propres et memorables.',
+  en: 'JO BAND brings together artists, comedians, videographers and musicians for lively, clean and memorable events.'
+};
 
-document.addEventListener('DOMContentLoaded', function () {
-    
-    // 1. Masquage du Splash Screen
-    const splash = document.getElementById('splash-screen');
-    if (splash) {
-        setTimeout(function () {
-            splash.style.opacity = '0';
-            setTimeout(function () { splash.style.display = 'none'; }, 400);
-        }, 1500);
+const state = {
+  lang: 'fr',
+  theme: 'dark',
+  installPrompt: null,
+  speech: null,
+  speechPaused: false
+};
+
+const splash = document.getElementById('splash');
+const tabs = Array.from(document.querySelectorAll('.tab-link'));
+const panels = Array.from(document.querySelectorAll('.tab-panel'));
+const memberGrid = document.getElementById('memberGrid');
+const modal = document.getElementById('memberModal');
+const modalName = document.getElementById('modalName');
+const modalRole = document.getElementById('modalRole');
+const modalPortrait = document.getElementById('modalPortrait');
+const closeModalBtn = document.getElementById('closeModal');
+const form = document.getElementById('reservationForm');
+const formStatus = document.getElementById('formStatus');
+const installBtn = document.getElementById('installBtn');
+const installStatus = document.getElementById('installStatus');
+const languageToggle = document.getElementById('languageToggle');
+const themeToggle = document.getElementById('themeToggle');
+const shareBtn = document.getElementById('shareBtn');
+const whatsappButton = document.getElementById('whatsappButton');
+const dailyPunchline = document.getElementById('dailyPunchline');
+const groupDescriptionNode = document.getElementById('groupDescription');
+const ttsPlay = document.getElementById('ttsPlay');
+const ttsPause = document.getElementById('ttsPause');
+const ttsStop = document.getElementById('ttsStop');
+
+function encodeMessage(text) {
+  return encodeURIComponent(text);
+}
+
+function getWhatsAppUrl(lang) {
+  const message = lang === 'en'
+    ? 'Hello JO BAND, I would like to book the collective for my event. Please confirm availability and booking conditions.'
+    : 'Bonjour JO BAND, je souhaite reserver le collectif pour mon evenement. Merci de confirmer la disponibilite et les conditions de reservation.';
+  return `https://wa.me/22870002539?text=${encodeMessage(message)}`;
+}
+
+function setLanguage(lang) {
+  state.lang = lang;
+  document.documentElement.lang = lang;
+  document.body.setAttribute('data-lang', lang);
+  const map = translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach((node) => {
+    const key = node.getAttribute('data-i18n');
+    const value = map[key];
+    if (typeof value === 'string') {
+      node.textContent = value;
     }
+  });
+  whatsappButton.href = getWhatsAppUrl(lang);
+  groupDescriptionNode.textContent = groupDescription[lang];
+  languageToggle.textContent = lang === 'fr' ? 'FR / EN' : 'EN / FR';
+  renderPunchline();
+  updateTTSButtonState();
+}
 
-    // 2. Affichage automatique de la citation du jour (Sécurisé sur 7 jours)
-    const quoteEl = document.getElementById('daily-quote');
-    if (quoteEl) {
-        const todayIndex = new Date().getDay(); // Retourne un chiffre entre 0 (dimanche) et 6 (samedi)
-        quoteEl.textContent = dailyQuotes[todayIndex];
-    }
+function setTheme(theme) {
+  state.theme = theme;
+  document.body.classList.toggle('theme-gold-intense', theme === 'gold');
+  themeToggle.textContent = theme === 'gold' ? 'Dark' : 'Palette';
+}
 
-    // 3. Gestion de la Navigation par Onglets mobiles (Tabs)
-    const navItems = document.querySelectorAll('.nav-item');
-    const sections = document.querySelectorAll('.tab-content');
+function switchTab(tabId) {
+  tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === tabId));
+  panels.forEach((panel) => panel.classList.toggle('active', panel.id === tabId));
+}
 
-    navItems.forEach(function (item) {
-        item.addEventListener('click', function () {
-            const targetTab = this.getAttribute('data-tab');
+function initialsFromName(name) {
+  const letters = name.replace(/[^A-ZÀ-ÿ& ]/gi, ' ').trim().split(/\s+/).filter(Boolean);
+  if (letters.length === 0) {
+    return 'JB';
+  }
+  if (letters.length === 1) {
+    return letters[0].slice(0, 2).toUpperCase();
+  }
+  return `${letters[0][0]}${letters[letters.length - 1][0]}`.toUpperCase();
+}
 
-            navItems.forEach(i => i.classList.remove('active'));
-            sections.forEach(s => s.classList.remove('active'));
+function renderMembers() {
+  memberGrid.innerHTML = '';
+  members.forEach((member) => {
+    const card = document.createElement('article');
+    card.className = 'member-card';
 
-            this.classList.add('active');
-            const targetSection = document.getElementById(targetTab);
-            if (targetSection) targetSection.classList.add('active');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.setAttribute('aria-label', member.name);
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+    const media = document.createElement('div');
+    media.className = 'member-media';
+
+    const img = document.createElement('img');
+    img.src = `images/${member.id}.jpg`;
+    img.alt = member.name;
+    img.loading = 'lazy';
+
+    const fallback = document.createElement('div');
+    fallback.className = 'member-fallback';
+    fallback.textContent = initialsFromName(member.name);
+
+    img.addEventListener('load', () => {
+      card.classList.add('has-image');
     });
 
-    // 4. Changement dynamique de Thème de couleur
-    const themeBtn = document.getElementById('theme-toggle');
-    if (themeBtn) {
-        themeBtn.addEventListener('click', function () {
-            document.body.classList.toggle('theme-gold-intense');
-        });
-    }
-
-    // 5. Gestionnaire de Traduction (FR / EN)
-    const langBtns = document.querySelectorAll('.lang-btn');
-    function applyTranslations(lang) {
-        document.querySelectorAll('[data-i18n]').forEach(function (element) {
-            const key = element.getAttribute('data-i18n');
-            if (translations[lang] && translations[lang][key]) {
-                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                    element.placeholder = translations[lang][key];
-                } else {
-                    element.textContent = translations[lang][key];
-                }
-            }
-        });
-    }
-
-    langBtns.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            langBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            applyTranslations(this.getAttribute('data-lang'));
-        });
+    img.addEventListener('error', () => {
+      card.classList.add('is-broken');
+      img.remove();
     });
 
-    // 6. Génération dynamique des cartes des Membres du Collectif
-    const membersContainer = document.getElementById('container-membres');
-    const modal = document.getElementById('modal-member');
-    const modalClose = document.getElementById('modal-close');
+    media.appendChild(img);
+    media.appendChild(fallback);
 
-    if (membersContainer && modal && modalClose) {
-        members.forEach(function (m) {
-            const card = document.createElement('div');
-            card.className = 'member-mini-card';
-            card.innerHTML = `
-                <div class="avatar-frame">
-                    <img src="images/${m.id}.jpg" alt="${m.name}" class="avatar-img" onerror="this.style.display='none'">
-                    <i class="fa-solid fa-user" style="position:absolute; z-index:-1;"></i>
-                </div>
-                <h3>${m.name}</h3>
-                <p>${m.role}</p>
-            `;
+    const name = document.createElement('h3');
+    name.className = 'member-name';
+    name.textContent = member.name;
 
-            card.addEventListener('click', function () {
-                document.getElementById('modal-name').textContent = m.name;
-                document.getElementById('modal-role').textContent = m.role;
-                
-                const frame = modal.querySelector('.modal-image-frame');
-                frame.innerHTML = `
-                    <img src="images/${m.id}.jpg" alt="${m.name}" class="avatar-img" onerror="this.style.display='none'">
-                    <i class="fa-solid fa-user" style="position:absolute; z-index:-1; top:35%; left:45%; font-size:2rem; color:var(--gold);"></i>
-                `;
-                modal.style.display = 'flex';
-            });
+    const role = document.createElement('p');
+    role.className = 'member-role';
+    role.textContent = member.role;
 
-            membersContainer.appendChild(card);
-        });
+    button.appendChild(media);
+    button.appendChild(name);
+    button.appendChild(role);
+    card.appendChild(button);
 
-        modalClose.addEventListener('click', function () { modal.style.display = 'none'; });
-        modal.addEventListener('click', function (e) { if (e.target === modal) modal.style.display = 'none'; });
+    button.addEventListener('click', () => openMemberModal(member, img.src, initialsFromName(member.name)));
+    memberGrid.appendChild(card);
+  });
+}
+
+function openMemberModal(member, imageUrl, initials) {
+  modalName.textContent = member.name;
+  modalRole.textContent = member.role;
+  modalPortrait.innerHTML = '';
+  const portraitImg = document.createElement('img');
+  portraitImg.alt = member.name;
+  portraitImg.src = imageUrl;
+  portraitImg.addEventListener('error', () => {
+    portraitImg.remove();
+    modalPortrait.textContent = initials;
+  });
+  modalPortrait.appendChild(portraitImg);
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeMemberModal() {
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+function renderPunchline() {
+  const dayIndex = new Date().getDay();
+  dailyPunchline.textContent = punchlines[state.lang][dayIndex];
+}
+
+function animateStat(node) {
+  const target = Number(node.dataset.target || '0');
+  const suffix = node.dataset.suffix || '';
+  const start = performance.now();
+  const duration = 1200;
+
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const value = Math.round(target * eased);
+    node.textContent = `${value}${suffix}`;
+    if (progress < 1) {
+      requestAnimationFrame(step);
     }
+  }
 
-    // 7. Intégration de la Playlist YouTube Automatique de JO BAND
-    const videosContainer = document.getElementById('container-videos');
-    if (videosContainer) {
-        const playlistId = 'UUxj3ygXxMVzbKmq4ctSCN5Q'; // Playlist d'envoi officielle
-        videosContainer.innerHTML = ''; 
+  requestAnimationFrame(step);
+}
 
-        for (let i = 0; i < 4; i++) {
-            const vBox = document.createElement('div');
-            vBox.className = 'video-responsive-box';
-            vBox.innerHTML = `
-                <div class="video-ratio-container">
-                    <iframe src="https://www.youtube.com/embed?listType=playlist&list=${playlistId}&index=${i}" allowfullscreen></iframe>
-                </div>
-                <div class="video-caption-text">Production Officielle JO BAND - Vidéo #${i+1}</div>
-            `;
-            videosContainer.appendChild(vBox);
-        }
+function animateStats() {
+  document.querySelectorAll('.stat-value').forEach(animateStat);
+}
+
+function speakText() {
+  if (!('speechSynthesis' in window)) {
+    installStatus.textContent = state.lang === 'fr'
+      ? 'La lecture vocale nest pas disponible sur ce navigateur.'
+      : 'Voice reading is not available in this browser.';
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(groupDescription[state.lang]);
+  utterance.lang = state.lang === 'fr' ? 'fr-FR' : 'en-US';
+  utterance.rate = 0.98;
+  utterance.pitch = 1;
+  utterance.onend = () => {
+    state.speechPaused = false;
+    updateTTSButtonState();
+  };
+  state.speech = utterance;
+  state.speechPaused = false;
+  window.speechSynthesis.speak(utterance);
+  updateTTSButtonState();
+}
+
+function pauseSpeech() {
+  if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+    window.speechSynthesis.pause();
+    state.speechPaused = true;
+    updateTTSButtonState();
+  }
+}
+
+function stopSpeech() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  state.speech = null;
+  state.speechPaused = false;
+  updateTTSButtonState();
+}
+
+function updateTTSButtonState() {
+  const speaking = 'speechSynthesis' in window && window.speechSynthesis.speaking;
+  ttsPlay.textContent = state.lang === 'fr' ? 'Play' : 'Play';
+  ttsPause.textContent = state.lang === 'fr' ? 'Pause' : 'Pause';
+  ttsStop.textContent = state.lang === 'fr' ? 'Stop' : 'Stop';
+  ttsPause.disabled = !speaking;
+  ttsStop.disabled = !speaking && !state.speechPaused;
+}
+
+async function handleShare() {
+  const shareData = {
+    title: 'JO BAND Officiel',
+    text: 'JO BAND Officiel - collectif artistique du Togo.',
+    url: window.location.href
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      return;
     }
+    await navigator.clipboard.writeText(window.location.href);
+    shareBtn.textContent = state.lang === 'fr' ? 'Lien copié' : 'Link copied';
+    setTimeout(() => setLanguage(state.lang), 1200);
+  } catch (error) {
+    formStatus.textContent = state.lang === 'fr' ? 'Partage indisponible.' : 'Sharing is unavailable.';
+  }
+}
 
-    // 8. Gestion du Formulaire de Réservation Formspree Intelligent
-    const form = document.getElementById('formspree-contact');
-    const formStatus = document.getElementById('form-status-message');
-
-    if (form && formStatus) {
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            formStatus.className = 'form-status-box';
-            formStatus.style.display = 'none';
-
-            const formData = new FormData(form);
-
-            fetch('https://formspree.io/f/xbdwnyer', {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            }).then(function (response) {
-                if (response.ok) {
-                    formStatus.className = 'form-status-box success';
-                    formStatus.textContent = 'Votre demande de réservation a bien été envoyée au management !';
-                    form.reset();
-                } else {
-                    formStatus.className = 'form-status-box error';
-                    formStatus.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer ou cliquer sur le bouton WhatsApp.';
-                }
-            }).catch(function () {
-                formStatus.className = 'form-status-box error';
-                formStatus.textContent = 'Problème de connexion. Utilisez WhatsApp pour réserver directement.';
-            });
-        });
+function setupInstallButton() {
+  if (!state.installPrompt) {
+    installBtn.disabled = false;
+  }
+  installBtn.addEventListener('click', async () => {
+    if (!state.installPrompt) {
+      installStatus.textContent = state.lang === 'fr'
+        ? "L'installation depend du navigateur. Essayez depuis Chrome."
+        : 'Installation depends on the browser. Try Chrome.';
+      return;
     }
-
-    // 9. API de Partage Web Native (Bouton de partage)
-    const shareBtn = document.getElementById('share-bottom');
-    if (shareBtn) {
-        shareBtn.addEventListener('click', function () {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'JO BAND Officiel',
-                    text: 'Découvrez l\'application officielle du collectif JO BAND !',
-                    url: window.location.href
-                }).catch(function () {});
-            } else {
-                alert("Copiez ce lien pour partager l'application : " + window.location.href);
-            }
-        });
+    state.installPrompt.prompt();
+    const choice = await state.installPrompt.userChoice;
+    if (choice.outcome === 'accepted') {
+      installStatus.textContent = state.lang === 'fr' ? 'Application installee.' : 'Application installed.';
+    } else {
+      installStatus.textContent = state.lang === 'fr' ? 'Installation annulee.' : 'Installation dismissed.';
     }
+    state.installPrompt = null;
+  });
+}
 
-    // 10. GESTION DU BOUTON D'INSTALLATION PWA POUR CHROME
-    const installBanner = document.getElementById('pwa-install-banner');
-    const installBtn = document.getElementById('btn-pwa-install');
+function setupTabs() {
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+}
 
-    window.addEventListener('beforeinstallprompt', function (e) {
-        // Empêche Chrome d'afficher sa mini-bannière par défaut
-        e.preventDefault();
-        // Garde l'événement de côté pour l'activer plus tard
-        deferredPrompt = e;
-        // Rend notre bouton doré d'installation visible sur l'onglet Accueil
-        if (installBanner) {
-            installBanner.style.display = 'flex';
-        }
+function setupModal() {
+  closeModalBtn.addEventListener('click', closeMemberModal);
+  modal.addEventListener('click', (event) => {
+    if (event.target && event.target.dataset && event.target.dataset.close === 'true') {
+      closeMemberModal();
+    }
+  });
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMemberModal();
+    }
+  });
+}
+
+function setupForm() {
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    formStatus.textContent = state.lang === 'fr' ? 'Envoi en cours...' : 'Sending...';
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form)
+      });
+
+      if (!response.ok) {
+        throw new Error('Form submission failed');
+      }
+
+      form.reset();
+      formStatus.textContent = state.lang === 'fr'
+        ? 'Reservation envoyee. Le management va repondre rapidement.'
+        : 'Booking sent. Management will reply soon.';
+    } catch (error) {
+      formStatus.textContent = state.lang === 'fr'
+        ? 'Erreur denvoi. Verifie ta connexion puis recommence.'
+        : 'Send error. Check your connection and try again.';
+    }
+  });
+}
+
+function setupPWA() {
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    state.installPrompt = event;
+    installStatus.textContent = state.lang === 'fr'
+      ? "L'installation est disponible."
+      : 'Installation is available.';
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      try {
+        await navigator.serviceWorker.register('sw.js');
+      } catch (error) {
+        installStatus.textContent = state.lang === 'fr'
+          ? 'Service Worker indisponible.'
+          : 'Service Worker unavailable.';
+      }
     });
+  }
+}
 
-    if (installBtn) {
-        installBtn.addEventListener('click', function () {
-            if (deferredPrompt) {
-                // Déclenche l'affichage de la fenêtre d'installation Chrome
-                deferredPrompt.prompt();
-                // Attend la réponse de l'utilisateur (Accepté ou Refusé)
-                deferredPrompt.userChoice.then(function (choiceResult) {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('L\'utilisateur a installé l\'application');
-                    }
-                    deferredPrompt = null;
-                    if (installBanner) installBanner.style.display = 'none';
-                });
-            }
-        });
-    }
+function setupEvents() {
+  languageToggle.addEventListener('click', () => {
+    setLanguage(state.lang === 'fr' ? 'en' : 'fr');
+  });
 
-    window.addEventListener('appinstalled', function () {
-        console.log('Application installée avec succès !');
-        if (installBanner) installBanner.style.display = 'none';
-        deferredPrompt = null;
-    });
+  themeToggle.addEventListener('click', () => {
+    setTheme(state.theme === 'dark' ? 'gold' : 'dark');
+  });
 
-    // 11. Enregistrement initial du Service Worker (sw.js)
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-            navigator.serviceWorker.register('/sw.js').catch(function (err) {
-                console.log('Service Worker non enregistré : ', err);
-            });
-        });
-    }
-});
- 
+  shareBtn.addEventListener('click', handleShare);
+  ttsPlay.addEventListener('click', speakText);
+  ttsPause.addEventListener('click', pauseSpeech);
+  ttsStop.addEventListener('click', stopSpeech);
+  window.addEventListener('focus', updateTTSButtonState);
+}
+
+function hideSplash() {
+  if (!splash) {
+    return;
+  }
+  splash.classList.add('hide');
+  window.setTimeout(() => {
+    splash.remove();
+  }, 450);
+}
+
+function init() {
+  setupTabs();
+  setupModal();
+  setupForm();
+  setupPWA();
+  setupEvents();
+  setupInstallButton();
+  renderMembers();
+  animateStats();
+  setLanguage('fr');
+  setTheme('dark');
+  hideSplash();
+  window.setTimeout(() => {
+    hideSplash();
+  }, 1500);
+}
+
+document.addEventListener('DOMContentLoaded', init);
