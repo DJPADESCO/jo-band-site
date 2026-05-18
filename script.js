@@ -239,30 +239,49 @@ function convertDriveLink(url) {
 
 
 function loadMediaFromSheets() {
+    if (galleryLoaded) return;
     var container = document.getElementById('galerie-container');
-    var dict = translations[currentLang];
-    if (!container) return;
-    container.innerHTML = '<p class="gallery-msg">' + dict['gallery-loading'] + '</p>';
+    if (container) {
+        container.innerHTML = '<div class="g-loader"></div>';
+    }
 
     fetch(SHEETS_URL)
         .then(function (res) { return res.text(); })
         .then(function (text) {
-            var clean = text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, '');
-            var json  = JSON.parse(clean);
-            var rows  = json.table.rows;
-            allMediaItems = [];
-            rows.forEach(function (row) {
-                if (!row.c || !row.c[0] || !row.c[0].v) return;
-                var type  = (row.c[0].v || '').toString().trim().toLowerCase();
-                var titre = row.c[1] ? (row.c[1].v || '').toString().trim() : '';
-                var lien  = row.c[2] ? (row.c[2].v || '').toString().trim() : '';
-                if (type && lien) allMediaItems.push({ type: type, titre: titre, lien: lien });
-            });
+            var raw = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+            var json = JSON.parse(raw);
+            var rows = json.table.rows;
+            
+            allMediaItems = rows.map(function (r) {
+                if (!r.c || r.c.length < 3) return null;
+                return {
+                    type:  r.c[0] ? String(r.c[0].v).trim().toLowerCase() : 'photo',
+                    titre: r.c[1] ? String(r.c[1].v).trim() : '',
+                    lien:  r.c[2] ? String(r.c[2].v).trim() : ''
+                };
+            }).filter(Boolean);
+
             galleryLoaded = true;
             renderGallery('all');
         })
         .catch(function () {
-            if (container) {
+            galleryLoaded = true;
+            renderGallery('all');
+        });
+}
+
+function hideSplash() {
+    var splash = document.getElementById('splash-screen');
+    if (!splash) return;
+    setTimeout(function () {
+        splash.style.transition = 'opacity 0.4s ease';
+        splash.style.opacity = '0';
+        setTimeout(function () { 
+            splash.style.display = 'none'; 
+        }, 400);
+    }, 1500);
+}
+
                 container.innerHTML = '<p class="gallery-msg error">' + translations[currentLang]['gallery-error'] + '</p>';
             }
         });
