@@ -164,10 +164,6 @@ var allMediaItems = [];
 var galleryLoaded = false;
 
 function hideSplash() {
-    var splash = document.getElementById('splash-screen');
-    if (!splash) return;
-    setTimeout(function () {
-        function hideSplash() {
     /* fonction désactivée */
 }
         
