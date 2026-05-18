@@ -272,32 +272,44 @@ function renderGallery(filter) {
     var container = document.getElementById('galerie-container');
     var dict = translations[currentLang];
     if (!container) return;
-    var items = filter === 'all' ? allMediaItems : allMediaItems.filter(function (i) { return i.type === filter; });
+    
+    var items = filter === 'all' ? 
+        allMediaItems : 
+        allMediaItems.filter(function (i) { return i.type === filter; });
+        
     if (items.length === 0) {
         container.innerHTML = '<p class="gallery-msg">' + dict['gallery-empty'] + '</p>';
         return;
     }
+    
     container.innerHTML = items.map(function (item) {
         var badge = '<span class="media-badge badge-' + item.type + '">' + item.type + '</span>';
         var title = '<p class="media-title">' + (item.titre || 'JO BAND') + '</p>';
+        
         if (item.type === 'video') {
             return '<div class="media-card">' +
-                '<div class="media-ratio"><iframe src="' + getDriveEmbedLink(item.lien) + '" allowfullscreen frameborder="0"></iframe></div>' +
-                '<div class="media-info">' + badge + title + '</div></div>';
+                '<div class="media-ratio">' +
+                '<video src="' + convertDriveLink(item.lien) + '" controls playsinline preload="metadata"></video>' +
+                '</div>' +
+                '<div class="media-info">' + badge + title + '</div>' +
+                '</div>';
         }
         if (item.type === 'photo' || item.type === 'affiche') {
             return '<div class="media-card">' +
                 '<div class="media-ratio"><img src="' + convertDriveLink(item.lien) + '" alt="' + (item.titre || 'JO BAND') + '" loading="lazy"></div>' +
-                '<div class="media-info">' + badge + title + '</div></div>';
+                '<div class="media-info">' + badge + title + '</div>' +
+                '</div>';
         }
         if (item.type === 'document') {
             return '<div class="media-card document-card">' +
                 '<a href="' + item.lien + '" target="_blank" class="doc-link">' +
-                '<i class="fa-solid fa-file-pdf"></i>' + title + '<span>Ouvrir</span></a></div>';
+                '<i class="fa-solid fa-file-pdf"></i>' + title + 
+                '<span>Ouvrir</span></a></div>';
         }
         return '';
     }).join('');
 }
+
 
 function initGalleryFilters() {
     document.querySelectorAll('.gallery-filter-btn').forEach(function (btn) {
