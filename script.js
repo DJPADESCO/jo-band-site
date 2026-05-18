@@ -425,3 +425,171 @@ function initContactForm() {
             });
     });
 }
+
+function initShare() {
+    document.querySelectorAll('.share-action-trigger').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var payload = {
+                title: 'JO BAND Officiel',
+                text: 'Découvrez le collectif JO BAND !',
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(payload).catch(function () {});
+            } else {
+                alert('Copiez le lien de votre navigateur pour partager !');
+            }
+        });
+    });
+}
+
+function initTTS() {
+    if (!('speechSynthesis' in window)) return;
+
+    var synth = window.speechSynthesis;
+    var aboutEl = document.getElementById('about-text');
+    var btnPlay = document.getElementById('btn-play');
+    var btnPause = document.getElementById('btn-pause');
+    var btnStop = document.getElementById('btn-stop');
+
+    if (!aboutEl || !btnPlay || !btnPause || !btnStop) return;
+
+    btnPlay.addEventListener('click', function () {
+        synth.cancel();
+        var msg = new SpeechSynthesisUtterance(aboutEl.textContent);
+        msg.lang = (currentLang === 'en') ? 'en-US' : 'fr-FR';
+        synth.speak(msg);
+    });
+
+    btnPause.addEventListener('click', function () {
+        if (synth.speaking) synth.pause();
+    });
+
+    btnStop.addEventListener('click', function () {
+        synth.cancel();
+    });
+}
+
+function clearAppCaches() {
+    if (!('caches' in window)) return Promise.resolve();
+    return caches.keys().then(function (keys) {
+        return Promise.all(keys.map(function (key) {
+            return caches.delete(key);
+        }));
+   
+    });
+}
+
+function initPWA() {
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+
+        var banner = document.getElementById('pwa-install-banner');
+        if (banner) banner.style.display = 'flex';
+    });
+
+    var installBtn = document.getElementById('btn-pwa-install');
+    if (installBtn) {
+        installBtn.addEventListener('click', function () {
+            if (!deferredInstallPrompt) return;
+
+            deferredInstallPrompt.prompt();
+            deferredInstallPrompt.userChoice.then(function () {
+                deferredInstallPrompt = null;
+                var banner = document.getElementById('pwa-install-banner');
+                if (banner) banner.style.display = 'none';
+            });
+        });
+    }
+
+    if (localStorage.getItem('jo-band-app-version') !== APP_VERSION) {
+        clearAppCaches().finally(function () {
+            localStorage.setItem('jo-band-app-version', APP_VERSION);
+        });
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.getRegistrations()
+                .then(function (registrations) {
+                    registrations.forEach(function (registration) {
+                        if (registration.update) registration.update();
+                    });
+                })
+                .catch(function () {});
+
+            navigator.serviceWorker.register('/sw.js?v=' + SW_VERSION)
+                .catch(function () {});
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    hideSplash();
+
+    var navItems = document.querySelectorAll('.nav-item');
+    var tabs = document.querySelectorAll('.tab-content');
+
+    navItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+            navItems.forEach(function (n) { n.classList.remove('active'); });
+            tabs.forEach(function (t) { t.classList.remove('active'); });
+
+            item.classList.add('active');
+
+            var targetId = item.getAttribute('data-tab');
+            var target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+
+window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (targetId === 'tab-galerie' && !galleryLoaded) {
+                loadMediaFromSheets();
+            }
+        });
+    });
+
+    startCounters();
+    setDailyQuote(currentLang);
+    buildMembersGrid();
+    initGalleryFilters();
+
+    var modalClose = document.getElementById('modal-close');
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+
+    var modalOverlay = document.getElementById('modal-member');
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+    }
+
+    var themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+            document.body.classList.toggle('theme-gold-intense');
+            var icon = themeToggle.querySelector('i');
+            if (!icon) return;
+            icon.className = document.body.classList.contains('theme-gold-intense')
+                ? 'fa-solid fa-sun'
+                : 'fa-solid fa-palette';
+        });
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.lang-btn').forEach(function (b) {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            applyLanguage(btn.getAttribute('data-lang'));
+        });
+    });
+
+    initContactForm();
+    initShare();
+    initTTS();
+    initPWA();
+});
