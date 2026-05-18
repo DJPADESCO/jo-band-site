@@ -228,22 +228,15 @@ function convertDriveLink(url) {
         return 'https://drive.google.com/uc?export=download&id=' + match[1];
     }
 
-    return url;
-}
-
-function getDriveEmbedLink(url) {
+    function convertDriveLink(url) {
     if (!url) return '';
-
     var match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-
-    /* ... reste du code inchangé ... */
-
     if (match) {
-        return 'https://drive.google.com/file/d/' + match[1] + '/preview?usp=drivesdk';
+        return 'https://drive.google.com/uc?export=download&id=' + match[1];
     }
-
     return url;
 }
+
 
 function loadMediaFromSheets() {
     var container = document.getElementById('galerie-container');
