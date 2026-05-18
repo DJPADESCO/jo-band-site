@@ -167,11 +167,18 @@ function hideSplash() {
     var splash = document.getElementById('splash-screen');
     if (!splash) return;
     setTimeout(function () {
-        splash.style.opacity = '0';
+        function hideSplash() {
+    var splash = document.getElementById('splash-screen');
+    if (!splash) return;
+    setTimeout(function () {
         splash.style.transition = 'opacity 0.4s ease';
-        setTimeout(function () { splash.style.display = 'none'; }, 400);
+        splash.style.opacity = '0';
+        setTimeout(function () { 
+            splash.style.display = 'none'; 
+        }, 400);
     }, 1500);
 }
+
 
 function startCounters() {
     document.querySelectorAll('.stat-number').forEach(function (counter) {
