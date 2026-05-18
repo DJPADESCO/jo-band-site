@@ -2,6 +2,8 @@
 
 var SHEETS_ID  = '1qa-6kDsGtT6uCQ71bcUS9WWzkNAHEz32ReQhuje1Pis';
 var SHEETS_URL = 'https://docs.google.com/spreadsheets/d/' + SHEETS_ID + '/gviz/tq?tqx=out:json&sheet=Sheet1';
+var APP_VERSION = '2026.05.18.1';
+var SW_VERSION = '2026.05.18.1';
 
 var members = [
     { name: "DJ PADESCO",   id: "padesco",   role: "DJ / Humoriste" },
@@ -164,20 +166,35 @@ var allMediaItems = [];
 var galleryLoaded = false;
 
 function hideSplash() {
-    /* fonction désactivée */
+    var splash = document.getElementById('splash-screen');
+    if (!splash) return;
+    setTimeout(function () {
+        splash.style.opacity = '0';
+        splash.style.transition = 'opacity 0.4s ease';
+        setTimeout(function () {
+            splash.style.display = 'none';
+        }, 400);
+    }, 1200);
 }
-        
 
 function startCounters() {
     document.querySelectorAll('.stat-number').forEach(function (counter) {
         var target = parseInt(counter.getAttribute('data-target'), 10);
-        var step = Math.ceil(target / 50);
+        if (isNaN(target)) return;
+
+        var step = Math.max(1, Math.ceil(target / 50));
         var current = 0;
+
         function tick() {
             current += step;
-            if (current < target) { counter.textContent = current; setTimeout(tick, 25); }
-            else { counter.textContent = target + '+'; }
+            if (current < target) {
+                counter.textContent = current;
+                window.setTimeout(tick, 25);
+            } else {
+                counter.textContent = target + '+';
+            }
         }
+
         tick();
     });
 }
@@ -191,100 +208,97 @@ function setDailyQuote(lang) {
 
 function applyLanguage(lang) {
     currentLang = lang;
+    document.documentElement.lang = lang;
+
     var dict = translations[lang];
     if (!dict) return;
+
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
         var key = el.getAttribute('data-i18n');
         if (!dict[key]) return;
+
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
             el.placeholder = dict[key];
         } else {
             el.textContent = dict[key];
         }
     });
+
     setDailyQuote(lang);
 }
 
 function convertDriveLink(url) {
     if (!url) return '';
-
     var match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-
-    /* ... reste du code inchangé ... */
-
-    if (match) {
-        return 'https://drive.google.com/uc?export=download&id=' + match[1];
-    }
-
-    function convertDriveLink(url) {
-    if (!url) return '';
-    var match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if (match) {
-        return 'https://drive.google.com/uc?export=download&id=' + match[1];
-    }
+    if (match) return 'https://drive.google.com/uc?export=download&id=' + match[1];
     return url;
 }
 
+function getDriveEmbedLink(url) {
+    if (!url) return '';
+    var match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (match) return 'https://drive.google.com/file/d/' + match[1] + '/preview?usp=drivesdk';
+    return url;
+}
 
 function loadMediaFromSheets() {
-    if (galleryLoaded) return;
     var container = document.getElementById('galerie-container');
-    if (container) {
-        container.innerHTML = '<div class="g-loader"></div>';
-    }
+    var dict = translations[currentLang] || translations.fr;
+    if (!container) return;
+
+    container.innerHTML = '<p class="gallery-msg">' + dict['gallery-loading'] + '</p>';
 
     fetch(SHEETS_URL)
-        .then(function (res) { return res.text(); })
+        .then(function (res) {
+            return res.text();
+        })
         .then(function (text) {
-            var raw = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
-            var json = JSON.parse(raw);
-            var rows = json.table.rows;
-            
-            allMediaItems = rows.map(function (r) {
-                if (!r.c || r.c.length < 3) return null;
-                return {
-                    type:  r.c[0] ? String(r.c[0].v).trim().toLowerCase() : 'photo',
-                    titre: r.c[1] ? String(r.c[1].v).trim() : '',
-                    lien:  r.c[2] ? String(r.c[2].v).trim() : ''
-                };
-            }).filter(Boolean);
+            var clean = text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, '');
+            var json = JSON.parse(clean);
+            var rows = (json.table && json.table.rows) ? json.table.rows : [];
+
+            allMediaItems = [];
+
+            rows.forEach(function (row) {
+                if (!row.c || !row.c[0] || !row.c[0].v) return;
+
+                var type = (row.c[0].v || '').toString().trim().toLowerCase();
+                var titre = row.c[1] ? (row.c[1].v || '').toString().trim() : '';
+                var lien = row.c[2] ? (row.c[2].v || '').toString().trim() : '';
+
+                if (type && lien) {
+                    allMediaItems.push({ type: type, titre: titre, lien: lien });
+                }
+            });
 
             galleryLoaded = true;
             renderGallery('all');
         })
         .catch(function () {
-            galleryLoaded = true;
-            renderGallery('all');
-        });
-}
-
-, 1500);
-}
-
-                container.innerHTML = '<p class="gallery-msg error">' + translations[currentLang]['gallery-error'] + '</p>';
+            if (container) {
+                container.innerHTML = '<p class="gallery-msg error">' + dict['gallery-error'] + '</p>';
             }
-        function hideSplash() {
-    /* fonction désactivée */
+        });
 }
 
 function renderGallery(filter) {
     var container = document.getElementById('galerie-container');
-    var dict = translations[currentLang];
+    var dict = translations[currentLang] || translations.fr;
     if (!container) return;
-    
-    var items = filter === 'all' ? 
-        allMediaItems : 
-        allMediaItems.filter(function (i) { return i.type === filter; });
-        
+
+    var items = filter === 'all'
+        ? allMediaItems
+        : allMediaItems.filter(function (i) { return i.type === filter; });
+
     if (items.length === 0) {
         container.innerHTML = '<p class="gallery-msg">' + dict['gallery-empty'] + '</p>';
         return;
     }
-    
+
     container.innerHTML = items.map(function (item) {
         var badge = '<span class="media-badge badge-' + item.type + '">' + item.type + '</span>';
         var title = '<p class="media-title">' + (item.titre || 'JO BAND') + '</p>';
-        
+
         if (item.type === 'video') {
             return '<div class="media-card">' +
                 '<div class="media-ratio">' +
@@ -293,27 +307,36 @@ function renderGallery(filter) {
                 '<div class="media-info">' + badge + title + '</div>' +
                 '</div>';
         }
+
         if (item.type === 'photo' || item.type === 'affiche') {
             return '<div class="media-card">' +
-                '<div class="media-ratio"><img src="' + convertDriveLink(item.lien) + '" alt="' + (item.titre || 'JO BAND') + '" loading="lazy"></div>' +
+                '<div class="media-ratio">' +
+                '<img src="' + convertDriveLink(item.lien) + '" alt="' + (item.titre || 'JO BAND') + '" loading="lazy">' +
+                '</div>' +
                 '<div class="media-info">' + badge + title + '</div>' +
                 '</div>';
         }
+
         if (item.type === 'document') {
             return '<div class="media-card document-card">' +
-                '<a href="' + item.lien + '" target="_blank" class="doc-link">' +
-                '<i class="fa-solid fa-file-pdf"></i>' + title + 
-                '<span>Ouvrir</span></a></div>';
+                '<a href="' + item.lien + '" target="_blank" rel="noopener noreferrer" class="doc-link">' +
+                '<i class="fa-solid fa-file-pdf"></i>' +
+                title +
+                '<span>Ouvrir</span>' +
+                '</a>' +
+                '</div>';
         }
+
         return '';
     }).join('');
 }
 
-
 function initGalleryFilters() {
     document.querySelectorAll('.gallery-filter-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            document.querySelectorAll('.gallery-filter-btn').forEach(function (b) { b.classList.remove('active'); });
+            document.querySelectorAll('.gallery-filter-btn').forEach(function (b) {
+                b.classList.remove('active');
+            });
             btn.classList.add('active');
             renderGallery(btn.getAttribute('data-filter'));
         });
@@ -323,12 +346,16 @@ function initGalleryFilters() {
 function buildMembersGrid() {
     var grid = document.getElementById('container-membres');
     if (!grid) return;
+
     grid.innerHTML = members.map(function (m) {
         return '<div class="member-card" data-id="' + m.id + '" data-name="' + m.name + '" data-role="' + m.role + '">' +
             '<img src="images/' + m.id + '.jpg" alt="' + m.name + '" class="member-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
             '<div class="member-fallback-bg" style="display:none;"><i class="fa-solid fa-user"></i></div>' +
-            '<h3>' + m.name + '</h3><p>' + m.role + '</p></div>';
+            '<h3>' + m.name + '</h3>' +
+            '<p>' + m.role + '</p>' +
+            '</div>';
     }).join('');
+
     grid.addEventListener('click', function (e) {
         var card = e.target.closest('.member-card');
         if (!card) return;
@@ -340,13 +367,18 @@ function openModal(id, name, role) {
     var modal = document.getElementById('modal-member');
     var img = document.getElementById('modal-img');
     var fallback = document.getElementById('modal-fallback');
-    if (!modal) return;
+    if (!modal || !img || !fallback) return;
+
     img.src = 'images/' + id + '.jpg';
     img.alt = name;
     img.style.display = 'block';
     fallback.style.display = 'none';
-    document.getElementById('modal-name').textContent = name;
-    document.getElementById('modal-role').textContent = role;
+
+    var modalName = document.getElementById('modal-name');
+    var modalRole = document.getElementById('modal-role');
+    if (modalName) modalName.textContent = name;
+    if (modalRole) modalRole.textContent = role;
+
     modal.style.display = 'flex';
 }
 
@@ -358,144 +390,38 @@ function closeModal() {
 function initContactForm() {
     var form = document.getElementById('formspree-contact');
     var status = document.getElementById('form-status-message');
+    var submitBtn = form ? form.querySelector('.submit-form-btn') : null;
+
     if (!form || !status) return;
+
     form.addEventListener('submit', function (e) {
         e.preventDefault();
+
         status.className = 'form-status-box';
         status.textContent = 'Envoi en cours...';
         status.style.display = 'block';
-        fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
+
+        if (submitBtn) submitBtn.disabled = true;
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        })
             .then(function (res) {
-                if (res.ok) {
-                    status.className = 'form-status-box success';
-                    status.textContent = 'Demande envoyée ! L\'équipe vous contactera très vite.';
-                    form.reset();
-                } else {
-                    status.className = 'form-status-box error';
-                    status.textContent = 'Erreur. Veuillez utiliser WhatsApp.';
+                if (!res.ok) {
+                    throw new Error('Formspree error');
                 }
-            }).catch(function () {
+                status.className = 'form-status-box success';
+                status.textContent = 'Demande envoyée ! L\'équipe vous contactera très vite.';
+                form.reset();
+            })
+            .catch(function () {
                 status.className = 'form-status-box error';
-                status.textContent = 'Problème de connexion. Utilisez WhatsApp.';
+                status.textContent = 'Erreur d\'envoi. Veuillez utiliser WhatsApp.';
+            })
+            .finally(function () {
+                if (submitBtn) submitBtn.disabled = false;
             });
     });
 }
-
-function initShare() {
-    document.querySelectorAll('.share-action-trigger').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            if (navigator.share) {
-                navigator.share({ title: 'JO BAND Officiel', text: 'Découvrez le collectif JO BAND !', url: window.location.href }).catch(function () {});
-            } else {
-                alert('Copiez le lien de votre navigateur pour partager !');
-            }
-        });
-    });
-}
-
-function initTTS() {
-    var synth = window.speechSynthesis;
-    var aboutEl = document.getElementById('about-text');
-    var btnPlay = document.getElementById('btn-play');
-    var btnPause = document.getElementById('btn-pause');
-    var btnStop = document.getElementById('btn-stop');
-    if (!aboutEl || !btnPlay) return;
-    btnPlay.addEventListener('click', function () {
-        synth.cancel();
-        var msg = new SpeechSynthesisUtterance(aboutEl.textContent);
-        msg.lang = (currentLang === 'en') ? 'en-US' : 'fr-FR';
-        synth.speak(msg);
-    });
-    btnPause.addEventListener('click', function () { synth.pause(); });
-    btnStop.addEventListener('click', function () { synth.cancel(); });
-}
-
-function initPWA() {
-    window.addEventListener('beforeinstallprompt', function (e) {
-        e.preventDefault();
-        deferredInstallPrompt = e;
-        var banner = document.getElementById('pwa-install-banner');
-        if (banner) banner.style.display = 'flex';
-    });
-    var installBtn = document.getElementById('btn-pwa-install');
-    if (installBtn) {
-        installBtn.addEventListener('click', function () {
-            if (!deferredInstallPrompt) return;
-            deferredInstallPrompt.prompt();
-            deferredInstallPrompt.userChoice.then(function () {
-                deferredInstallPrompt = null;
-                var banner = document.getElementById('pwa-install-banner');
-                if (banner) banner.style.display = 'none';
-            });
-        });
-    }
-    if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-
-        navigator.serviceWorker.getRegistrations()
-            .then(function (registrations) {
-                registrations.forEach(function (registration) {
-                    registration.update();
-                });
-            });
-
-        navigator.serviceWorker.register('/sw.js?v=' + Date.now())
-            .catch(function () {});
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    hideSplash();
-
-    var navItems = document.querySelectorAll('.nav-item');
-    var tabs = document.querySelectorAll('.tab-content');
-
-    navItems.forEach(function (item) {
-        item.addEventListener('click', function () {
-            navItems.forEach(function (n) { n.classList.remove('active'); });
-            tabs.forEach(function (t) { t.classList.remove('active'); });
-            item.classList.add('active');
-            var targetId = item.getAttribute('data-tab');
-            var target = document.getElementById(targetId);
-            if (target) target.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (targetId === 'tab-galerie' && !galleryLoaded) {
-                loadMediaFromSheets();
-            }
-        });
-    });
-
-    startCounters();
-    setDailyQuote('fr');
-    buildMembersGrid();
-    initGalleryFilters();
-
-    var modalClose = document.getElementById('modal-close');
-    if (modalClose) modalClose.addEventListener('click', closeModal);
-    var modalOverlay = document.getElementById('modal-member');
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', function (e) { if (e.target === this) closeModal(); });
-    }
-
-    var themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function () {
-            document.body.classList.toggle('theme-gold-intense');
-            themeToggle.querySelector('i').className = document.body.classList.contains('theme-gold-intense') ? 'fa-solid fa-sun' : 'fa-solid fa-palette';
-        });
-    }
-
-    document.querySelectorAll('.lang-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.lang-btn').forEach(function (b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            applyLanguage(btn.getAttribute('data-lang'));
-        });
-    });
-
-    initContactForm();
-    initShare();
-    initTTS();
-    initPWA();
-});
-                                           
