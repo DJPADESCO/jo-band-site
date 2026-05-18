@@ -37,6 +37,9 @@
                 <button class="control-btn share-action-trigger" id="share-top" aria-label="Partager">
                     <i class="fa-solid fa-share-nodes"></i>
                 </button>
+<button class="control-btn" id="burger-btn" aria-label="Menu">
+    <i class="fa-solid fa-bars"></i>
+</button>
             </div>
         </div>
     </header>
@@ -297,6 +300,22 @@
         </button>
         <p class="footer-copyright">&copy; 2026 JO BAND. Fait au Togo. App créée par DJ PADESCO.</p>
     </footer>
+<div id="burger-overlay" class="burger-overlay" style="display:none;"></div>
+<div id="burger-menu" class="burger-menu">
+    <button id="burger-close" class="burger-close">&times;</button>
+    <div class="burger-menu-content">
+        <h3 class="burger-menu-title">JO BAND</h3>
+        <button class="burger-nav-item" data-tab="tab-sponsors">
+            <i class="fa-solid fa-handshake"></i> Sponsors & Partenaires
+        </button>
+        <button class="burger-nav-item" id="btn-fedapay">
+            <i class="fa-solid fa-heart"></i> Soutenir JO BAND
+        </button>
+        <button class="burger-nav-item share-action-trigger">
+            <i class="fa-solid fa-share-nodes"></i> Partager l'application
+        </button>
+    </div>
+</div>
 
     <script src="script.js"></script>
 </body>
