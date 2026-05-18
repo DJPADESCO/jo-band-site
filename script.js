@@ -168,17 +168,9 @@ function hideSplash() {
     if (!splash) return;
     setTimeout(function () {
         function hideSplash() {
-    var splash = document.getElementById('splash-screen');
-    if (!splash) return;
-    setTimeout(function () {
-        splash.style.transition = 'opacity 0.4s ease';
-        splash.style.opacity = '0';
-        setTimeout(function () { 
-            splash.style.display = 'none'; 
-        }, 400);
-    }, 1500);
+    /* fonction désactivée */
 }
-
+        
 
 function startCounters() {
     document.querySelectorAll('.stat-number').forEach(function (counter) {
