@@ -636,6 +636,14 @@ var burgerBtn     = document.getElementById('burger-btn');
         });
     }
 
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('gallery-photo-thumb')) {
+            var lb = document.getElementById('lightbox');
+            document.getElementById('lightbox-img').src = e.target.src;
+            lb.style.display = 'flex';
+        }
+    });
+    
     initContactForm();
     initShare();
     initTTS();
