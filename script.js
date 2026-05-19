@@ -303,7 +303,7 @@ function renderGallery(filter) {
         if (item.type === 'video') {
             return '<div class="media-card">' +
                 '<div class="media-ratio">' +
-                '<video src="' + convertDriveLink(item.lien) + '" controls playsinline preload="metadata"></video>' +
+                '<iframe src="' + getDriveEmbedLink(item.lien) + '" allowfullscreen frameborder="0" style="width:100%;height:220px;border:0;"></iframe>' +
                 '</div>' +
                 '<div class="media-info">' + badge + title + '</div>' +
                 '</div>';
