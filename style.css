@@ -824,3 +824,86 @@ select option { background: var(--navy-blue); }
 
 .burger-menu {
     position: 
+
+    .sponsor-hero-card {
+    background:    var(--navy-light);
+    border-radius: 14px;
+    padding:       20px;
+    border:        1px solid rgba(212,175,55,0.15);
+    margin-bottom: 16px;
+}
+
+.sponsor-hero-card > i {
+    font-size:     2rem;
+    display:       block;
+    margin-bottom: 8px;
+}
+
+.sponsor-hero-card h3 {
+    font-size:     1.4rem;
+    color:         #fff;
+    margin-bottom: 16px;
+}
+
+.sponsor-benefits {
+    display:        flex;
+    flex-direction: column;
+    gap:            14px;
+}
+
+.benefit-item {
+    display:     flex;
+    align-items: flex-start;
+    gap:         12px;
+    background:  var(--navy-blue);
+    padding:     12px;
+    border-radius: 10px;
+    border-left: 3px solid var(--gold);
+}
+
+.benefit-item > i {
+    font-size:  1.3rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.benefit-item h4 {
+    font-size:     0.95rem;
+    color:         #fff;
+    margin-bottom: 3px;
+}
+
+.benefit-item p {
+    font-size:   0.82rem;
+    color:       #8892b0;
+    line-height: 1.4;
+}
+
+.sponsors-grid {
+    margin-top: 20px;
+}
+
+.sponsor-empty-state {
+    background:    var(--navy-light);
+    border:        2px dashed rgba(212,175,55,0.3);
+    border-radius: 14px;
+    padding:       30px 20px;
+    text-align:    center;
+}
+
+.sponsor-empty-state i {
+    font-size:     2.5rem;
+    display:       block;
+    margin-bottom: 10px;
+}
+
+.sponsor-empty-state h4 {
+    font-size:     1.1rem;
+    color:         var(--gold);
+    margin-bottom: 6px;
+}
+
+.sponsor-empty-state p {
+    font-size: 0.85rem;
+    color:     #8892b0;
+    }
