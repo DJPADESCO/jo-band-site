@@ -311,7 +311,7 @@ function renderGallery(filter) {
 
         if (item.type === 'photo' || item.type === 'affiche') {
             return '<div class="media-card">' +
-                '<div class="media-ratio"><img src="' + convertDriveLink(item.lien) + '" onclick="var lb=document.getElementById(\'lightbox\');document.getElementById(\'lightbox-img\').src=this.src;lb.style.display=\'flex\';" style="cursor:pointer;"' alt="' + (item.titre || 'JO BAND') + '" loading="lazy">' +
+                '<div class="media-ratio"><img src="' + convertDriveLink(item.lien) + '" class="gallery-photo-thumb"'.src=this.src;lb.style.display=\'flex\';" style="cursor:pointer;"' alt="' + (item.titre || 'JO BAND') + '" loading="lazy">' +
                 '</div>' +
                 '<div class="media-info">' + badge + title + '</div>' +
                 '</div>';
