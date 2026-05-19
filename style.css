@@ -226,10 +226,17 @@ h1, h2, h3, h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 }
 
 .media-ratio iframe {
-    width:   100%;
-    height:  220px;
-    border:  0;
-    display: block;
+    width:        100%;
+    aspect-ratio: 9 / 16;
+    border:       0;
+    display:      block;
+    max-height:   80vh;
+}
+
+@media (min-width: 600px) {
+    .media-ratio iframe {
+        aspect-ratio: 16 / 9;
+    }
 }
 
 .media-ratio img {
