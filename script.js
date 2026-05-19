@@ -238,7 +238,7 @@ function getDriveEmbedLink(url) {
 function convertDriveLink(url) {
     if (!url) return '';
     var match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if (match) return 'https://drive.google.com/file/d/' + match[1] + '/preview';
+    if (match) return 'https://drive.google.com/thumbnail?id=' + match[1] + '&sz=w800';
     return url;
 }
 
