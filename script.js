@@ -589,6 +589,54 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
 
+var burgerBtn     = document.getElementById('burger-btn');
+    var burgerMenu    = document.getElementById('burger-menu');
+    var burgerOverlay = document.getElementById('burger-overlay');
+    var burgerClose   = document.getElementById('burger-close');
+
+    function openBurger() {
+        burgerMenu.classList.add('open');
+        burgerOverlay.style.display = 'block';
+    }
+
+    function closeBurger() {
+        burgerMenu.classList.remove('open');
+        burgerOverlay.style.display = 'none';
+    }
+
+    if (burgerBtn)     burgerBtn.addEventListener('click', openBurger);
+    if (burgerClose)   burgerClose.addEventListener('click', closeBurger);
+    if (burgerOverlay) burgerOverlay.addEventListener('click', closeBurger);
+
+    document.querySelectorAll('.burger-nav-item[data-tab]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var targetId = btn.getAttribute('data-tab');
+            navItems.forEach(function(n) { n.classList.remove('active'); });
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            var target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+            closeBurger();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+
+    var fedapayBtn = document.getElementById('btn-fedapay');
+    if (fedapayBtn) {
+        fedapayBtn.addEventListener('click', function() {
+            closeBurger();
+            FedaPay.init({
+                public_key: 'pk_sandbox_nlmehOJq-jHX7WsLovvqt8Tr',
+                transaction: {
+                    amount: 500,
+                    description: 'Soutien au collectif JO BAND'
+                },
+                customer: {
+                    email: 'supporter@joband.com'
+                }
+            }).open();
+        });
+    }
+
     initContactForm();
     initShare();
     initTTS();
