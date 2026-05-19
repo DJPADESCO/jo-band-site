@@ -339,7 +339,7 @@ select option { background: var(--navy-blue); }
 .modal-desc-text { font-size: 0.85rem; color: #a8b2d1; line-height: 1.4; margin-top: 10px; }
 
 /* BOTTOM NAV — 5 onglets */
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 62px; background: #060e1a; border-top: 1px solid rgba(212,175,55,0.18); display: grid; grid-template-columns: repeat(5,1fr); z-index: 2000; box-shadow: 0 -4px 12px rgba(0,0,0,0.4); }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 62px; background: #060e1a; border-top: 1px solid rgba(212,175,55,0.18); display: grid; grid-template-columns: repeat(5, 1fr); z-index: 2000; box-shadow: 0 -4px 12px rgba(0,0,0,0.4); }
 .nav-item { background: none; border: none; color: #8892b0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; font-family: 'Outfit', sans-serif; transition: color 0.2s; }
 .nav-item i    { font-size: 1rem; }
 .nav-item span { font-size: 0.58rem; font-weight: bold; }
