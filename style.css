@@ -823,9 +823,17 @@ select option { background: var(--navy-blue); }
 }
 
 .burger-menu {
-    position: 
+    position: fixed;
+    top: 0; right: -280px;
+    width: 280px; height: 100%;
+    background: var(--navy-light);
+    border-left: 1px solid rgba(212,175,55,0.2);
+    z-index: 4001;
+    transition: right 0.3s ease;
+    padding: 20px;
+}
 
-    .sponsor-hero-card {
+.sponsor-hero-card {
     background:    var(--navy-light);
     border-radius: 14px;
     padding:       20px;
