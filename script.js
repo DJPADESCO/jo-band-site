@@ -1,5 +1,9 @@
 'use strict';
 
+function sanitize(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 var SHEETS_ID  = '1qa-6kDsGtT6uCQ71bcUS9WWzkNAHEz32ReQhuje1Pis';
 var SHEETS_URL = 'https://docs.google.com/spreadsheets/d/' + SHEETS_ID + '/gviz/tq?tqx=out:json&sheet=Sheet1';
 var APP_VERSION = '2026.05.18.1';
