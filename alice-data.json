@@ -1,0 +1,75 @@
+{
+    "identity": {
+        "name": "JO BAND",
+        "slogan": "Partout où ça bouge, Jo Band est là.",
+        "description": "Collectif artistique togolais basé à Lomé, Togo. Humour, prestations DJ, chants vibrants et productions vidéo.",
+        "location": "Lomé, Togo, Afrique"
+    },
+    "contacts": {
+        "whatsapp1": "+228 97 66 80 21",
+        "whatsapp2": "+228 70 00 25 39",
+        "youtube": "https://www.youtube.com/@jobandofficiel",
+        "tiktok": "https://www.tiktok.com/@jobandofficiel",
+        "whatsapp_channel": "https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C",
+        "website": "https://jo-band-site.vercel.app"
+    },
+    "stats": {
+        "views": "500K+",
+        "members": 13,
+        "shows": "150+"
+    },
+    "members": [
+        { "name": "DJ PADESCO", "role": "DJ / Humoriste" },
+        { "name": "JOEL", "role": "Management" },
+        { "name": "LE FONDATEUR", "role": "Fondateur" },
+        { "name": "NANA SIKA", "role": "Comédien & Vidéaste" },
+        { "name": "GEDEON", "role": "Humoriste" },
+        { "name": "JEAN", "role": "Artiste Chanteur" },
+        { "name": "THE GACHA", "role": "Artiste Chanteur" },
+        { "name": "AROLE", "role": "Caméraman" },
+        { "name": "L&H", "role": "Caméraman" },
+        { "name": "DK POPI", "role": "Humoriste" },
+        { "name": "ESTHER", "role": "Humoriste" },
+        { "name": "PRISCA", "role": "Humoriste" },
+        { "name": "MAKAFUI", "role": "Humoriste" }
+    ],
+    "packages": [
+        {
+            "name": "Formule Standard",
+            "description": "Ambiance explosive pour vos soirées, mariages et anniversaires.",
+            "features": ["Show Humour sur scène", "Animation DJ PADESCO & DJ ZÉKA"]
+        },
+        {
+            "name": "Formule Premium VIP",
+            "description": "Le show complet clé en main avec couverture média totale.",
+            "features": ["Show Humour complet", "Animation DJ Premium non-stop", "Captation vidéo par Arole & L&H"]
+        }
+    ],
+    "events": ["Mariage", "Anniversaire", "Concert / Festival", "Soirée d'entreprise", "Autre prestation"],
+    "faq": [
+        {
+            "questions": ["prix", "tarif", "combien", "coût"],
+            "answer": "Les prix sont négociés directement selon votre événement. Contactez le management au +228 70 00 25 39 sur WhatsApp pour un devis personnalisé."
+        },
+        {
+            "questions": ["réserver", "réservation", "booker", "disponible", "date"],
+            "answer": "Pour réserver JO BAND, envoyez un message WhatsApp au +228 70 00 25 39 avec la date, le lieu et le type d'événement. Vous pouvez aussi utiliser le formulaire dans l'onglet Contact."
+        },
+        {
+            "questions": ["membres", "qui", "collectif", "artistes"],
+            "answer": "JO BAND compte 13 membres : humoristes, chanteurs, DJ, caméramen et équipe de management. Visitez l'onglet Collectif pour découvrir chaque membre."
+        },
+        {
+            "questions": ["vidéo", "youtube", "tiktok", "sketch"],
+            "answer": "Retrouvez toutes nos vidéos sur YouTube @jobandofficiel et TikTok @jobandofficiel. Vous pouvez aussi les voir directement dans l'onglet Vidéos du site."
+        },
+        {
+            "questions": ["où", "togo", "lomé", "déplacement", "voyage"],
+            "answer": "JO BAND est basé à Lomé, Togo et se déplace partout au Togo et dans la région pour vos événements."
+        },
+        {
+            "questions": ["formule", "prestation", "show", "animation"],
+            "answer": "Nous proposons deux formules : Standard (Show + DJ) et Premium VIP (Show complet + DJ + Captation vidéo). Contactez-nous pour plus de détails."
+        }
+    ]
+}
