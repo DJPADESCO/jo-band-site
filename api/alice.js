@@ -3,7 +3,9 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    var allowedOrigins = ['https://jo-band-site.vercel.app', 'https://jo-band-site-git-main-djpadesco.vercel.app'];
+var origin = req.headers.origin;
+res.setHeader('Access-Control-Allow-Origin', allowedOrigins.indexOf(origin) !== -1 ? origin : allowedOrigins[0]);
     res.setHeader('Access-Control-Allow-Methods', 'POST');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
