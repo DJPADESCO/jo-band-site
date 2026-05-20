@@ -63,6 +63,7 @@ Sois concise (max 3 phrases par réponse) sauf si on demande des détails.`;
             fn: async function() {
                 var key = process.env.GROQ_KEY;
                 if (!key) throw new Error('No Groq key');
+                if (!key || key.length < 10) throw new Error('Invalid key');
                 var messages = [{ role: 'system', content: systemPrompt }];
                 history.forEach(function(h) { messages.push(h); });
                 messages.push({ role: 'user', content: message });
@@ -81,6 +82,7 @@ Sois concise (max 3 phrases par réponse) sauf si on demande des détails.`;
             fn: async function() {
                 var key = process.env.GEMINI_KEY;
                 if (!key) throw new Error('No Gemini key');
+                if (!key || key.length < 10) throw new Error('Invalid key');
                 var contents = [];
                 history.forEach(function(h) {
                     contents.push({ role: h.role === 'assistant' ? 'model' : 'user', parts: [{ text: h.content }] });
@@ -101,6 +103,7 @@ Sois concise (max 3 phrases par réponse) sauf si on demande des détails.`;
             fn: async function() {
                 var key = process.env.MISTRAL_KEY;
                 if (!key) throw new Error('No Mistral key');
+                if (!key || key.length < 10) throw new Error('Invalid key');
                 var messages = [{ role: 'system', content: systemPrompt }];
                 history.forEach(function(h) { messages.push(h); });
                 messages.push({ role: 'user', content: message });
