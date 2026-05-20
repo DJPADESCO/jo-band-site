@@ -50,9 +50,19 @@ var AliceBot = (function () {
         var div = document.createElement('div');
         div.className = 'alice-msg alice-msg-' + sender;
         if (sender === 'bot') {
-            div.innerHTML = '<div class="alice-avatar">A</div><div class="alice-bubble">' + text + '</div>';
+            var avatar = document.createElement('div');
+avatar.className = 'alice-avatar';
+avatar.textContent = 'A';
+var bubble = document.createElement('div');
+bubble.className = 'alice-bubble';
+bubble.textContent = text;
+div.appendChild(avatar);
+div.appendChild(bubble);
         } else {
-            div.innerHTML = '<div class="alice-bubble">' + text + '</div>';
+            var bubble = document.createElement('div');
+bubble.className = 'alice-bubble';
+bubble.textContent = text;
+div.appendChild(bubble);
         }
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
