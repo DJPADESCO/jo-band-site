@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="alice.css">
 <script src="https://cdn.fedapay.com/checkout.js?v=1.1.7" defer></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
@@ -365,6 +366,35 @@
         </button>
     </div>
 </div>
+    
+    <button id="alice-fab" aria-label="Parler à ALICE">
+        <i class="fa-solid fa-robot"></i>
+        <span class="alice-fab-label">ALICE - Assistante</span>
+    </button>
+
+    <div id="alice-widget">
+        <div class="alice-header">
+            <div class="alice-header-avatar">A</div>
+            <div class="alice-header-info">
+                <div class="alice-header-name">ALICE</div>
+                <div class="alice-header-status">
+                    <span class="alice-status-dot"></span>
+                    Assistante JO BAND
+                </div>
+            </div>
+            <button id="alice-close" aria-label="Fermer">&times;</button>
+        </div>
+        <div id="alice-messages"></div>
+        <div class="alice-footer">
+            <input type="text" id="alice-input" placeholder="Posez votre question..." maxlength="500">
+            <button id="alice-send" aria-label="Envoyer">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+        <div class="alice-powered">Propulsé par IA — JO BAND</div>
+    </div>
+    
+    <script src="alice.js"></script>
 
     <script src="script.js"></script>
     <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center;">
