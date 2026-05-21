@@ -68,6 +68,46 @@ div.appendChild(bubble);
         container.scrollTop = container.scrollHeight;
     }
 
+    function setSpeaking(on) {
+    var fab = document.getElementById('alice-fab');
+    if (!fab) return;
+    if (on) fab.classList.add('is-speaking');
+    else fab.classList.remove('is-speaking');
+}
+
+function greetAlice() {
+    var fab = document.getElementById('alice-fab');
+    if (!fab) return;
+    fab.classList.add('is-greeting');
+    setTimeout(function () {
+        fab.classList.remove('is-greeting');
+    }, 1200);
+}
+
+function speakText(text) {
+    if (!window.speechSynthesis) return;
+
+    var utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'fr-FR';
+    utter.rate = 1;
+    utter.pitch = 1;
+
+    utter.onstart = function () {
+        setSpeaking(true);
+    };
+
+    utter.onend = function () {
+        setSpeaking(false);
+    };
+
+    utter.onerror = function () {
+        setSpeaking(false);
+    };
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+}
+
     function showTyping() {
         var container = document.getElementById('alice-messages');
         if (!container) return;
@@ -123,21 +163,21 @@ div.appendChild(bubble);
             });
     }
 
-    function toggleChat() {
-        isOpen = !isOpen;
-        var widget = document.getElementById('alice-widget');
-        var fab = document.getElementById('alice-fab');
-        if (!widget || !fab) return;
-        if (isOpen) {
-            widget.style.display = 'flex';
-            fab.style.display = 'none';
-            if (conversationHistory.length === 0) {
-                setTimeout(function () {
-                    addMessage('Bonjour ! Je suis ALICE, l\'assistante officielle de JO BAND. Comment puis-je vous aider ? Réservation, infos sur le groupe, tarifs... je suis là !', 'bot');
-                }, 300);
-            }
-            var input = document.getElementById('alice-input');
-            if (input) input.focus();
+    if (isOpen) {
+    widget.style.display = 'flex';
+    fab.style.display = 'none';
+
+    if (conversationHistory.length === 0) {
+        setTimeout(function () {
+            var welcome = 'Salut 👋, soyez les bienvenus sur JO BAND 😘🥳🔥💯🎧';
+            addMessage(welcome, 'bot');
+            speakText('Salut, soyez les bienvenus sur JO BAND.');
+        }, 300);
+    }
+
+    var input = document.getElementById('alice-input');
+    if (input) input.focus();
+                    }
         } else {
             widget.style.display = 'none';
             fab.style.display = 'flex';
@@ -160,6 +200,10 @@ div.appendChild(bubble);
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleSend();
+                    addMessage(reply, 'bot');
+speakText(reply);
+                    addMessage(localAnswer, 'bot');
+speakText(localAnswer);
                     var fab = document.getElementById('alice-fab');
         var widget = document.getElementById('alice-widget');
         var dragTarget = null;
@@ -205,6 +249,10 @@ div.appendChild(bubble);
     }
 
     return { init: init };
+greetAlice();
+setTimeout(function () {
+    speakText('Bonjour, je suis ALICE, votre assistante JO BAND.');
+}, 1500);
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
