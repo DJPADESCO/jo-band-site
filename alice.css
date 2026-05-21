@@ -415,3 +415,85 @@ body{
 #alice-widget.active{
     display:block;
 }
+/* IMAGE DU BOUTON */
+
+.alice-fab-avatar{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+/* GRAND AVATAR */
+
+.alice-avatar-big{
+    width:220px;
+    max-width:75vw;
+    border-radius:25px;
+    object-fit:contain;
+    animation:aliceFloat 3s ease-in-out infinite;
+}
+
+/* BULLE MESSAGE */
+
+.alice-bubble{
+    background:#fff;
+    color:#111;
+    padding:14px 18px;
+    border-radius:20px;
+    max-width:280px;
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:600;
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+/* SCENE */
+
+.alice-scene{
+    position:fixed;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:999999;
+}
+
+/* FOND */
+
+.alice-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.82);
+    backdrop-filter:blur(10px);
+}
+
+/* FERMER */
+
+#alice-close{
+    position:absolute;
+    top:20px;
+    right:20px;
+    border:none;
+    background:#FFD700;
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    font-size:20px;
+    cursor:pointer;
+}
+
+/* ANIMATION */
+
+@keyframes aliceFloat{
+    0%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-10px);
+    }
+    100%{
+        transform:translateY(0);
+    }
+}
