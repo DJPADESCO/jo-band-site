@@ -1,11 +1,4 @@
-#alice-fab {
-    touch-action: none;
-user-select:  none;
-    position:        fixed;
-    bottom:          80px;
-    right:           16px;
-    width:           56px;
-    height:          56px;
+
     background:      linear-gradient(135deg, #d4af37, #b89225);
     border-radius:   50%;
     display:         flex;
