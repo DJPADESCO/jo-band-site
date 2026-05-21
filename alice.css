@@ -8,7 +8,7 @@
     box-sizing:border-box;
 }
 
-body.alice-page{
+body{
     background:
     linear-gradient(
         180deg,
@@ -361,4 +361,48 @@ body.alice-page{
         max-width:250px;
     }
 
+}
+/* FIX BOUTON ALICE */
+
+#alice-fab{
+    position:fixed;
+    bottom:95px;
+    right:18px;
+    z-index:99999;
+    width:70px;
+    height:70px;
+    border:none;
+    border-radius:50%;
+    background:linear-gradient(
+        135deg,
+        #FFD700,
+        #ffb700
+    );
+    box-shadow:0 8px 25px rgba(0,0,0,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.alice-fab-label{
+    position:absolute;
+    bottom:-28px;
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+}
+
+#alice-widget{
+    position:fixed;
+    bottom:165px;
+    right:15px;
+    width:370px;
+    max-width:92vw;
+    z-index:99999;
+    display:none;
+}
+
+#alice-widget.active{
+    display:block;
 }
