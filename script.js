@@ -11,12 +11,12 @@ var SW_VERSION = '2026.05.18.1';
 
 var members = [
     { name: "DJ PADESCO",   id: "padesco",   role: "DJ / Humoriste" },
-    { name: "JOEL",         id: "joel",      role: "Management" },
+    { name: "JOEL",         id: "joel",      role: "Management / Humouriste" },
     { name: "LE FONDATEUR", id: "fondateur", role: "Fondateur" },
-    { name: "NANA SIKA",    id: "nanasika",  role: "Comedien & Videaste" },
-    { name: "GEDEON",       id: "gedeon",    role: "Humoriste" },
+    { name: "NANA SIKA",    id: "nanasika",  role: " Humouriste & Videaste" },
+    { name: "GEDEON",       id: "gedeon",    role: "Humoriste & Danseurs" },
     { name: "JEAN",         id: "jean",      role: "Artiste Chanteur" },
-    { name: "THE GACHA",    id: "gacha",     role: "Artiste Chanteur" },
+    { name: "THE GACHA",    id: "gacha",     role: "Humouriste / Artiste Chanteur" },
     { name: "AROLE",        id: "arole",     role: "Cameraman" },
     { name: "L&H",          id: "lh",        role: "Cameraman" },
     { name: "DK POPI",      id: "dkpopi",    role: "Humoriste" },
