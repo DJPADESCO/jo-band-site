@@ -276,9 +276,9 @@ var AliceBot = (function () {
         }
 
         greetAliceVisual();
-            var welcome = 'Salut 👋, soyez les bienvenus sur JO BAND 😘🥳🔥💯🎧';
-addMessage(welcome, 'bot');
-speakText('Salut, soyez les bienvenus sur JO BAND.');
+            setTimeout(function () {
+    speakText('Bonjour, je suis ALICE, votre assistante JO BAND.');
+}, 1500);
 
     return { init: init };
 })();
