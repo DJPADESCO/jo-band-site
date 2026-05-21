@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALICE | JO BAND</title>
+    <meta name="theme-color" content="#0a192f">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="alice.css">
+</head>
+<body class="alice-page">
+
+    <main class="alice-page-wrap">
+        <button id="alice-fab" aria-label="Parler à ALICE">
+            <span class="alice-face">
+                <span class="alice-eyes">
+                    <span class="eye"></span>
+                    <span class="eye"></span>
+                </span>
+                <span class="alice-mouth"></span>
+            </span>
+            <span class="alice-fab-label">ALICE</span>
+        </button>
+
+        <div id="alice-widget" class="alice-widget-page">
+            <div class="alice-live-stage">
+                <div class="alice-live-bubble" id="alice-live-bubble">
+                    Salut 👋 Je suis ALICE, votre assistante JO BAND.
+                </div>
+
+                <div class="alice-live-avatar-wrap">
+                    <img
+                        src="images/alice-avatar.png"
+                        alt="ALICE"
+                        class="alice-live-avatar"
+                        id="alice-live-avatar"
+                    >
+
+                    <div class="alice-live-hand alice-hand-left"></div>
+                    <div class="alice-live-hand alice-hand-right"></div>
+                    <div class="alice-live-mouth" id="alice-live-mouth"></div>
+                </div>
+            </div>
+
+            <div class="alice-header">
+                <div class="alice-header-avatar">
+                    <img src="images/alice-avatar.png" alt="ALICE">
+                </div>
+                <div class="alice-header-info">
+                    <div class="alice-header-name">ALICE</div>
+                    <div class="alice-header-status">
+                        <span class="alice-status-dot"></span>
+                        Assistante JO BAND
+                    </div>
+                </div>
+                <button id="alice-close" aria-label="Fermer">&times;</button>
+            </div>
+
+            <div id="alice-messages"></div>
+
+            <div class="alice-footer">
+                <input type="text" id="alice-input" placeholder="Posez votre question..." maxlength="500">
+                <button id="alice-send" aria-label="Envoyer">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+
+            <div class="alice-powered">Propulsé par IA — JO BAND</div>
+        </div>
+    </main>
+
+    <script src="alice.js"></script>
+</body>
+</html>
