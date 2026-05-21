@@ -1,344 +1,87 @@
+/* =========================
+   ALICE - AVATAR + WIDGET
+   ========================= */
 
-    background:      linear-gradient(135deg, #d4af37, #b89225);
-    border-radius:   50%;
-    display:         flex;
-    align-items:     center;
-    justify-content: center;
-    cursor:          pointer;
-    z-index:         2500;
-    box-shadow:      0 4px 16px rgba(212,175,55,0.5);
-    border:          none;
-    animation:       alicePulse 2s infinite;
-}
-
-@keyframes alicePulse {
-    0%   { box-shadow: 0 4px 16px rgba(212,175,55,0.5); }
-    50%  { box-shadow: 0 4px 24px rgba(212,175,55,0.9); }
-    100% { box-shadow: 0 4px 16px rgba(212,175,55,0.5); }
-}
-
-#alice-fab i {
-    font-size: 1.4rem;
-    color:     #0a192f;
-}
-
-#alice-fab .alice-fab-label {
-    position:      absolute;
-    bottom:        62px;
-    right:         0;
-    background:    #0a192f;
-    color:         #d4af37;
-    font-size:     0.7rem;
-    font-weight:   bold;
-    padding:       4px 8px;
-    border-radius: 10px;
-    white-space:   nowrap;
-    font-family:   'Outfit', sans-serif;
-    border:        1px solid rgba(212,175,55,0.3);
-}
-
-#alice-widget {
-    position:        fixed;
-    bottom:          80px;
-    right:           16px;
-    width:           calc(100vw - 32px);
-    max-width:       360px;
-    height:          480px;
-    background:      #0a192f;
-    border:          1px solid rgba(212,175,55,0.3);
-    border-radius:   16px;
-    z-index:         2500;
-    display:         none;
-    flex-direction:  column;
-    overflow:        hidden;
-    box-shadow:      0 8px 32px rgba(0,0,0,0.5);
-}
-
-.alice-header {
-    background:      linear-gradient(135deg, #112240, #1b305a);
-    padding:         12px 16px;
-    display:         flex;
-    align-items:     center;
-    gap:             10px;
-    border-bottom:   1px solid rgba(212,175,55,0.15);
-    flex-shrink:     0;
-}
-
-.alice-header-avatar {
-    width:           36px;
-    height:          36px;
-    background:      linear-gradient(135deg, #d4af37, #b89225);
-    border-radius:   50%;
-    display:         flex;
-    align-items:     center;
-    justify-content: center;
-    font-family:     'Bebas Neue', sans-serif;
-    font-size:       1.1rem;
-    color:           #0a192f;
-    flex-shrink:     0;
-}
-
-.alice-header-info { flex: 1; }
-
-.alice-header-name {
-    font-family:  'Bebas Neue', sans-serif;
-    font-size:    1rem;
-    color:        #d4af37;
-    letter-spacing: 1px;
-}
-
-.alice-header-status {
-    font-size:   0.7rem;
-    color:       #25D366;
-    display:     flex;
-    align-items: center;
-    gap:         4px;
-    font-family: 'Outfit', sans-serif;
-}
-
-.alice-status-dot {
-    width:         6px;
-    height:        6px;
-    background:    #25D366;
-    border-radius: 50%;
-    animation:     blink 1.5s infinite;
-}
-
-#alice-close {
-    background:  none;
-    border:      none;
-    color:       #8892b0;
-    font-size:   1.3rem;
-    cursor:      pointer;
-    padding:     4px;
-    line-height: 1;
-}
-
-#alice-messages {
-    flex:       1;
-    overflow-y: auto;
-    padding:    12px;
-    display:    flex;
-    flex-direction: column;
-    gap:        10px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(212,175,55,0.2) transparent;
-}
-
-.alice-msg {
-    display:     flex;
-    align-items: flex-end;
-    gap:         8px;
-    max-width:   85%;
-}
-
-.alice-msg-bot  { align-self: flex-start; }
-.alice-msg-user { align-self: flex-end; flex-direction: row-reverse; }
-
-.alice-avatar {
-    width:           28px;
-    height:          28px;
-    background:      linear-gradient(135deg, #d4af37, #b89225);
-    border-radius:   50%;
-    display:         flex;
-    align-items:     center;
-    justify-content: center;
-    font-family:     'Bebas Neue', sans-serif;
-    font-size:       0.85rem;
-    color:           #0a192f;
-    flex-shrink:     0;
-}
-
-.alice-bubble {
-    padding:       10px 12px;
-    border-radius: 12px;
-    font-family:   'Outfit', sans-serif;
-    font-size:     0.85rem;
-    line-height:   1.4;
-}
-
-.alice-msg-bot .alice-bubble {
-    background:         #112240;
-    color:              #ccd6f6;
-    border-bottom-left-radius: 4px;
-    border:             1px solid rgba(212,175,55,0.08);
-}
-
-.alice-msg-user .alice-bubble {
-    background:          linear-gradient(135deg, #d4af37, #b89225);
-    color:               #0a192f;
-    font-weight:         600;
-    border-bottom-right-radius: 4px;
-}
-
-.alice-typing-dots {
-    display:     flex;
-    align-items: center;
-    gap:         4px;
-    padding:     12px 16px;
-}
-
-.alice-typing-dots span {
-    width:         6px;
-    height:        6px;
-    background:    #d4af37;
-    border-radius: 50%;
-    animation:     aliceDot 1.2s infinite;
-}
-
-.alice-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-.alice-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes aliceDot {
-    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-    40%            { transform: scale(1);   opacity: 1; }
-}
-
-.alice-footer {
-    padding:       10px 12px;
-    border-top:    1px solid rgba(212,175,55,0.1);
-    display:       flex;
-    align-items:   center;
-    gap:           8px;
-    flex-shrink:   0;
-    background:    #0a192f;
-}
-
-#alice-input {
-    flex:          1;
-    background:    #112240;
-    border:        1px solid rgba(212,175,55,0.2);
-    border-radius: 20px;
-    padding:       8px 14px;
-    color:         #ccd6f6;
-    font-family:   'Outfit', sans-serif;
-    font-size:     0.85rem;
-    outline:       none;
-}
-
-#alice-input:focus { border-color: #d4af37; }
-
-#alice-send {
-    width:           36px;
-    height:          36px;
-    background:      linear-gradient(135deg, #d4af37, #b89225);
-    border:          none;
-    border-radius:   50%;
-    cursor:          pointer;
-    display:         flex;
-    align-items:     center;
-    justify-content: center;
-    flex-shrink:     0;
-    transition:      transform 0.15s;
-}
-
-#alice-send:active { transform: scale(0.92); }
-
-#alice-send i { font-size: 0.85rem; color: #0a192f; }
-
-.alice-powered {
-    text-align:  center;
-    font-size:   0.6rem;
-    color:       rgba(136,146,176,0.5);
-    padding:     4px 0 6px;
-    font-family: 'Outfit', sans-serif;
-}
 #alice-fab {
+    position: fixed;
+    right: 16px;
+    bottom: 80px;
     width: 72px;
     height: 72px;
-    border-radius: 50%;
-    position: fixed;
-    bottom: 80px;
-    right: 16px;
     z-index: 2500;
-    background: linear-gradient(135deg, #d4af37, #b89225);
     border: none;
-    box-shadow: 0 4px 16px rgba(212,175,55,0.5);
+    border-radius: 50%;
+    padding: 0;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: visible;
+    background: transparent;
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.45);
     animation: aliceFloat 3s ease-in-out infinite;
+    user-select: none;
+    touch-action: manipulation;
 }
 
-@keyframes aliceFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-}
-
-.alice-face {
-    width: 52px;
-    height: 52px;
-    border-radius: 18px;
-    background: #0a192f;
-    border: 2px solid rgba(255,255,255,0.08);
+#alice-fab .alice-face {
     position: relative;
-    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background:
+        linear-gradient(180deg, rgba(10, 25, 47, 0.18), rgba(10, 25, 47, 0.35)),
+        url("images/alice-avatar.png") center/cover no-repeat;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    transform-origin: center;
 }
 
-.alice-eyes {
+/* léger halo animé */
+#alice-fab .alice-face::after {
+    content: "";
     position: absolute;
-    top: 14px;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.18);
+    pointer-events: none;
+}
+
+/* yeux */
+#alice-fab .alice-eyes {
+    position: absolute;
+    top: 18px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 8px;
+    z-index: 2;
 }
 
-.alice-eyes .eye {
+#alice-fab .alice-eyes .eye {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background: #d9f4ff;
     box-shadow: 0 0 10px rgba(173, 232, 255, 0.9);
-    animation: blink 4s infinite;
+    animation: aliceBlink 4s infinite;
 }
 
-@keyframes blink {
-    0%, 96%, 100% { transform: scaleY(1); }
-    97% { transform: scaleY(0.1); }
-    98% { transform: scaleY(1); }
-}
-
-.alice-mouth {
+/* bouche */
+#alice-fab .alice-mouth {
     position: absolute;
     left: 50%;
-    bottom: 12px;
+    bottom: 14px;
     transform: translateX(-50%);
     width: 18px;
     height: 6px;
     border-radius: 999px;
     background: #d9f4ff;
-    opacity: 0.7;
+    opacity: 0.8;
+    z-index: 2;
 }
 
-#alice-fab.is-speaking .alice-mouth {
-    height: 14px;
-    width: 22px;
-    border-radius: 12px;
-    background: #ffffff;
-    opacity: 1;
-    animation: mouthTalk 0.18s infinite alternate;
-}
-
-@keyframes mouthTalk {
-    from { transform: translateX(-50%) scaleY(0.75); }
-    to   { transform: translateX(-50%) scaleY(1.2); }
-}
-
-#alice-fab.is-greeting {
-    animation: aliceFloat 3s ease-in-out infinite, aliceWave 0.6s ease-in-out 1;
-}
-
-@keyframes aliceWave {
-    0% { transform: rotate(0deg) translateY(0); }
-    25% { transform: rotate(-8deg) translateY(-3px); }
-    50% { transform: rotate(8deg) translateY(-6px); }
-    75% { transform: rotate(-4deg) translateY(-3px); }
-    100% { transform: rotate(0deg) translateY(0); }
-}
-
+/* label */
 #alice-fab .alice-fab-label {
     position: absolute;
     bottom: 78px;
@@ -350,5 +93,279 @@
     padding: 4px 8px;
     border-radius: 10px;
     white-space: nowrap;
-    border: 1px solid rgba(212,175,55,0.3);
-    }
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    font-family: 'Outfit', sans-serif;
+}
+
+/* états */
+#alice-fab.is-speaking .alice-mouth {
+    height: 14px;
+    width: 24px;
+    border-radius: 12px;
+    background: #ffffff;
+    opacity: 1;
+    animation: aliceTalk 0.18s infinite alternate;
+}
+
+#alice-fab.is-greeting {
+    animation: aliceFloat 3s ease-in-out infinite, aliceWave 0.7s ease-in-out 1;
+}
+
+#alice-fab.is-greeting .alice-face {
+    transform: scale(1.03);
+}
+
+/* widget */
+#alice-widget {
+    position: fixed;
+    right: 16px;
+    bottom: 80px;
+    width: calc(100vw - 32px);
+    max-width: 360px;
+    height: 480px;
+    z-index: 2500;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #0a192f;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* header */
+.alice-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #112240, #1b305a);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.alice-header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background:
+        linear-gradient(180deg, rgba(10, 25, 47, 0.12), rgba(10, 25, 47, 0.28)),
+        url("images/alice-avatar.png") center/cover no-repeat;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-indent: -9999px;
+    overflow: hidden;
+}
+
+.alice-header-info {
+    flex: 1;
+}
+
+.alice-header-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: #d4af37;
+    letter-spacing: 1px;
+}
+
+.alice-header-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem;
+    color: #25D366;
+}
+
+.alice-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #25D366;
+    animation: aliceStatusBlink 1.5s infinite;
+}
+
+#alice-close {
+    background: none;
+    border: none;
+    color: #8892b0;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+}
+
+/* messages */
+#alice-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.2) transparent;
+}
+
+.alice-msg {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    max-width: 85%;
+}
+
+.alice-msg-bot {
+    align-self: flex-start;
+}
+
+.alice-msg-user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.alice-avatar {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background:
+        linear-gradient(180deg, rgba(10, 25, 47, 0.1), rgba(10, 25, 47, 0.25)),
+        url("images/alice-avatar.png") center/cover no-repeat;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-indent: -9999px;
+    overflow: hidden;
+}
+
+.alice-bubble {
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.alice-msg-bot .alice-bubble {
+    background: #112240;
+    color: #ccd6f6;
+    border-bottom-left-radius: 4px;
+    border: 1px solid rgba(212, 175, 55, 0.08);
+}
+
+.alice-msg-user .alice-bubble {
+    background: linear-gradient(135deg, #d4af37, #b89225);
+    color: #0a192f;
+    font-weight: 600;
+    border-bottom-right-radius: 4px;
+}
+
+/* typing */
+.alice-typing-dots {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px;
+}
+
+.alice-typing-dots span {
+    width: 6px;
+    height: 6px;
+    background: #d4af37;
+    border-radius: 50%;
+    animation: aliceDot 1.2s infinite;
+}
+
+.alice-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.alice-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* footer */
+.alice-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 10px 12px;
+    background: #0a192f;
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+#alice-input {
+    flex: 1;
+    background: #112240;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 20px;
+    padding: 8px 14px;
+    color: #ccd6f6;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+#alice-input:focus {
+    border-color: #d4af37;
+}
+
+#alice-send {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: linear-gradient(135deg, #d4af37, #b89225);
+    transition: transform 0.15s;
+}
+
+#alice-send:active {
+    transform: scale(0.92);
+}
+
+#alice-send i {
+    font-size: 0.85rem;
+    color: #0a192f;
+}
+
+.alice-powered {
+    padding: 4px 0 6px;
+    text-align: center;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.6rem;
+    color: rgba(136, 146, 176, 0.5);
+}
+
+/* animations */
+@keyframes aliceFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+@keyframes aliceWave {
+    0% { transform: rotate(0deg) translateY(0); }
+    25% { transform: rotate(-8deg) translateY(-3px); }
+    50% { transform: rotate(8deg) translateY(-6px); }
+    75% { transform: rotate(-4deg) translateY(-3px); }
+    100% { transform: rotate(0deg) translateY(0); }
+}
+
+@keyframes aliceBlink {
+    0%, 96%, 100% { transform: scaleY(1); }
+    97% { transform: scaleY(0.1); }
+    98% { transform: scaleY(1); }
+}
+
+@keyframes aliceTalk {
+    from { transform: translateX(-50%) scaleY(0.75); }
+    to { transform: translateX(-50%) scaleY(1.2); }
+}
+
+@keyframes aliceDot {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes aliceStatusBlink {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
