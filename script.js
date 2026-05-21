@@ -624,9 +624,26 @@ var burgerBtn     = document.getElementById('burger-btn');
     });
 
     var fedapayBtn = document.getElementById('btn-fedapay');
-    if (fedapayBtn) {
-        fedapayBtn.addEventListener('click', function() {
-            closeBurger();
+
+if (fedapayBtn) {
+
+    fedapayBtn.addEventListener('click', function () {
+
+        closeBurger();
+
+        // Feedback immédiat
+        fedapayBtn.disabled = true;
+        fedapayBtn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Chargement...';
+
+        function openFedaPay() {
+
+            if (typeof FedaPay === 'undefined') {
+                alert('Connexion lente. Veuillez réessayer.');
+                resetButton();
+                return;
+            }
+
             FedaPay.init({
                 public_key: 'pk_sandbox_nlmehOJq-jHX7WsLovvqt8Tr',
                 transaction: {
@@ -637,9 +654,39 @@ var burgerBtn     = document.getElementById('burger-btn');
                     email: 'supporter@joband.com'
                 }
             }).open();
-        });
-    }
 
+            resetButton();
+        }
+
+        function resetButton() {
+            fedapayBtn.disabled = false;
+            fedapayBtn.innerHTML =
+                '<i class="fa-solid fa-heart"></i> Soutenir JO BAND';
+        }
+
+        // Si FedaPay est déjà chargé
+        if (typeof FedaPay !== 'undefined') {
+            openFedaPay();
+            return;
+        }
+
+        // Charge FedaPay manuellement si lent
+        var script = document.createElement('script');
+        script.src =
+            'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+
+        script.onload = function () {
+            openFedaPay();
+        };
+
+        script.onerror = function () {
+            alert('Impossible de charger FedaPay. Vérifiez votre connexion.');
+            resetButton();
+        };
+
+        document.head.appendChild(script);
+    });
+}
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('gallery-photo-thumb')) {
             var lb = document.getElementById('lightbox');
