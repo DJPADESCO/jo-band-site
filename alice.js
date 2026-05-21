@@ -6,9 +6,14 @@ var AliceBot = (function () {
     var isTyping = false;
     var joData = null;
     var hasGreeted = false;
+    var voiceReady = false;
 
     function byId(id) {
         return document.getElementById(id);
+    }
+
+    function safeText(value) {
+        return String(value == null ? '' : value);
     }
 
     function loadData() {
@@ -34,19 +39,20 @@ var AliceBot = (function () {
         var faqList = getFaqList();
         if (!faqList.length) return null;
 
-        var msg = String(message || '').toLowerCase();
+        var msg = safeText(message).toLowerCase();
 
         for (var i = 0; i < faqList.length; i++) {
             var faq = faqList[i] || {};
             var questions = Array.isArray(faq.questions) ? faq.questions : [];
 
             for (var j = 0; j < questions.length; j++) {
-                var q = String(questions[j] || '').toLowerCase().trim();
+                var q = safeText(questions[j]).toLowerCase().trim();
                 if (q && msg.indexOf(q) !== -1) {
                     return faq.answer || null;
                 }
             }
         }
+
         return null;
     }
 
@@ -82,14 +88,14 @@ var AliceBot = (function () {
 
             var bubble = document.createElement('div');
             bubble.className = 'alice-bubble';
-            bubble.textContent = text;
+            bubble.textContent = safeText(text);
 
             div.appendChild(avatar);
             div.appendChild(bubble);
         } else {
             var bubbleUser = document.createElement('div');
             bubbleUser.className = 'alice-bubble';
-            bubbleUser.textContent = text;
+            bubbleUser.textContent = safeText(text);
             div.appendChild(bubbleUser);
         }
 
@@ -101,9 +107,9 @@ var AliceBot = (function () {
         var container = byId('alice-messages');
         if (!container) return;
 
-        var div = document.createElement('div');
-        div.className = 'alice-msg alice-msg-bot';
-        div.id = 'alice-typing';
+        var wrap = document.createElement('div');
+        wrap.className = 'alice-msg alice-msg-bot';
+        wrap.id = 'alice-typing';
 
         var avatar = document.createElement('div');
         avatar.className = 'alice-avatar';
@@ -111,12 +117,19 @@ var AliceBot = (function () {
 
         var bubble = document.createElement('div');
         bubble.className = 'alice-bubble alice-typing-dots';
-        bubble.innerHTML = '<span></span><span></span><span></span>';
 
-        div.appendChild(avatar);
-        div.appendChild(bubble);
+        var dot1 = document.createElement('span');
+        var dot2 = document.createElement('span');
+        var dot3 = document.createElement('span');
 
-        container.appendChild(div);
+        bubble.appendChild(dot1);
+        bubble.appendChild(dot2);
+        bubble.appendChild(dot3);
+
+        wrap.appendChild(avatar);
+        wrap.appendChild(bubble);
+
+        container.appendChild(wrap);
         container.scrollTop = container.scrollHeight;
     }
 
@@ -134,13 +147,49 @@ var AliceBot = (function () {
         else fab.classList.remove('is-speaking');
     }
 
+    function cleanSpeechText(text) {
+        return safeText(text)
+            .replace(/[*_`~]/g, ' ')
+            .replace(/[😘😍🥳👍🔥💯🎧👋😔😭😅😂🤣❤️❤✨🎉🎵🎶🫶🙂🙃😉😎🤖]/g, '')
+            .replace(/[<>]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function pickVoice() {
+        if (!('speechSynthesis' in window)) return null;
+
+        var voices = window.speechSynthesis.getVoices();
+        if (!voices || !voices.length) return null;
+
+        var preferred =
+            voices.find(function (v) { return /Microsoft/i.test(v.name) && /fr/i.test(v.lang); }) ||
+            voices.find(function (v) { return /Google/i.test(v.name) && /fr/i.test(v.lang); }) ||
+            voices.find(function (v) { return /fr/i.test(v.lang); }) ||
+            voices[0];
+
+        return preferred || null;
+    }
+
     function speakText(text) {
         if (!('speechSynthesis' in window)) return;
 
-        var utter = new SpeechSynthesisUtterance(text);
+        var finalText = cleanSpeechText(text);
+        if (!finalText) return;
+
+        try {
+            window.speechSynthesis.cancel();
+        } catch (e) {}
+
+        var utter = new SpeechSynthesisUtterance(finalText);
         utter.lang = 'fr-FR';
-        utter.rate = 1;
+        utter.rate = 0.95;
         utter.pitch = 1;
+
+        var voice = pickVoice();
+        if (voice) {
+            utter.voice = voice;
+        }
 
         utter.onstart = function () {
             setSpeaking(true);
@@ -154,7 +203,6 @@ var AliceBot = (function () {
             setSpeaking(false);
         };
 
-        window.speechSynthesis.cancel();
         window.speechSynthesis.speak(utter);
     }
 
@@ -163,7 +211,7 @@ var AliceBot = (function () {
         if (!fab) return;
 
         fab.classList.add('is-greeting');
-        setTimeout(function () {
+        window.setTimeout(function () {
             fab.classList.remove('is-greeting');
         }, 1200);
     }
@@ -181,10 +229,10 @@ var AliceBot = (function () {
 
         if (!hasGreeted) {
             hasGreeted = true;
-            setTimeout(function () {
+            window.setTimeout(function () {
                 var welcome = 'Salut 👋, soyez les bienvenus sur JO BAND 😘🥳🔥💯🎧';
                 addMessage(welcome, 'bot');
-                speakText('Salut, soyez les bienvenus sur JO BAND.');
+                speakText('Salut, soyez les bienvenus sur JO BAND. Comment puis-je vous aider ?');
             }, 250);
         }
 
@@ -226,7 +274,7 @@ var AliceBot = (function () {
         var localAnswer = checkLocalAnswer(message);
 
         if (localAnswer) {
-            setTimeout(function () {
+            window.setTimeout(function () {
                 hideTyping();
                 addMessage(localAnswer, 'bot');
                 conversationHistory.push({ role: 'assistant', content: localAnswer });
@@ -254,8 +302,25 @@ var AliceBot = (function () {
             });
     }
 
+    function bindVoicesWhenReady() {
+        if (!('speechSynthesis' in window)) return;
+
+        var voices = window.speechSynthesis.getVoices();
+        if (voices && voices.length) {
+            voiceReady = true;
+            return;
+        }
+
+        if (voiceReady) return;
+
+        window.speechSynthesis.onvoiceschanged = function () {
+            voiceReady = true;
+        };
+    }
+
     function init() {
         loadData();
+        bindVoicesWhenReady();
 
         var fab = byId('alice-fab');
         var closeBtn = byId('alice-close');
@@ -276,11 +341,11 @@ var AliceBot = (function () {
         }
 
         greetAliceVisual();
-            setTimeout(function () {
-    speakText('Bonjour, je suis ALICE, votre assistante JO BAND.');
-}, 1500);
+    }
 
-    return { init: init };
+    return {
+        init: init
+    };
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
