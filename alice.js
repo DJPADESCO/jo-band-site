@@ -1,27 +1,49 @@
 'use strict';
 
 var AliceBot = (function () {
-
     var conversationHistory = [];
     var isOpen = false;
     var isTyping = false;
     var joData = null;
+    var hasGreeted = false;
+
+    function byId(id) {
+        return document.getElementById(id);
+    }
 
     function loadData() {
-        fetch('/alice-data.json')
-            .then(function (r) { return r.json(); })
-            .then(function (d) { joData = d; })
-            .catch(function () { joData = null; });
+        return fetch('/alice-data.json', { cache: 'no-store' })
+            .then(function (r) {
+                if (!r.ok) throw new Error('Impossible de charger alice-data.json');
+                return r.json();
+            })
+            .then(function (d) {
+                joData = d || null;
+            })
+            .catch(function () {
+                joData = null;
+            });
+    }
+
+    function getFaqList() {
+        if (!joData || !Array.isArray(joData.faq)) return [];
+        return joData.faq;
     }
 
     function checkLocalAnswer(message) {
-        if (!joData) return null;
-        var msg = message.toLowerCase();
-        for (var i = 0; i < joData.faq.length; i++) {
-            var faq = joData.faq[i];
-            for (var j = 0; j < faq.questions.length; j++) {
-                if (msg.indexOf(faq.questions[j]) !== -1) {
-                    return faq.answer;
+        var faqList = getFaqList();
+        if (!faqList.length) return null;
+
+        var msg = String(message || '').toLowerCase();
+
+        for (var i = 0; i < faqList.length; i++) {
+            var faq = faqList[i] || {};
+            var questions = Array.isArray(faq.questions) ? faq.questions : [];
+
+            for (var j = 0; j < questions.length; j++) {
+                var q = String(questions[j] || '').toLowerCase().trim();
+                if (q && msg.indexOf(q) !== -1) {
+                    return faq.answer || null;
                 }
             }
         }
@@ -41,109 +63,176 @@ var AliceBot = (function () {
             if (!r.ok) throw new Error('API error');
             return r.json();
         })
-        .then(function (d) { return d.reply; });
+        .then(function (d) {
+            return d && d.reply ? d.reply : 'Je n’ai pas reçu de réponse valide.';
+        });
     }
 
     function addMessage(text, sender) {
-        var container = document.getElementById('alice-messages');
+        var container = byId('alice-messages');
         if (!container) return;
+
         var div = document.createElement('div');
         div.className = 'alice-msg alice-msg-' + sender;
+
         if (sender === 'bot') {
             var avatar = document.createElement('div');
-avatar.className = 'alice-avatar';
-avatar.textContent = 'A';
-var bubble = document.createElement('div');
-bubble.className = 'alice-bubble';
-bubble.textContent = text;
-div.appendChild(avatar);
-div.appendChild(bubble);
-        } else {
+            avatar.className = 'alice-avatar';
+            avatar.textContent = 'A';
+
             var bubble = document.createElement('div');
-bubble.className = 'alice-bubble';
-bubble.textContent = text;
-div.appendChild(bubble);
+            bubble.className = 'alice-bubble';
+            bubble.textContent = text;
+
+            div.appendChild(avatar);
+            div.appendChild(bubble);
+        } else {
+            var bubbleUser = document.createElement('div');
+            bubbleUser.className = 'alice-bubble';
+            bubbleUser.textContent = text;
+            div.appendChild(bubbleUser);
         }
+
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
     }
 
-    function setSpeaking(on) {
-    var fab = document.getElementById('alice-fab');
-    if (!fab) return;
-    if (on) fab.classList.add('is-speaking');
-    else fab.classList.remove('is-speaking');
-}
-
-function greetAlice() {
-    var fab = document.getElementById('alice-fab');
-    if (!fab) return;
-    fab.classList.add('is-greeting');
-    setTimeout(function () {
-        fab.classList.remove('is-greeting');
-    }, 1200);
-}
-
-function speakText(text) {
-    if (!window.speechSynthesis) return;
-
-    var utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'fr-FR';
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    utter.onstart = function () {
-        setSpeaking(true);
-    };
-
-    utter.onend = function () {
-        setSpeaking(false);
-    };
-
-    utter.onerror = function () {
-        setSpeaking(false);
-    };
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utter);
-}
-
     function showTyping() {
-        var container = document.getElementById('alice-messages');
+        var container = byId('alice-messages');
         if (!container) return;
+
         var div = document.createElement('div');
         div.className = 'alice-msg alice-msg-bot';
         div.id = 'alice-typing';
-        div.innerHTML = '<div class="alice-avatar">A</div><div class="alice-bubble alice-typing-dots"><span></span><span></span><span></span></div>';
+
+        var avatar = document.createElement('div');
+        avatar.className = 'alice-avatar';
+        avatar.textContent = 'A';
+
+        var bubble = document.createElement('div');
+        bubble.className = 'alice-bubble alice-typing-dots';
+        bubble.innerHTML = '<span></span><span></span><span></span>';
+
+        div.appendChild(avatar);
+        div.appendChild(bubble);
+
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
     }
 
     function hideTyping() {
-        var el = document.getElementById('alice-typing');
-        if (el) el.parentNode.removeChild(el);
+        var el = byId('alice-typing');
+        if (el && el.parentNode) {
+            el.parentNode.removeChild(el);
+        }
+    }
+
+    function setSpeaking(on) {
+        var fab = byId('alice-fab');
+        if (!fab) return;
+        if (on) fab.classList.add('is-speaking');
+        else fab.classList.remove('is-speaking');
+    }
+
+    function speakText(text) {
+        if (!('speechSynthesis' in window)) return;
+
+        var utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'fr-FR';
+        utter.rate = 1;
+        utter.pitch = 1;
+
+        utter.onstart = function () {
+            setSpeaking(true);
+        };
+
+        utter.onend = function () {
+            setSpeaking(false);
+        };
+
+        utter.onerror = function () {
+            setSpeaking(false);
+        };
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utter);
+    }
+
+    function greetAliceVisual() {
+        var fab = byId('alice-fab');
+        if (!fab) return;
+
+        fab.classList.add('is-greeting');
+        setTimeout(function () {
+            fab.classList.remove('is-greeting');
+        }, 1200);
+    }
+
+    function openChat() {
+        var widget = byId('alice-widget');
+        var fab = byId('alice-fab');
+        var input = byId('alice-input');
+
+        if (!widget || !fab) return;
+
+        widget.style.display = 'flex';
+        fab.style.display = 'none';
+        isOpen = true;
+
+        if (!hasGreeted) {
+            hasGreeted = true;
+            setTimeout(function () {
+                var welcome = 'Salut 👋, soyez les bienvenus sur JO BAND 😘🥳🔥💯🎧';
+                addMessage(welcome, 'bot');
+                speakText('Salut, soyez les bienvenus sur JO BAND.');
+            }, 250);
+        }
+
+        if (input) input.focus();
+    }
+
+    function closeChat() {
+        var widget = byId('alice-widget');
+        var fab = byId('alice-fab');
+
+        if (!widget || !fab) return;
+
+        widget.style.display = 'none';
+        fab.style.display = 'flex';
+        isOpen = false;
+    }
+
+    function toggleChat() {
+        if (isOpen) closeChat();
+        else openChat();
     }
 
     function handleSend() {
         if (isTyping) return;
-        var input = document.getElementById('alice-input');
+
+        var input = byId('alice-input');
         if (!input) return;
+
         var message = input.value.trim();
         if (!message) return;
+
         input.value = '';
         addMessage(message, 'user');
         conversationHistory.push({ role: 'user', content: message });
+
         isTyping = true;
         showTyping();
 
         var localAnswer = checkLocalAnswer(message);
+
         if (localAnswer) {
             setTimeout(function () {
                 hideTyping();
                 addMessage(localAnswer, 'bot');
                 conversationHistory.push({ role: 'assistant', content: localAnswer });
+                speakText(localAnswer);
                 isTyping = false;
-            }, 600);
+            }, 500);
             return;
         }
 
@@ -152,107 +241,47 @@ function speakText(text) {
                 hideTyping();
                 addMessage(reply, 'bot');
                 conversationHistory.push({ role: 'assistant', content: reply });
+                speakText(reply);
             })
             .catch(function () {
                 hideTyping();
-                var fallback = 'Je suis momentanément indisponible. Contactez-nous sur WhatsApp au +228 70 00 25 39 !';
+                var fallback = 'Je suis momentanément indisponible. Contactez-nous sur WhatsApp au +228 70 00 25 39.';
                 addMessage(fallback, 'bot');
+                speakText(fallback);
             })
             .finally(function () {
                 isTyping = false;
             });
     }
 
-    if (isOpen) {
-    widget.style.display = 'flex';
-    fab.style.display = 'none';
-
-    if (conversationHistory.length === 0) {
-        setTimeout(function () {
-            var welcome = 'Salut 👋, soyez les bienvenus sur JO BAND 😘🥳🔥💯🎧';
-            addMessage(welcome, 'bot');
-            speakText('Salut, soyez les bienvenus sur JO BAND.');
-        }, 300);
-    }
-
-    var input = document.getElementById('alice-input');
-    if (input) input.focus();
-                    }
-        } else {
-            widget.style.display = 'none';
-            fab.style.display = 'flex';
-        }
-    }
-
     function init() {
         loadData();
 
-        var fab = document.getElementById('alice-fab');
-        var closeBtn = document.getElementById('alice-close');
-        var sendBtn = document.getElementById('alice-send');
-        var input = document.getElementById('alice-input');
+        var fab = byId('alice-fab');
+        var closeBtn = byId('alice-close');
+        var sendBtn = byId('alice-send');
+        var input = byId('alice-input');
 
         if (fab) fab.addEventListener('click', toggleChat);
-        if (closeBtn) closeBtn.addEventListener('click', toggleChat);
+        if (closeBtn) closeBtn.addEventListener('click', closeChat);
         if (sendBtn) sendBtn.addEventListener('click', handleSend);
+
         if (input) {
             input.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleSend();
-                    addMessage(reply, 'bot');
-speakText(reply);
-                    addMessage(localAnswer, 'bot');
-speakText(localAnswer);
-                    var fab = document.getElementById('alice-fab');
-        var widget = document.getElementById('alice-widget');
-        var dragTarget = null;
-        var startX, startY, origX, origY;
-
-        function onDragStart(e) {
-            var touch = e.touches ? e.touches[0] : e;
-            dragTarget = e.currentTarget;
-            startX = touch.clientX;
-            startY = touch.clientY;
-            var rect = dragTarget.getBoundingClientRect();
-            origX = rect.left;
-            origY = rect.top;
-            e.preventDefault();
-        }
-
-        function onDragMove(e) {
-            if (!dragTarget) return;
-            var touch = e.touches ? e.touches[0] : e;
-            var dx = touch.clientX - startX;
-            var dy = touch.clientY - startY;
-            var newX = origX + dx;
-            var newY = origY + dy;
-            newX = Math.max(0, Math.min(window.innerWidth - 56, newX));
-            newY = Math.max(0, Math.min(window.innerHeight - 56, newY));
-            dragTarget.style.left   = newX + 'px';
-            dragTarget.style.top    = newY + 'px';
-            dragTarget.style.right  = 'auto';
-            dragTarget.style.bottom = 'auto';
-            e.preventDefault();
-        }
-
-        function onDragEnd() { dragTarget = null; }
-
-        if (fab) {
-            fab.addEventListener('touchstart', onDragStart, { passive: false });
-            document.addEventListener('touchmove', onDragMove, { passive: false });
-            document.addEventListener('touchend', onDragEnd);
-            }
                 }
             });
         }
+
+        greetAliceVisual();
+        setTimeout(function () {
+            speakText('Bonjour, je suis ALICE, votre assistante JO BAND.');
+        }, 1500);
     }
 
     return { init: init };
-greetAlice();
-setTimeout(function () {
-    speakText('Bonjour, je suis ALICE, votre assistante JO BAND.');
-}, 1500);
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
