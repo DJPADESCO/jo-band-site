@@ -276,8 +276,7 @@ var AliceBot = (function () {
         }
 
         greetAliceVisual();
-        setTimeout(function () {
-            speak to speech= 'Salut 👋, soyez les bienvenus sur JO BAND 😘🥳🔥💯🎧';
+            var welcome = 'Salut 👋, soyez les bienvenus sur JO BAND 😘🥳🔥💯🎧';
 addMessage(welcome, 'bot');
 speakText('Salut, soyez les bienvenus sur JO BAND.');
 
