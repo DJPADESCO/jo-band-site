@@ -160,6 +160,45 @@ div.appendChild(bubble);
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleSend();
+                    var fab = document.getElementById('alice-fab');
+        var widget = document.getElementById('alice-widget');
+        var dragTarget = null;
+        var startX, startY, origX, origY;
+
+        function onDragStart(e) {
+            var touch = e.touches ? e.touches[0] : e;
+            dragTarget = e.currentTarget;
+            startX = touch.clientX;
+            startY = touch.clientY;
+            var rect = dragTarget.getBoundingClientRect();
+            origX = rect.left;
+            origY = rect.top;
+            e.preventDefault();
+        }
+
+        function onDragMove(e) {
+            if (!dragTarget) return;
+            var touch = e.touches ? e.touches[0] : e;
+            var dx = touch.clientX - startX;
+            var dy = touch.clientY - startY;
+            var newX = origX + dx;
+            var newY = origY + dy;
+            newX = Math.max(0, Math.min(window.innerWidth - 56, newX));
+            newY = Math.max(0, Math.min(window.innerHeight - 56, newY));
+            dragTarget.style.left   = newX + 'px';
+            dragTarget.style.top    = newY + 'px';
+            dragTarget.style.right  = 'auto';
+            dragTarget.style.bottom = 'auto';
+            e.preventDefault();
+        }
+
+        function onDragEnd() { dragTarget = null; }
+
+        if (fab) {
+            fab.addEventListener('touchstart', onDragStart, { passive: false });
+            document.addEventListener('touchmove', onDragMove, { passive: false });
+            document.addEventListener('touchend', onDragEnd);
+            }
                 }
             });
         }
