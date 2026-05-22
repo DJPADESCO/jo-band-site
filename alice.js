@@ -141,11 +141,31 @@ var AliceBot = (function () {
     }
 
     function setSpeaking(on) {
-        var fab = byId('alice-fab');
-        if (!fab) return;
-        if (on) fab.classList.add('is-speaking');
-        else fab.classList.remove('is-speaking');
+
+    var widget = byId('alice-widget');
+    var bubble = byId('alice-bubble');
+
+    if (!widget) return;
+
+    if (on) {
+
+        widget.classList.add('speaking');
+        widget.classList.remove('waiting');
+
+        if (bubble) {
+            bubble.textContent = 'ALICE est en train de parler...';
+        }
+
+    } else {
+
+        widget.classList.remove('speaking');
+        widget.classList.add('waiting');
+
+        if (bubble) {
+            bubble.textContent = 'Je vous écoute 👋';
+        }
     }
+}
 
     function cleanSpeechText(text) {
         return safeText(text)
