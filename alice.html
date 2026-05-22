@@ -11,39 +11,48 @@
 <body class="alice-page">
 
     <main class="alice-page-wrap">
-        <button id="alice-fab" aria-label="Parler à ALICE">
-            <img src="images/alice-avatar.png" alt="ALICE" class="alice-fab-avatar">
+        <button id="alice-fab" aria-label="Parler à ALICE" style="position: fixed; bottom: 20px; right: 20px; border-radius: 50%; border: 2px solid #d4af37; background: #0a192f; cursor: pointer; z-index: 1000; padding: 5px;">
+            <img src="" alt="ALICE" id="alice-fab-avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
         </button>
 
-        <div id="alice-widget">
-            <div class="alice-overlay"></div>
-
-            <div class="alice-scene">
-                <div class="alice-bubble" id="alice-bubble">
-                    Bonjour 👋 Je suis ALICE, assistante JO BAND.
+        <div id="alice-widget" class="alice-live-container idle" style="display: none;">
+            
+            <div class="alice-stage-header">
+                <div class="alice-stage-title">
+                    <div class="alice-live-dot"></div>
+                    ALICE LIVE
                 </div>
-<div id="alice-messages"></div>
-
-<div class="alice-footer">
-    <input type="text" id="alice-input" placeholder="Posez votre question..." maxlength="500">
-    <button id="alice-send" aria-label="Envoyer">
-        <i class="fa-solid fa-paper-plane"></i>
-    </button>
-</div>
-
-                <img
-                    src="images/alice-avatar.png"
-                    alt="ALICE"
-                    class="alice-avatar-big"
-                    id="alice-avatar-big"
-                >
-
-                <button id="alice-close" aria-label="Fermer">✕</button>
+                <button id="alice-close" class="alice-stage-close" aria-label="Fermer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
+
+            <div class="alice-stage-main">
+                <div class="alice-bubble-wrap">
+                    <div class="alice-comic-bubble" id="alice-bubble">
+                        Bonjour 👋 Je suis ALICE, assistante JO BAND.
+                    </div>
+                </div>
+
+                <div class="alice-avatar-stage">
+                    <img src="" alt="ALICE" class="alice-avatar-img" id="alice-avatar-img">
+                    <div class="alice-stage-floor"></div>
+                </div>
+            </div>
+
+            <div class="alice-stage-footer">
+                <div class="alice-input-box">
+                    <input type="text" id="alice-input" placeholder="Posez votre question..." maxlength="500">
+                    <button id="alice-send" aria-label="Envoyer">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="alice-brand-footer">ALICE CORE BY DJ PADESCO</div>
+            </div>
+
         </div>
     </main>
 
     <script src="alice.js"></script>
 </body>
 </html>
-
