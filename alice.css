@@ -497,3 +497,24 @@ body{
         transform:translateY(0);
     }
 }
+#alice-widget.active {
+    display: flex;
+}
+
+#alice-avatar-big {
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+#alice-widget.speaking #alice-avatar-big {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.35));
+}
+
+#alice-widget.speaking .alice-bubble {
+    animation: bubblePulse 0.25s infinite alternate;
+}
+
+@keyframes bubblePulse {
+    from { transform: translateY(0); }
+    to { transform: translateY(-3px); }
+}
