@@ -518,3 +518,112 @@ body{
     from { transform: translateY(0); }
     to { transform: translateY(-3px); }
 }
+
+/* ==========================
+ALICE GESTES HUMAINS
+========================== */
+
+/* respiration légère */
+#alice-avatar-big{
+    animation:
+    aliceIdle 4s ease-in-out infinite;
+}
+
+/* Alice attend une réponse */
+#alice-widget.waiting #alice-avatar-big{
+    animation:
+    aliceWaiting 3s ease-in-out infinite;
+}
+
+/* Alice parle */
+#alice-widget.speaking #alice-avatar-big{
+    animation:
+    aliceTalking .5s infinite alternate;
+}
+
+/* mouvements quand elle attend */
+@keyframes aliceWaiting{
+
+    0%{
+        transform:
+        translateY(0)
+        rotate(0deg);
+    }
+
+    25%{
+        transform:
+        translateY(-4px)
+        rotate(-1deg);
+    }
+
+    50%{
+        transform:
+        translateY(-8px)
+        rotate(1deg);
+    }
+
+    75%{
+        transform:
+        translateY(-4px)
+        rotate(-1deg);
+    }
+
+    100%{
+        transform:
+        translateY(0)
+        rotate(0deg);
+    }
+}
+
+/* respiration */
+@keyframes aliceIdle{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.02);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+}
+
+/* quand elle parle */
+@keyframes aliceTalking{
+
+    from{
+        transform:
+        scale(1)
+        translateY(0);
+    }
+
+    to{
+        transform:
+        scale(1.03)
+        translateY(-5px);
+    }
+}
+
+/* bulle qui bouge légèrement */
+#alice-widget.waiting .alice-bubble{
+    animation:
+    bubbleWaiting 2s ease-in-out infinite;
+}
+
+@keyframes bubbleWaiting{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-4px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+}
