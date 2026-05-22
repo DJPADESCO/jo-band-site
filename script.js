@@ -16,7 +16,6 @@ let galleryLoaded         = false;
 /* ==========================================================================
    2. DONNÉES DU COLLECTIF (MEMBRES & PUNCHLINES)
    ========================================================================== */
-
 const members = [
     { name: "DJ PADESCO",   id: "padesco",   role: "DJ / Humoriste" },
     { name: "JOEL",         id: "joel",      role: "Management / Humoriste" },
@@ -57,7 +56,6 @@ const quotes = {
 /* ==========================================================================
    3. DICTIONNAIRE DE TRADUCTION (FR / EN)
    ========================================================================== */
-
 const translations = {
     fr: {
         "slogan": "Partout où ça bouge, Jo Band est là.",
@@ -179,7 +177,6 @@ const translations = {
 /* ==========================================================================
    4. FONCTIONS DE SÉCURITÉ ET UTILITAIRES
    ========================================================================== */
-
 function sanitize(str) {
     return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
@@ -197,9 +194,8 @@ function convertDriveLink(url) {
 }
 
 /* ==========================================================================
-   5. INTERFACE UTILISATEUR & CYCLES DE VIE (SPLASH, COMPTEURS, LANGUES)
+   5. INTERFACE UTILISATEUR & CYCLES DE VIE
    ========================================================================== */
-
 function hideSplash() {
     const splash = document.getElementById('splash-screen');
     if (!splash) return;
@@ -260,9 +256,8 @@ function applyLanguage(lang) {
 }
 
 /* ==========================================================================
-   6. INTERACTION GOOGLE SHEETS & REQUÊTES API
+   6. INTERACTION GOOGLE SHEETS & GALERIE
    ========================================================================== */
-
 function loadMediaFromSheets() {
     const container = document.getElementById('galerie-container');
     const dict = translations[currentLang] || translations.fr;
@@ -315,9 +310,6 @@ function renderGallery(filter) {
         return;
     }
 
-    /* ==========================================================================
-       6. INTERACTION GOOGLE SHEETS & REQUÊTES API (SUITE & FIN)
-       ========================================================================== */
     container.innerHTML = items.map(item => {
         const badge = `<span class="media-badge badge-${item.type}">${item.type}</span>`;
         const title = `<p class="media-title">${sanitize(item.titre) || 'JO BAND'}</p>`;
@@ -371,9 +363,8 @@ function initGalleryFilters() {
 }
 
 /* ==========================================================================
-   7. GESTION DU COLLECTIF & COMPOSANTS MODALES
+   7. GESTION DU COLLECTIF & MODALES
    ========================================================================== */
-
 function buildMembersGrid() {
     const grid = document.getElementById('container-membres');
     if (!grid) return;
@@ -419,9 +410,8 @@ function closeModal() {
 }
 
 /* ==========================================================================
-   8. FORMULAIRES DE CONTACT & PASSERELLES DE PAIEMENT (FEDAPAY)
+   8. FORMULAIRES & FEDAPAY
    ========================================================================== */
-
 function initContactForm() {
     const form = document.getElementById('formspree-contact');
     const status = document.getElementById('form-status-message');
@@ -514,7 +504,6 @@ function initFedaPayIntegration(closeBurgerCallback) {
 /* ==========================================================================
    9. FONCTIONNALITÉS SYSTÈME (TTS, PARTAGE, CACHE & PWA)
    ========================================================================== */
-
 function initShare() {
     document.querySelectorAll('.share-action-trigger').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -612,16 +601,15 @@ function initPWA() {
 }
 
 /* ==========================================================================
-   10. INITIALISATION DU DOCUMENT (DOM CONTENT LOADED)
+   10. INITIALISATION DOM (DÉMARRAGE PRINCIPAL)
    ========================================================================== */
-
 document.addEventListener('DOMContentLoaded', () => {
     hideSplash();
 
     const navItems = document.querySelectorAll('.nav-item');
     const tabs = document.querySelectorAll('.tab-content');
 
-    // Gestion de la navigation principale par onglets
+    // Navigation par onglets
     navItems.forEach(item => {
         item.addEventListener('click', () => {
             navItems.forEach(n => n.classList.remove('active'));
@@ -641,13 +629,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Modules d'interface
+    // Modules
     startCounters();
     setDailyQuote(currentLang);
     buildMembersGrid();
     initGalleryFilters();
 
-    // Gestionnaires d'événements de la modale équipe
+    // Modale membres
     const modalClose = document.getElementById('modal-close');
     if (modalClose) modalClose.addEventListener('click', closeModal);
 
@@ -658,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Sélecteur de thème visuel
+    // Thème (jour/nuit)
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
@@ -671,7 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Sélecteur de langue (Internationalisation)
+    // Langues
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -680,7 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Menu Mobile (Burger)
+    // Menu Mobile
     const burgerBtn     = document.getElementById('burger-btn');
     const burgerMenu    = document.getElementById('burger-menu');
     const burgerOverlay = document.getElementById('burger-overlay');
@@ -707,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Lightbox pour l'aperçu des images de la galerie
+    // Lightbox Galerie
     document.addEventListener('click', e => {
         if (e.target.classList.contains('gallery-photo-thumb')) {
             const lb = document.getElementById('lightbox');
@@ -719,11 +707,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialisations système secondaires
+    // Initialisations finales
     initFedaPayIntegration(closeBurger);
     initContactForm();
     initShare();
     initTTS();
     initPWA();
 });
-
