@@ -192,39 +192,47 @@ var AliceBot = (function () {
     }
 
     function speakText(text) {
-        if (!('speechSynthesis' in window)) return;
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel(); // Stoppe toute voix en cours
 
-        var finalText = cleanSpeechText(text);
-        if (!finalText) return;
+    // Nettoyage : Enlève les astérisques et les émojis pour la lecture vocale
+    var cleanText = safeText(text)
+        .replace(/\*/g, '') // Supprime les *
+        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}]/gu, ''); // Supprime les émojis
 
-        try {
-            window.speechSynthesis.cancel();
-        } catch (e) {}
+    var utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'fr-FR';
 
-        var utter = new SpeechSynthesisUtterance(finalText);
-        utter.lang = 'fr-FR';
-        utter.rate = 0.95;
-        utter.pitch = 1;
+    // Sélection d'une voix française naturelle si disponible
+    var voices = window.speechSynthesis.getVoices();
+    var frenchVoice = voices.find(function (v) {
+        return v.lang.indexOf('fr') === 0 && (v.name.includes('Google') || v.name.includes('Natural'));
+    });
+    if (frenchVoice) utterance.voice = frenchVoice;
 
-        var voice = pickVoice();
-        if (voice) {
-            utter.voice = voice;
+    var widget = byId('alice-widget');
+
+    // ÉVÉNEMENTS D'ANIMATION DE PAROLE
+    utterance.onstart = function () {
+        if (widget) {
+            widget.classList.remove('waiting');
+            widget.classList.add('speaking'); // Active l'animation de la bouche/corps
         }
+    };
 
-        utter.onstart = function () {
-            setSpeaking(true);
-        };
+    utterance.onend = function () {
+        if (widget) {
+            widget.classList.remove('speaking'); // Arrête de parler, repasse en mode normal (idle)
+        }
+    };
 
-        utter.onend = function () {
-            setSpeaking(false);
-        };
+    utterance.onerror = function () {
+        if (widget) widget.classList.remove('speaking');
+    };
 
-        utter.onerror = function () {
-            setSpeaking(false);
-        };
-
-        window.speechSynthesis.speak(utter);
+    window.speechSynthesis.speak(utterance);
     }
+    
 
     function greetAliceVisual() {
         var fab = byId('alice-fab');
