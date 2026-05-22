@@ -1,22 +1,30 @@
+/* ==========================================================================
+   1. CONFIGURATION, CONSTANTES ET VARIABLES GLOBALES
+   ========================================================================== */
 'use strict';
 
-function sanitize(str) {
-    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+const SHEETS_ID   = '1qa-6kDsGtT6uCQ71bcUS9WWzkNAHEz32ReQhuje1Pis';
+const SHEETS_URL  = `https://docs.google.com/spreadsheets/d/${SHEETS_ID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+const APP_VERSION = '2026.05.18.1';
+const SW_VERSION  = '2026.05.18.1';
 
-var SHEETS_ID  = '1qa-6kDsGtT6uCQ71bcUS9WWzkNAHEz32ReQhuje1Pis';
-var SHEETS_URL = 'https://docs.google.com/spreadsheets/d/' + SHEETS_ID + '/gviz/tq?tqx=out:json&sheet=Sheet1';
-var APP_VERSION = '2026.05.18.1';
-var SW_VERSION = '2026.05.18.1';
+let deferredInstallPrompt = null;
+let currentLang           = 'fr';
+let allMediaItems         = [];
+let galleryLoaded         = false;
 
-var members = [
+/* ==========================================================================
+   2. DONNÉES DU COLLECTIF (MEMBRES & PUNCHLINES)
+   ========================================================================== */
+
+const members = [
     { name: "DJ PADESCO",   id: "padesco",   role: "DJ / Humoriste" },
-    { name: "JOEL",         id: "joel",      role: "Management / Humouriste" },
+    { name: "JOEL",         id: "joel",      role: "Management / Humoriste" },
     { name: "LE FONDATEUR", id: "fondateur", role: "Fondateur" },
-    { name: "NANA SIKA",    id: "nanasika",  role: " Humouriste & Videaste" },
-    { name: "GEDEON",       id: "gedeon",    role: "Humoriste & Danseurs" },
+    { name: "NANA SIKA",    id: "nanasika",  role: "Humoriste & Vidéaste" },
+    { name: "GEDEON",       id: "gedeon",    role: "Humoriste & Danseur" },
     { name: "JEAN",         id: "jean",      role: "Artiste Chanteur" },
-    { name: "THE GACHA",    id: "gacha",     role: "Humouriste / Artiste Chanteur" },
+    { name: "THE GACHA",    id: "gacha",     role: "Humoriste / Artiste Chanteur" },
     { name: "AROLE",        id: "arole",     role: "Cameraman" },
     { name: "L&H",          id: "lh",        role: "Cameraman" },
     { name: "DK POPI",      id: "dkpopi",    role: "Humoriste" },
@@ -25,15 +33,15 @@ var members = [
     { name: "MAKAFUI",      id: "makafui",   role: "Humoriste" }
 ];
 
-var quotes = {
+const quotes = {
     fr: [
-        "L'humour, c'est notre langue officielle. JO BAND transforme chaque soiree en fete.",
-        "On ne fait pas que du bruit, on cree des souvenirs inoubliables.",
-        "Si votre soiree manque d'ambiance, c'est que JO BAND n'etait pas invite.",
-        "Le rire est universel. Notre scene, elle, est pour tout le Togo.",
-        "Partout ou ca bouge, JO BAND est deja la.",
-        "Un collectif, une vision : rendre chaque moment de votre vie memorable.",
-        "Le week-end commence quand JO BAND monte sur scene."
+        "L'humour, c'est notre langue officielle. JO BAND transforme chaque soirée en fête.",
+        "On ne fait pas que du bruit, on crée des souvenirs inoubliables.",
+        "Si votre soirée manque d'ambiance, c'est que JO BAND n'était pas invité.",
+        "Le rire est universel. Notre scène, elle, est pour tout le Togo.",
+        "Partout où ça bouge, JO BAND est déjà là.",
+        "Un collectif, une vision : rendre chaque moment de votre vie mémorable.",
+        "Le week-end commence quand JO BAND monte sur scène."
     ],
     en: [
         "Humor is our official language. JO BAND turns every evening into a celebration.",
@@ -46,7 +54,11 @@ var quotes = {
     ]
 };
 
-var translations = {
+/* ==========================================================================
+   3. DICTIONNAIRE DE TRADUCTION (FR / EN)
+   ========================================================================== */
+
+const translations = {
     fr: {
         "slogan": "Partout où ça bouge, Jo Band est là.",
         "live-text": "EN LIVE",
@@ -164,32 +176,49 @@ var translations = {
     }
 };
 
-var deferredInstallPrompt = null;
-var currentLang = 'fr';
-var allMediaItems = [];
-var galleryLoaded = false;
+/* ==========================================================================
+   4. FONCTIONS DE SÉCURITÉ ET UTILITAIRES
+   ========================================================================== */
+
+function sanitize(str) {
+    return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function getDriveEmbedLink(url) {
+    if (!url) return '';
+    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    return match ? `https://drive.google.com/file/d/${match[1]}/preview?usp=drivesdk` : url;
+}
+
+function convertDriveLink(url) {
+    if (!url) return '';
+    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    return match ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800` : url;
+}
+
+/* ==========================================================================
+   5. INTERFACE UTILISATEUR & CYCLES DE VIE (SPLASH, COMPTEURS, LANGUES)
+   ========================================================================== */
 
 function hideSplash() {
-    var splash = document.getElementById('splash-screen');
+    const splash = document.getElementById('splash-screen');
     if (!splash) return;
-    setTimeout(function () {
+    setTimeout(() => {
         splash.style.opacity = '0';
         splash.style.transition = 'opacity 0.4s ease';
-        setTimeout(function () {
-            splash.style.display = 'none';
-        }, 400);
+        setTimeout(() => { splash.style.display = 'none'; }, 400);
     }, 1200);
 }
 
 function startCounters() {
-    document.querySelectorAll('.stat-number').forEach(function (counter) {
-        var target = parseInt(counter.getAttribute('data-target'), 10);
+    document.querySelectorAll('.stat-number').forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'), 10);
         if (isNaN(target)) return;
 
-        var step = Math.max(1, Math.ceil(target / 50));
-        var current = 0;
+        const step = Math.max(1, Math.ceil(target / 50));
+        let current = 0;
 
-        function tick() {
+        const tick = () => {
             current += step;
             if (current < target) {
                 counter.textContent = current;
@@ -197,16 +226,15 @@ function startCounters() {
             } else {
                 counter.textContent = target + '+';
             }
-        }
-
+        };
         tick();
     });
 }
 
 function setDailyQuote(lang) {
-    var el = document.getElementById('daily-quote');
+    const el = document.getElementById('daily-quote');
     if (!el) return;
-    var list = quotes[lang] || quotes.fr;
+    const list = quotes[lang] || quotes.fr;
     el.textContent = list[new Date().getDay()];
 }
 
@@ -214,11 +242,11 @@ function applyLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
 
-    var dict = translations[lang];
+    const dict = translations[lang];
     if (!dict) return;
 
-    document.querySelectorAll('[data-i18n]').forEach(function (el) {
-        var key = el.getAttribute('data-i18n');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
         if (!dict[key]) return;
 
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
@@ -231,472 +259,58 @@ function applyLanguage(lang) {
     setDailyQuote(lang);
 }
 
-
-function getDriveEmbedLink(url) {
-    if (!url) return '';
-    var match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if (match) return 'https://drive.google.com/file/d/' + match[1] + '/preview?usp=drivesdk';
-    return url;
-}
-
-function convertDriveLink(url) {
-    if (!url) return '';
-    var match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if (match) return 'https://drive.google.com/thumbnail?id=' + match[1] + '&sz=w800';
-    return url;
-}
+/* ==========================================================================
+   6. INTERACTION GOOGLE SHEETS & REQUÊTES API
+   ========================================================================== */
 
 function loadMediaFromSheets() {
-    var container = document.getElementById('galerie-container');
-    var dict = translations[currentLang] || translations.fr;
+    const container = document.getElementById('galerie-container');
+    const dict = translations[currentLang] || translations.fr;
     if (!container) return;
 
-    container.innerHTML = '<p class="gallery-msg">' + dict['gallery-loading'] + '</p>';
+    container.innerHTML = `<p class="gallery-msg">${dict['gallery-loading']}</p>`;
 
     fetch(SHEETS_URL)
-        .then(function (res) {
-            return res.text();
-        })
-        .then(function (text) {
-            var clean = text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, '');
-            var json = JSON.parse(clean);
-            var rows = (json.table && json.table.rows) ? json.table.rows : [];
+        .then(res => res.text())
+        .then(text => {
+            const clean = text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, '');
+            const json = JSON.parse(clean);
+            const rows = (json.table && json.table.rows) ? json.table.rows : [];
 
             allMediaItems = [];
 
-            rows.forEach(function (row) {
+            rows.forEach(row => {
                 if (!row.c || !row.c[0] || !row.c[0].v) return;
 
-                var type = (row.c[0].v || '').toString().trim().toLowerCase();
-                var titre = row.c[1] ? (row.c[1].v || '').toString().trim() : '';
-                var lien = row.c[2] ? (row.c[2].v || '').toString().trim() : '';
+                const type = (row.c[0].v || '').toString().trim().toLowerCase();
+                const titre = row.c[1] ? (row.c[1].v || '').toString().trim() : '';
+                const lien = row.c[2] ? (row.c[2].v || '').toString().trim() : '';
 
                 if (type && lien) {
-                    allMediaItems.push({ type: type, titre: titre, lien: lien });
+                    allMediaItems.push({ type, titre, lien });
                 }
             });
 
             galleryLoaded = true;
             renderGallery('all');
         })
-        .catch(function () {
+        .catch(() => {
             if (container) {
-                container.innerHTML = '<p class="gallery-msg error">' + dict['gallery-error'] + '</p>';
+                container.innerHTML = `<p class="gallery-msg error">${dict['gallery-error']}</p>`;
             }
         });
 }
 
 function renderGallery(filter) {
-    var container = document.getElementById('galerie-container');
-    var dict = translations[currentLang] || translations.fr;
+    const container = document.getElementById('galerie-container');
+    const dict = translations[currentLang] || translations.fr;
     if (!container) return;
 
-    var items = filter === 'all'
+    const items = filter === 'all'
         ? allMediaItems
-        : allMediaItems.filter(function (i) { return i.type === filter; });
+        : allMediaItems.filter(i => i.type === filter);
 
     if (items.length === 0) {
-        container.innerHTML = '<p class="gallery-msg">' + dict['gallery-empty'] + '</p>';
+        container.innerHTML = `<p class="gallery-msg">${dict['gallery-empty']}</p>`;
         return;
     }
-
-    container.innerHTML = items.map(function (item) {
-        var badge = '<span class="media-badge badge-' + item.type + '">' + item.type + '</span>';
-        var title = '<p class="media-title">' + (item.titre || 'JO BAND') + '</p>';
-
-        if (item.type === 'video') {
-            return '<div class="media-card">' +
-                '<div class="media-ratio">' +
-                '<iframe src="' + getDriveEmbedLink(item.lien) + '" allowfullscreen frameborder="0" style="width:100%;height:220px;border:0;"></iframe>' +
-                '</div>' +
-                '<div class="media-info">' + badge + title + '</div>' +
-                '</div>';
-        }
-
-        if (item.type === 'photo' || item.type === 'affiche') {
-            return '<div class="media-card">' +
-                '<div class="media-ratio"><img src="' + convertDriveLink(item.lien) + '" class="gallery-photo-thumb" alt="' + (item.titre || 'JO BAND') + '" loading="lazy">' +
-                '</div>' +
-                '<div class="media-info">' + badge + title + '</div>' +
-                '</div>';
-        }
-
-        if (item.type === 'document') {
-            return '<div class="media-card document-card">' +
-                '<a href="' + item.lien + '" target="_blank" rel="noopener noreferrer" class="doc-link">' +
-                '<i class="fa-solid fa-file-pdf"></i>' +
-                title +
-                '<span>Ouvrir</span>' +
-                '</a>' +
-                '</div>';
-        }
-
-        return '';
-    }).join('');
-}
-
-function initGalleryFilters() {
-    document.querySelectorAll('.gallery-filter-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.gallery-filter-btn').forEach(function (b) {
-                b.classList.remove('active');
-            });
-            btn.classList.add('active');
-            renderGallery(btn.getAttribute('data-filter'));
-        });
-    });
-}
-
-function buildMembersGrid() {
-    var grid = document.getElementById('container-membres');
-    if (!grid) return;
-
-    grid.innerHTML = members.map(function (m) {
-        return '<div class="member-card" data-id="' + m.id + '" data-name="' + m.name + '" data-role="' + m.role + '">' +
-            '<img src="images/' + m.id + '.jpg" alt="' + m.name + '" class="member-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
-            '<div class="member-fallback-bg" style="display:none;"><i class="fa-solid fa-user"></i></div>' +
-            '<h3>' + m.name + '</h3>' +
-            '<p>' + m.role + '</p>' +
-            '</div>';
-    }).join('');
-
-    grid.addEventListener('click', function (e) {
-        var card = e.target.closest('.member-card');
-        if (!card) return;
-        openModal(card.dataset.id, card.dataset.name, card.dataset.role);
-    });
-}
-
-function openModal(id, name, role) {
-    var modal = document.getElementById('modal-member');
-    var img = document.getElementById('modal-img');
-    var fallback = document.getElementById('modal-fallback');
-    if (!modal || !img || !fallback) return;
-
-    img.src = 'images/' + id + '.jpg';
-    img.alt = name;
-    img.style.display = 'block';
-    fallback.style.display = 'none';
-
-    var modalName = document.getElementById('modal-name');
-    var modalRole = document.getElementById('modal-role');
-    if (modalName) modalName.textContent = name;
-    if (modalRole) modalRole.textContent = role;
-
-    modal.style.display = 'flex';
-}
-
-function closeModal() {
-    var modal = document.getElementById('modal-member');
-    if (modal) modal.style.display = 'none';
-}
-
-function initContactForm() {
-    var form = document.getElementById('formspree-contact');
-    var status = document.getElementById('form-status-message');
-    var submitBtn = form ? form.querySelector('.submit-form-btn') : null;
-
-    if (!form || !status) return;
-
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        status.className = 'form-status-box';
-        status.textContent = 'Envoi en cours...';
-        status.style.display = 'block';
-
-        if (submitBtn) submitBtn.disabled = true;
-
-        fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
-        })
-            .then(function (res) {
-                if (!res.ok) {
-                    throw new Error('Formspree error');
-                }
-                status.className = 'form-status-box success';
-                status.textContent = 'Demande envoyée ! L\'équipe vous contactera très vite.';
-                form.reset();
-            })
-            .catch(function () {
-                status.className = 'form-status-box error';
-                status.textContent = 'Erreur d\'envoi. Veuillez utiliser WhatsApp.';
-            })
-            .finally(function () {
-                if (submitBtn) submitBtn.disabled = false;
-            });
-    });
-}
-
-function initShare() {
-    document.querySelectorAll('.share-action-trigger').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            var payload = {
-                title: 'JO BAND Officiel',
-                text: 'Découvrez le collectif JO BAND !',
-                url: window.location.href
-            };
-
-            if (navigator.share) {
-                navigator.share(payload).catch(function () {});
-            } else {
-                alert('Copiez le lien de votre navigateur pour partager !');
-            }
-        });
-    });
-}
-
-function initTTS() {
-    if (!('speechSynthesis' in window)) return;
-
-    var synth = window.speechSynthesis;
-    var aboutEl = document.getElementById('about-text');
-    var btnPlay = document.getElementById('btn-play');
-    var btnPause = document.getElementById('btn-pause');
-    var btnStop = document.getElementById('btn-stop');
-
-    if (!aboutEl || !btnPlay || !btnPause || !btnStop) return;
-
-    btnPlay.addEventListener('click', function () {
-        synth.cancel();
-        var msg = new SpeechSynthesisUtterance(aboutEl.textContent);
-        msg.lang = (currentLang === 'en') ? 'en-US' : 'fr-FR';
-        synth.speak(msg);
-    });
-
-    btnPause.addEventListener('click', function () {
-        if (synth.speaking) synth.pause();
-    });
-
-    btnStop.addEventListener('click', function () {
-        synth.cancel();
-    });
-}
-
-function clearAppCaches() {
-    if (!('caches' in window)) return Promise.resolve();
-    return caches.keys().then(function (keys) {
-        return Promise.all(keys.map(function (key) {
-            return caches.delete(key);
-        }));
-   
-    });
-}
-
-function initPWA() {
-    window.addEventListener('beforeinstallprompt', function (e) {
-        e.preventDefault();
-        deferredInstallPrompt = e;
-
-        var banner = document.getElementById('pwa-install-banner');
-        if (banner) banner.style.display = 'flex';
-    });
-
-    var installBtn = document.getElementById('btn-pwa-install');
-    if (installBtn) {
-        installBtn.addEventListener('click', function () {
-            if (!deferredInstallPrompt) return;
-
-            deferredInstallPrompt.prompt();
-            deferredInstallPrompt.userChoice.then(function () {
-                deferredInstallPrompt = null;
-                var banner = document.getElementById('pwa-install-banner');
-                if (banner) banner.style.display = 'none';
-            });
-        });
-    }
-
-    if (localStorage.getItem('jo-band-app-version') !== APP_VERSION) {
-        clearAppCaches().finally(function () {
-            localStorage.setItem('jo-band-app-version', APP_VERSION);
-        });
-    }
-
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-            navigator.serviceWorker.getRegistrations()
-                .then(function (registrations) {
-                    registrations.forEach(function (registration) {
-                        if (registration.update) registration.update();
-                    });
-                })
-                .catch(function () {});
-
-            navigator.serviceWorker.register('/sw.js?v=' + SW_VERSION)
-                .catch(function () {});
-        });
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    hideSplash();
-
-    var navItems = document.querySelectorAll('.nav-item');
-    var tabs = document.querySelectorAll('.tab-content');
-
-    navItems.forEach(function (item) {
-        item.addEventListener('click', function () {
-            navItems.forEach(function (n) { n.classList.remove('active'); });
-            tabs.forEach(function (t) { t.classList.remove('active'); });
-
-            item.classList.add('active');
-
-            var targetId = item.getAttribute('data-tab');
-            var target = document.getElementById(targetId);
-            if (target) target.classList.add('active');
-
-window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            if (targetId === 'tab-galerie' && !galleryLoaded) {
-                loadMediaFromSheets();
-            }
-        });
-    });
-
-    startCounters();
-    setDailyQuote(currentLang);
-    buildMembersGrid();
-    initGalleryFilters();
-
-    var modalClose = document.getElementById('modal-close');
-    if (modalClose) modalClose.addEventListener('click', closeModal);
-
-    var modalOverlay = document.getElementById('modal-member');
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', function (e) {
-            if (e.target === this) closeModal();
-        });
-    }
-
-    var themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function () {
-            document.body.classList.toggle('theme-gold-intense');
-            var icon = themeToggle.querySelector('i');
-            if (!icon) return;
-            icon.className = document.body.classList.contains('theme-gold-intense')
-                ? 'fa-solid fa-sun'
-                : 'fa-solid fa-palette';
-        });
-    }
-
-    document.querySelectorAll('.lang-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.lang-btn').forEach(function (b) {
-                b.classList.remove('active');
-            });
-            btn.classList.add('active');
-            applyLanguage(btn.getAttribute('data-lang'));
-        });
-    });
-
-var burgerBtn     = document.getElementById('burger-btn');
-    var burgerMenu    = document.getElementById('burger-menu');
-    var burgerOverlay = document.getElementById('burger-overlay');
-    var burgerClose   = document.getElementById('burger-close');
-
-    function openBurger() {
-        burgerMenu.classList.add('open');
-        burgerOverlay.style.display = 'block';
-    }
-
-    function closeBurger() {
-        burgerMenu.classList.remove('open');
-        burgerOverlay.style.display = 'none';
-    }
-
-    if (burgerBtn)     burgerBtn.addEventListener('click', openBurger);
-    if (burgerClose)   burgerClose.addEventListener('click', closeBurger);
-    if (burgerOverlay) burgerOverlay.addEventListener('click', closeBurger);
-
-    document.querySelectorAll('.burger-nav-item[data-tab]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            var targetId = btn.getAttribute('data-tab');
-            navItems.forEach(function(n) { n.classList.remove('active'); });
-            tabs.forEach(function(t) { t.classList.remove('active'); });
-            var target = document.getElementById(targetId);
-            if (target) target.classList.add('active');
-            closeBurger();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    });
-
-    var fedapayBtn = document.getElementById('btn-fedapay');
-
-if (fedapayBtn) {
-
-    fedapayBtn.addEventListener('click', function () {
-
-        closeBurger();
-
-        // Feedback immédiat
-        fedapayBtn.disabled = true;
-        fedapayBtn.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i> Chargement...';
-
-        function openFedaPay() {
-
-            if (typeof FedaPay === 'undefined') {
-                alert('Connexion lente. Veuillez réessayer.');
-                resetButton();
-                return;
-            }
-
-            FedaPay.init({
-                public_key: 'pk_sandbox_nlmehOJq-jHX7WsLovvqt8Tr',
-                transaction: {
-                    amount: 500,
-                    description: 'Soutien au collectif JO BAND'
-                },
-                customer: {
-                    email: 'supporter@joband.com'
-                }
-            }).open();
-
-            resetButton();
-        }
-
-        function resetButton() {
-            fedapayBtn.disabled = false;
-            fedapayBtn.innerHTML =
-                '<i class="fa-solid fa-heart"></i> Soutenir JO BAND';
-        }
-
-        // Si FedaPay est déjà chargé
-        if (typeof FedaPay !== 'undefined') {
-            openFedaPay();
-            return;
-        }
-
-        // Charge FedaPay manuellement si lent
-        var script = document.createElement('script');
-        script.src =
-            'https://cdn.fedapay.com/checkout.js?v=1.1.7';
-
-        script.onload = function () {
-            openFedaPay();
-        };
-
-        script.onerror = function () {
-            alert('Impossible de charger FedaPay. Vérifiez votre connexion.');
-            resetButton();
-        };
-
-        document.head.appendChild(script);
-    });
-}
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('gallery-photo-thumb')) {
-            var lb = document.getElementById('lightbox');
-            document.getElementById('lightbox-img').src = e.target.src;
-            lb.style.display = 'flex';
-        }
-    });
-    
-    initContactForm();
-    initShare();
-    initTTS();
-    initPWA();
-});
