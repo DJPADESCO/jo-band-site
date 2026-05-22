@@ -314,3 +314,416 @@ function renderGallery(filter) {
         container.innerHTML = `<p class="gallery-msg">${dict['gallery-empty']}</p>`;
         return;
     }
+
+    /* ==========================================================================
+       6. INTERACTION GOOGLE SHEETS & REQUÊTES API (SUITE & FIN)
+       ========================================================================== */
+    container.innerHTML = items.map(item => {
+        const badge = `<span class="media-badge badge-${item.type}">${item.type}</span>`;
+        const title = `<p class="media-title">${sanitize(item.titre) || 'JO BAND'}</p>`;
+
+        if (item.type === 'video') {
+            return `
+                <div class="media-card">
+                    <div class="media-ratio">
+                        <iframe src="${getDriveEmbedLink(item.lien)}" allowfullscreen frameborder="0" style="width:100%;height:220px;border:0;"></iframe>
+                    </div>
+                    <div class="media-info">${badge}${title}</div>
+                </div>
+            `;
+        }
+
+        if (item.type === 'photo' || item.type === 'affiche') {
+            return `
+                <div class="media-card">
+                    <div class="media-ratio">
+                        <img src="${convertDriveLink(item.lien)}" class="gallery-photo-thumb" alt="${sanitize(item.titre) || 'JO BAND'}" loading="lazy">
+                    </div>
+                    <div class="media-info">${badge}${title}</div>
+                </div>
+            `;
+        }
+
+        if (item.type === 'document') {
+            return `
+                <div class="media-card document-card">
+                    <a href="${item.lien}" target="_blank" rel="noopener noreferrer" class="doc-link">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        ${title}
+                        <span>Ouvrir</span>
+                    </a>
+                </div>
+            `;
+        }
+
+        return '';
+    }).join('');
+}
+
+function initGalleryFilters() {
+    document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderGallery(btn.getAttribute('data-filter'));
+        });
+    });
+}
+
+/* ==========================================================================
+   7. GESTION DU COLLECTIF & COMPOSANTS MODALES
+   ========================================================================== */
+
+function buildMembersGrid() {
+    const grid = document.getElementById('container-membres');
+    if (!grid) return;
+
+    grid.innerHTML = members.map(m => `
+        <div class="member-card" data-id="${m.id}" data-name="${m.name}" data-role="${m.role}">
+            <img src="images/${m.id}.jpg" alt="${m.name}" class="member-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="member-fallback-bg" style="display:none;"><i class="fa-solid fa-user"></i></div>
+            <h3>${m.name}</h3>
+            <p>${m.role}</p>
+        </div>
+    `).join('');
+
+    grid.addEventListener('click', e => {
+        const card = e.target.closest('.member-card');
+        if (!card) return;
+        openModal(card.dataset.id, card.dataset.name, card.dataset.role);
+    });
+}
+
+function openModal(id, name, role) {
+    const modal = document.getElementById('modal-member');
+    const img = document.getElementById('modal-img');
+    const fallback = document.getElementById('modal-fallback');
+    if (!modal || !img || !fallback) return;
+
+    img.src = `images/${id}.jpg`;
+    img.alt = name;
+    img.style.display = 'block';
+    fallback.style.display = 'none';
+
+    const modalName = document.getElementById('modal-name');
+    const modalRole = document.getElementById('modal-role');
+    if (modalName) modalName.textContent = name;
+    if (modalRole) modalRole.textContent = role;
+
+    modal.style.display = 'flex';
+}
+
+function closeModal() {
+    const modal = document.getElementById('modal-member');
+    if (modal) modal.style.display = 'none';
+}
+
+/* ==========================================================================
+   8. FORMULAIRES DE CONTACT & PASSERELLES DE PAIEMENT (FEDAPAY)
+   ========================================================================== */
+
+function initContactForm() {
+    const form = document.getElementById('formspree-contact');
+    const status = document.getElementById('form-status-message');
+    const submitBtn = form ? form.querySelector('.submit-form-btn') : null;
+
+    if (!form || !status) return;
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        status.className = 'form-status-box';
+        status.textContent = 'Envoi en cours...';
+        status.style.display = 'block';
+
+        if (submitBtn) submitBtn.disabled = true;
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Formspree error');
+            status.className = 'form-status-box success';
+            status.textContent = "Demande envoyée ! L'équipe vous contactera très vite.";
+            form.reset();
+        })
+        .catch(() => {
+            status.className = 'form-status-box error';
+            status.textContent = "Erreur d'envoi. Veuillez utiliser WhatsApp.";
+        })
+        .finally(() => {
+            if (submitBtn) submitBtn.disabled = false;
+        });
+    });
+}
+
+function initFedaPayIntegration(closeBurgerCallback) {
+    const fedapayBtn = document.getElementById('btn-fedapay');
+    if (!fedapayBtn) return;
+
+    const resetButton = () => {
+        fedapayBtn.disabled = false;
+        fedapayBtn.innerHTML = '<i class="fa-solid fa-heart"></i> Soutenir JO BAND';
+    };
+
+    const openFedaPay = () => {
+        if (typeof FedaPay === 'undefined') {
+            alert('Connexion lente. Veuillez réessayer.');
+            resetButton();
+            return;
+        }
+
+        FedaPay.init({
+            public_key: 'pk_sandbox_nlmehOJq-jHX7WsLovvqt8Tr',
+            transaction: {
+                amount: 500,
+                description: 'Soutien au collectif JO BAND'
+            },
+            customer: {
+                email: 'supporter@joband.com'
+            }
+        }).open();
+
+        resetButton();
+    };
+
+    fedapayBtn.addEventListener('click', () => {
+        if (typeof closeBurgerCallback === 'function') closeBurgerCallback();
+
+        fedapayBtn.disabled = true;
+        fedapayBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Chargement...';
+
+        if (typeof FedaPay !== 'undefined') {
+            openFedaPay();
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+        script.onload = openFedaPay;
+        script.onerror = () => {
+            alert('Impossible de charger FedaPay. Vérifiez votre connexion.');
+            resetButton();
+        };
+        document.head.appendChild(script);
+    });
+}
+
+/* ==========================================================================
+   9. FONCTIONNALITÉS SYSTÈME (TTS, PARTAGE, CACHE & PWA)
+   ========================================================================== */
+
+function initShare() {
+    document.querySelectorAll('.share-action-trigger').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const payload = {
+                title: 'JO BAND Officiel',
+                text: 'Découvrez le collectif JO BAND !',
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(payload).catch(() => {});
+            } else {
+                alert('Copiez le lien de votre navigateur pour partager !');
+            }
+        });
+    });
+}
+
+function initTTS() {
+    if (!('speechSynthesis' in window)) return;
+
+    const synth = window.speechSynthesis;
+    const aboutEl = document.getElementById('about-text');
+    const btnPlay = document.getElementById('btn-play');
+    const btnPause = document.getElementById('btn-pause');
+    const btnStop = document.getElementById('btn-stop');
+
+    if (!aboutEl || !btnPlay || !btnPause || !btnStop) return;
+
+    btnPlay.addEventListener('click', () => {
+        synth.cancel();
+        const msg = new SpeechSynthesisUtterance(aboutEl.textContent);
+        msg.lang = (currentLang === 'en') ? 'en-US' : 'fr-FR';
+        synth.speak(msg);
+    });
+
+    btnPause.addEventListener('click', () => {
+        if (synth.speaking) synth.pause();
+    });
+
+    btnStop.addEventListener('click', () => {
+        synth.cancel();
+    });
+}
+
+function clearAppCaches() {
+    if (!('caches' in window)) return Promise.resolve();
+    return caches.keys().then(keys => {
+        return Promise.all(keys.map(key => caches.delete(key)));
+    });
+}
+
+function initPWA() {
+    window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+
+        const banner = document.getElementById('pwa-install-banner');
+        if (banner) banner.style.display = 'flex';
+    });
+
+    const installBtn = document.getElementById('btn-pwa-install');
+    if (installBtn) {
+        installBtn.addEventListener('click', () => {
+            if (!deferredInstallPrompt) return;
+
+            deferredInstallPrompt.prompt();
+            deferredInstallPrompt.userChoice.then(() => {
+                deferredInstallPrompt = null;
+                const banner = document.getElementById('pwa-install-banner');
+                if (banner) banner.style.display = 'none';
+            });
+        });
+    }
+
+    if (localStorage.getItem('jo-band-app-version') !== APP_VERSION) {
+        clearAppCaches().finally(() => {
+            localStorage.setItem('jo-band-app-version', APP_VERSION);
+        });
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.getRegistrations()
+                .then(registrations => {
+                    registrations.forEach(registration => {
+                        if (registration.update) registration.update();
+                    });
+                })
+                .catch(() => {});
+
+            navigator.serviceWorker.register(`/sw.js?v=${SW_VERSION}`).catch(() => {});
+        });
+    }
+}
+
+/* ==========================================================================
+   10. INITIALISATION DU DOCUMENT (DOM CONTENT LOADED)
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', () => {
+    hideSplash();
+
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabs = document.querySelectorAll('.tab-content');
+
+    // Gestion de la navigation principale par onglets
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            navItems.forEach(n => n.classList.remove('active'));
+            tabs.forEach(t => t.classList.remove('active'));
+
+            item.classList.add('active');
+
+            const targetId = item.getAttribute('data-tab');
+            const target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (targetId === 'tab-galerie' && !galleryLoaded) {
+                loadMediaFromSheets();
+            }
+        });
+    });
+
+    // Modules d'interface
+    startCounters();
+    setDailyQuote(currentLang);
+    buildMembersGrid();
+    initGalleryFilters();
+
+    // Gestionnaires d'événements de la modale équipe
+    const modalClose = document.getElementById('modal-close');
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+
+    const modalOverlay = document.getElementById('modal-member');
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+    }
+
+    // Sélecteur de thème visuel
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('theme-gold-intense');
+            const icon = themeToggle.querySelector('i');
+            if (!icon) return;
+            icon.className = document.body.classList.contains('theme-gold-intense')
+                ? 'fa-solid fa-sun'
+                : 'fa-solid fa-palette';
+        });
+    }
+
+    // Sélecteur de langue (Internationalisation)
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyLanguage(btn.getAttribute('data-lang'));
+        });
+    });
+
+    // Menu Mobile (Burger)
+    const burgerBtn     = document.getElementById('burger-btn');
+    const burgerMenu    = document.getElementById('burger-menu');
+    const burgerOverlay = document.getElementById('burger-overlay');
+    const burgerClose   = document.getElementById('burger-close');
+
+    const openBurger  = () => { burgerMenu.classList.add('open'); burgerOverlay.style.display = 'block'; };
+    const closeBurger = () => { burgerMenu.classList.remove('open'); burgerOverlay.style.display = 'none'; };
+
+    if (burgerBtn)     burgerBtn.addEventListener('click', openBurger);
+    if (burgerClose)   burgerClose.addEventListener('click', closeBurger);
+    if (burgerOverlay) burgerOverlay.addEventListener('click', closeBurger);
+
+    document.querySelectorAll('.burger-nav-item[data-tab]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-tab');
+            navItems.forEach(n => n.classList.remove('active'));
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            const target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+            
+            closeBurger();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+
+    // Lightbox pour l'aperçu des images de la galerie
+    document.addEventListener('click', e => {
+        if (e.target.classList.contains('gallery-photo-thumb')) {
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            if (lb && lbImg) {
+                lbImg.src = e.target.src;
+                lb.style.display = 'flex';
+            }
+        }
+    });
+
+    // Initialisations système secondaires
+    initFedaPayIntegration(closeBurger);
+    initContactForm();
+    initShare();
+    initTTS();
+    initPWA();
+});
+
