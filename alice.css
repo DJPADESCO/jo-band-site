@@ -72,13 +72,13 @@ body.alice-page {
     box-shadow: 0 0 8px #00ffcc;
 }
 
-#alice-widget.waiting .alice-live-dot {
+.alice-live-container.waiting .alice-live-dot {
     background-color: #ffaa00;
     box-shadow: 0 0 8px #ffaa00;
     animation: aliceGlowPulse 0.8s infinite alternate;
 }
 
-#alice-widget.speaking .alice-live-dot {
+.alice-live-container.speaking .alice-live-dot {
     background-color: #ff0055;
     box-shadow: 0 0 8px #ff0055;
     animation: aliceGlowPulse 0.4s infinite alternate;
@@ -133,7 +133,6 @@ body.alice-page {
     overflow-y: auto;
 }
 
-/* Triangle pointant vers le bas pour le style BD */
 .alice-comic-bubble::after {
     content: '';
     position: absolute;
@@ -191,37 +190,31 @@ body.alice-page {
    CONTRÔLE DES GESTES ET ANIMATIONS HUMAINES
 ========================================== */
 
-/* État : Respiration Calme Humaine (idle) */
 .alice-live-container.idle .alice-avatar-img {
     animation: humanIdle 3.2s ease-in-out infinite;
 }
 
-/* État : En attente / Réflexion API (waiting) */
 .alice-live-container.waiting .alice-avatar-img {
     animation: humanWaiting 1.6s ease-in-out infinite;
     filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
 }
 
-/* État : En train de Parler et Gestes (speaking) */
 .alice-live-container.speaking .alice-avatar-img {
     animation: humanTalking 0.4s ease-in-out infinite alternate;
     filter: drop-shadow(0 0 12px rgba(0, 255, 204, 0.45));
 }
 
-/* Keyframes : Respiration */
 @keyframes humanIdle {
     0%, 100% { transform: scale(1) translateY(0); }
     50% { transform: scale(1.02) translateY(-4px); }
 }
 
-/* Keyframes : Réflexion (mouvement d'attente naturelle gauche-droite) */
 @keyframes humanWaiting {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     25% { transform: translateY(-5px) rotate(-1.5deg); }
     75% { transform: translateY(-3px) rotate(1.5deg); }
 }
 
-/* Keyframes : Parole rapide et animée */
 @keyframes humanTalking {
     0% { transform: scale(1) translateY(0) rotate(0deg); }
     100% { transform: scale(1.05) translateY(-8px) rotate(1deg); }
