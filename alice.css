@@ -1,629 +1,289 @@
-/* ==========================
-   ALICE — JO BAND
-========================== */
+/* ==========================================
+   ALICE LIVE STAGE — CODES STYLE SPECIFIQUE
+========================================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    background:
-    linear-gradient(
-        180deg,
-        #07111f 0%,
-        #091728 100%
-    );
-    min-height:100vh;
-    font-family:'Outfit',sans-serif;
-    overflow-x:hidden;
-    color:#fff;
-}
-
-/* ==========================
-   CONTAINER
-========================== */
-
-.alice-page-wrap{
-    width:100%;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
-
-/* ==========================
-   WIDGET
-========================== */
-
-.alice-widget-page{
-    width:100%;
-    max-width:480px;
-    background:
-    rgba(12,20,36,.92);
-    border:1px solid rgba(255,215,0,.12);
-    border-radius:30px;
-    overflow:hidden;
-    backdrop-filter:blur(20px);
-    box-shadow:
-    0 0 40px rgba(0,0,0,.45);
-}
-
-/* ==========================
-   STAGE LIVE
-========================== */
-
-.alice-live-stage{
-    position:relative;
-    min-height:430px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    padding:40px 20px;
-}
-
-/* ==========================
-   BULLE BD
-========================== */
-
-.alice-live-bubble{
-    position:relative;
-    background:#fff;
-    color:#111;
-    max-width:290px;
-    text-align:center;
-    padding:18px;
-    border-radius:26px;
-    font-size:15px;
-    line-height:1.6;
-    margin-bottom:24px;
-    font-weight:600;
-    animation:
-    bubbleFloat 4s ease-in-out infinite;
-}
-
-.alice-live-bubble::after{
-    content:'';
-    position:absolute;
-    bottom:-16px;
-    left:50%;
-    transform:translateX(-50%);
-    border-width:16px 14px 0;
-    border-style:solid;
-    border-color:#fff transparent transparent;
-}
-
-@keyframes bubbleFloat{
-    0%,100%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-6px);
-    }
-}
-
-/* ==========================
-   AVATAR
-========================== */
-
-.alice-live-avatar-wrap{
-    position:relative;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    animation:
-    aliceFloat 5s ease-in-out infinite;
-}
-
-@keyframes aliceFloat{
-    0%,100%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-12px);
-    }
-}
-
-.alice-live-avatar{
-    width:240px;
-    max-width:85vw;
-    object-fit:contain;
-    filter:
-    drop-shadow(0 0 25px rgba(255,215,0,.25));
-}
-
-/* ==========================
-   MAINS
-========================== */
-
-.alice-live-hand{
-    position:absolute;
-    width:55px;
-    height:110px;
-    background:
-    rgba(255,215,0,.10);
-    border:
-    2px solid rgba(255,215,0,.25);
-    border-radius:999px;
-}
-
-.alice-hand-left{
-    left:-18px;
-    top:110px;
-    transform-origin:top;
-    animation:
-    handWaveLeft 3s infinite ease-in-out;
-}
-
-.alice-hand-right{
-    right:-18px;
-    top:110px;
-    transform-origin:top;
-    animation:
-    handWaveRight 3s infinite ease-in-out;
-}
-
-@keyframes handWaveLeft{
-    0%,100%{
-        transform:rotate(5deg);
-    }
-
-    50%{
-        transform:rotate(16deg);
-    }
-}
-
-@keyframes handWaveRight{
-    0%,100%{
-        transform:rotate(-5deg);
-    }
-
-    50%{
-        transform:rotate(-16deg);
-    }
-}
-
-/* ==========================
-   BOUCHE
-========================== */
-
-.alice-live-mouth{
-    position:absolute;
-    bottom:34px;
-    left:50%;
-    transform:translateX(-50%);
-    width:42px;
-    height:12px;
-    border-radius:999px;
-    background:#111;
-}
-
-.alice-speaking .alice-live-mouth{
-    animation:
-    talking .18s infinite;
-}
-
-@keyframes talking{
-    0%{
-        height:8px;
-    }
-
-    50%{
-        height:20px;
-    }
-
-    100%{
-        height:10px;
-    }
-}
-
-/* ==========================
-   HEADER
-========================== */
-
-.alice-header{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:18px;
-    border-top:
-    1px solid rgba(255,255,255,.06);
-    border-bottom:
-    1px solid rgba(255,255,255,.06);
-}
-
-.alice-header-avatar img{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    object-fit:cover;
-    border:2px solid gold;
-}
-
-.alice-header-name{
-    font-size:18px;
-    font-weight:700;
-}
-
-.alice-header-status{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:13px;
-    opacity:.85;
-}
-
-.alice-status-dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:#00ff6a;
-}
-
-#alice-close{
-    margin-left:auto;
-    border:none;
-    background:none;
-    color:#fff;
-    font-size:28px;
-    cursor:pointer;
-}
-
-/* ==========================
-   CHAT
-========================== */
-
-#alice-messages{
-    height:260px;
-    overflow-y:auto;
-    padding:18px;
-}
-
-.alice-message{
-    margin-bottom:12px;
-    padding:14px;
-    border-radius:18px;
-    max-width:85%;
-    line-height:1.6;
-}
-
-.alice-message.user{
-    background:#1b2940;
-    margin-left:auto;
-}
-
-.alice-message.bot{
-    background:#142033;
-    border:
-    1px solid rgba(255,215,0,.12);
-}
-
-/* ==========================
-   FOOTER
-========================== */
-
-.alice-footer{
-    display:flex;
-    gap:10px;
-    padding:18px;
-}
-
-#alice-input{
-    flex:1;
-    height:52px;
-    border:none;
-    outline:none;
-    border-radius:16px;
-    padding:0 16px;
-    background:#111c2d;
-    color:#fff;
-}
-
-#alice-send{
-    width:52px;
-    height:52px;
-    border:none;
-    border-radius:16px;
-    background:gold;
-    color:#111;
-    font-size:18px;
-    cursor:pointer;
-}
-
-.alice-powered{
-    text-align:center;
-    padding:14px;
-    font-size:12px;
-    opacity:.7;
-}
-
-/* ==========================
-   MOBILE
-========================== */
-
-@media(max-width:480px){
-
-    .alice-live-avatar{
-        width:210px;
-    }
-
-    .alice-live-stage{
-        min-height:390px;
-    }
-
-    .alice-live-bubble{
-        font-size:14px;
-        max-width:250px;
-    }
-
-}
-/* FIX BOUTON ALICE */
-
-#alice-fab{
-    position: fixed;
-    bottom: 95px;
-    right: 18px;
-    z-index: 99999;
-    width: 70px;
-    height: 70px;
-    border: none;
-    border-radius: 50%;
+* {
+    margin: 0;
     padding: 0;
-    overflow: hidden;
-    background: linear-gradient(135deg, #FFD700, #ffb700);
-    box-shadow: 0 8px 25px rgba(0,0,0,.35);
+    box-sizing: border-box;
+}
+
+body.alice-page {
+    background: radial-gradient(circle at center, #0f1c3f 0%, #050c1e 100%);
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    color: #fff;
+    overflow: hidden;
 }
 
-#alice-fab .alice-fab-avatar{
+.alice-page-wrap {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.alice-fab-label{
+/* Boîtier Principal du Widget */
+.alice-live-container {
+    width: 100%;
+    max-width: 450px;
+    height: 620px;
+    background: rgba(10, 25, 47, 0.95);
+    border: 2px solid #d4af37;
+    border-radius: 24px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(15px);
+}
+
+/* En-tête de la Scène */
+.alice-stage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: rgba(17, 34, 64, 0.85);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.alice-stage-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: #d4af37;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 1.2px;
+}
+
+/* Point Indicateur d'état (Live) */
+.alice-live-dot {
+    width: 9px;
+    height: 9px;
+    background-color: #00ffcc;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00ffcc;
+}
+
+#alice-widget.waiting .alice-live-dot {
+    background-color: #ffaa00;
+    box-shadow: 0 0 8px #ffaa00;
+    animation: aliceGlowPulse 0.8s infinite alternate;
+}
+
+#alice-widget.speaking .alice-live-dot {
+    background-color: #ff0055;
+    box-shadow: 0 0 8px #ff0055;
+    animation: aliceGlowPulse 0.4s infinite alternate;
+}
+
+@keyframes aliceGlowPulse {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+}
+
+.alice-stage-close {
+    background: transparent;
+    border: none;
+    color: #8892b0;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.alice-stage-close:hover {
+    color: #d4af37;
+}
+
+/* Plateau du Stage Central */
+.alice-stage-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    position: relative;
+    background: radial-gradient(circle at 50% 70%, rgba(212, 175, 55, 0.08) 0%, transparent 65%);
+}
+
+/* Bulle Style Bande Dessinée (Manga / Comic) */
+.alice-bubble-wrap {
+    width: 100%;
+    z-index: 5;
+}
+
+.alice-comic-bubble {
+    position: relative;
+    background: #112240;
+    border: 2px solid #d4af37;
+    border-radius: 20px;
+    padding: 14px 18px;
+    color: #ccd6f6;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+/* Triangle pointant vers le bas pour le style BD */
+.alice-comic-bubble::after {
+    content: '';
     position: absolute;
-    bottom: -28px;
+    bottom: -12px;
     left: 50%;
     transform: translateX(-50%);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    white-space: nowrap;
+    border-width: 12px 12px 0;
+    border-style: solid;
+    border-color: #112240 transparent;
 }
 
-#alice-widget{
-    position:fixed;
-    bottom:165px;
-    right:15px;
-    width:370px;
-    max-width:92vw;
-    z-index:99999;
-    display:none;
+.alice-comic-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 13px 13px 0;
+    border-style: solid;
+    border-color: #d4af37 transparent;
+    z-index: -1;
 }
 
-#alice-widget.active{
-    display:block;
-}
-/* IMAGE DU BOUTON */
-
-.alice-fab-avatar{
-    width:100%;
-    height:100%;
-    border-radius:50%;
-    object-fit:cover;
-}
-
-/* GRAND AVATAR */
-
-.alice-avatar-big{
-    width:220px;
-    max-width:75vw;
-    border-radius:25px;
-    object-fit:contain;
-    animation:aliceFloat 3s ease-in-out infinite;
-}
-
-/* BULLE MESSAGE */
-
-.alice-bubble{
-    background:#fff;
-    color:#111;
-    padding:14px 18px;
-    border-radius:20px;
-    max-width:280px;
-    text-align:center;
-    margin-bottom:20px;
-    font-weight:600;
-    box-shadow:0 8px 25px rgba(0,0,0,.25);
-}
-
-/* SCENE */
-
-.alice-scene{
-    position:fixed;
-    inset:0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    z-index:999999;
-}
-
-/* FOND */
-
-.alice-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.82);
-    backdrop-filter:blur(10px);
-}
-
-/* FERMER */
-
-#alice-close{
-    position:absolute;
-    top:20px;
-    right:20px;
-    border:none;
-    background:#FFD700;
-    width:45px;
-    height:45px;
-    border-radius:50%;
-    font-size:20px;
-    cursor:pointer;
-}
-
-/* ANIMATION */
-
-@keyframes aliceFloat{
-    0%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(-10px);
-    }
-    100%{
-        transform:translateY(0);
-    }
-}
-#alice-widget.active {
+/* Zone d'ancrage de l'avatar */
+.alice-avatar-stage {
+    flex: 1;
     display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
 }
 
-#alice-avatar-big {
-    transition: transform 0.2s ease, filter 0.2s ease;
+.alice-avatar-img {
+    width: 185px;
+    height: auto;
+    object-fit: contain;
+    z-index: 2;
+    transform-origin: bottom center;
 }
 
-#alice-widget.speaking #alice-avatar-big {
-    transform: scale(1.03);
-    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.35));
+/* Ombre/Effet de sol sous le capitaine */
+.alice-stage-floor {
+    width: 130px;
+    height: 10px;
+    background: rgba(212, 175, 55, 0.2);
+    border-radius: 50%;
+    filter: blur(4px);
+    margin-top: -4px;
+    z-index: 1;
+    box-shadow: 0 0 10px #d4af37;
 }
 
-#alice-widget.speaking .alice-bubble {
-    animation: bubblePulse 0.25s infinite alternate;
+/* ==========================================
+   CONTRÔLE DES GESTES ET ANIMATIONS HUMAINES
+========================================== */
+
+/* État : Respiration Calme Humaine (idle) */
+.alice-live-container.idle .alice-avatar-img {
+    animation: humanIdle 3.2s ease-in-out infinite;
 }
 
-@keyframes bubblePulse {
-    from { transform: translateY(0); }
-    to { transform: translateY(-3px); }
+/* État : En attente / Réflexion API (waiting) */
+.alice-live-container.waiting .alice-avatar-img {
+    animation: humanWaiting 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
 }
 
-/* ==========================
-ALICE GESTES HUMAINS
-========================== */
-
-/* respiration légère */
-#alice-avatar-big{
-    animation:
-    aliceIdle 4s ease-in-out infinite;
+/* État : En train de Parler et Gestes (speaking) */
+.alice-live-container.speaking .alice-avatar-img {
+    animation: humanTalking 0.4s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 12px rgba(0, 255, 204, 0.45));
 }
 
-/* Alice attend une réponse */
-#alice-widget.waiting #alice-avatar-big{
-    animation:
-    aliceWaiting 3s ease-in-out infinite;
+/* Keyframes : Respiration */
+@keyframes humanIdle {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.02) translateY(-4px); }
 }
 
-/* Alice parle */
-#alice-widget.speaking #alice-avatar-big{
-    animation:
-    aliceTalking .5s infinite alternate;
+/* Keyframes : Réflexion (mouvement d'attente naturelle gauche-droite) */
+@keyframes humanWaiting {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-5px) rotate(-1.5deg); }
+    75% { transform: translateY(-3px) rotate(1.5deg); }
 }
 
-/* mouvements quand elle attend */
-@keyframes aliceWaiting{
-
-    0%{
-        transform:
-        translateY(0)
-        rotate(0deg);
-    }
-
-    25%{
-        transform:
-        translateY(-4px)
-        rotate(-1deg);
-    }
-
-    50%{
-        transform:
-        translateY(-8px)
-        rotate(1deg);
-    }
-
-    75%{
-        transform:
-        translateY(-4px)
-        rotate(-1deg);
-    }
-
-    100%{
-        transform:
-        translateY(0)
-        rotate(0deg);
-    }
+/* Keyframes : Parole rapide et animée */
+@keyframes humanTalking {
+    0% { transform: scale(1) translateY(0) rotate(0deg); }
+    100% { transform: scale(1.05) translateY(-8px) rotate(1deg); }
 }
 
-/* respiration */
-@keyframes aliceIdle{
-
-    0%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.02);
-    }
-
-    100%{
-        transform:scale(1);
-    }
+/* Barre de Saisie Inférieure */
+.alice-stage-footer {
+    padding: 15px 20px 12px;
+    background: rgba(17, 34, 64, 0.95);
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
 }
 
-/* quand elle parle */
-@keyframes aliceTalking{
-
-    from{
-        transform:
-        scale(1)
-        translateY(0);
-    }
-
-    to{
-        transform:
-        scale(1.03)
-        translateY(-5px);
-    }
+.alice-input-box {
+    display: flex;
+    align-items: center;
+    background: #0a192f;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 30px;
+    padding: 4px 6px 4px 16px;
 }
 
-/* bulle qui bouge légèrement */
-#alice-widget.waiting .alice-bubble{
-    animation:
-    bubbleWaiting 2s ease-in-out infinite;
+.alice-input-box:focus-within {
+    border-color: #d4af37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
-@keyframes bubbleWaiting{
+.alice-input-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 0.95rem;
+    padding: 8px 0;
+}
 
-    0%{
-        transform:translateY(0);
-    }
+.alice-input-box input::placeholder {
+    color: #4c5773;
+}
 
-    50%{
-        transform:translateY(-4px);
-    }
+#alice-send {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d4af37, #b89225);
+    color: #0a192f;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s;
+}
 
-    100%{
-        transform:translateY(0);
-    }
+#alice-send:active {
+    transform: scale(0.92);
+}
+
+.alice-brand-footer {
+    text-align: center;
+    font-size: 0.65rem;
+    color: rgba(136, 146, 176, 0.4);
+    margin-top: 8px;
+    letter-spacing: 0.5px;
 }
