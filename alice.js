@@ -65,48 +65,59 @@ var AliceBot = (function () {
     }
 
     // --- Gestion de la voix ---
-    function speakText(text) {
-        if (!('speechSynthesis' in window)) return;
-        window.speechSynthesis.cancel(); 
+   
+function speakText(text) {
+    var cleanText = safeText(text)
+        .replace(/\*/g, '')
+        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}]/gu, '');
 
-        var cleanText = safeText(text)
-            .replace(/\*/g, '')
-            .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}]/gu, '');
+    var widget = byId('alice-widget');
 
-        var utterance = new SpeechSynthesisUtterance(cleanText);
-        utterance.lang = 'fr-FR';
+    fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texte: cleanText, langue: 'fr' })
+    })
+    .then(function(response) {
+        if (!response.ok) throw new Error('TTS error');
+        return response.blob();
+    })
+    .then(function(blob) {
+        var url   = URL.createObjectURL(blob);
+        var audio = new Audio(url);
 
-        var voices = window.speechSynthesis.getVoices();
-        var frenchVoice = voices.find(function (v) {
-            return v.lang.indexOf('fr') === 0 && (v.name.includes('Google') || v.name.includes('Natural'));
-        });
-        if (frenchVoice) utterance.voice = frenchVoice;
-
-        var widget = byId('alice-widget');
-
-        utterance.onstart = function () {
+        audio.onplay = function() {
             if (widget) {
                 widget.classList.remove('idle', 'waiting');
                 widget.classList.add('speaking');
             }
         };
 
-        utterance.onend = function () {
+        audio.onended = function() {
+            if (widget) {
+                widget.classList.remove('speaking', 'waiting');
+                widget.classList.add('idle');
+            }
+            URL.revokeObjectURL(url);
+        };
+
+        audio.onerror = function() {
             if (widget) {
                 widget.classList.remove('speaking', 'waiting');
                 widget.classList.add('idle');
             }
         };
 
-        utterance.onerror = function () {
-            if (widget) {
-                widget.classList.remove('speaking', 'waiting');
-                widget.classList.add('idle');
-            }
-        };
-
-        window.speechSynthesis.speak(utterance);
-    }
+        audio.play();
+    })
+    .catch(function(err) {
+        console.error('TTS Error:', err);
+        if (widget) {
+            widget.classList.remove('speaking', 'waiting');
+            widget.classList.add('idle');
+        }
+    });
+}
 
     function updateBubble(text) {
         var bubble = byId('alice-bubble');
