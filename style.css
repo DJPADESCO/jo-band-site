@@ -230,7 +230,7 @@ h1, h2, h3, h4 {
     border-color: var(--gold);
 }
 
-/* Grille principale */
+/* ── GRILLE ── */
 .galerie-grid,
 #galerie-container {
     display:               grid;
@@ -239,72 +239,64 @@ h1, h2, h3, h4 {
     margin-bottom:         20px;
 }
 
-@media (min-width: 600px) {
-    .galerie-grid,
-    #galerie-container {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-/* Carte média */
+/* ── CARTE ── */
 .media-card {
     background:    var(--navy-light);
     border-radius: 12px;
     overflow:      hidden;
     border:        1px solid rgba(212,175,55,0.08);
+    cursor:        pointer;
 }
 
-/* ── VIDÉO CLOUDINARY (balise <video>) ── */
-.gallery-video {
-    width:       100%;
-    height:      auto;
-    max-height:  75vw;   /* carré sur mobile */
-    display:     block;
-    object-fit:  cover;
-    background:  #000;
-    border-radius: 0;
-}
-
-@media (min-width: 600px) {
-    .gallery-video {
-        max-height: 280px;
-    }
-}
-
-/* ── IFRAME (YouTube / embed) ── */
-.media-ratio {
-    position:      relative;
-    width:         100%;
-    background:    var(--navy-blue);
-    overflow:      hidden;
-}
-
-.media-ratio iframe {
-    width:        100%;
-    aspect-ratio: 9 / 16;
-    border:       0;
-    display:      block;
-    max-height:   80vh;
-}
-
-@media (min-width: 600px) {
-    .media-ratio iframe {
-        aspect-ratio: 16 / 9;
-    }
-}
-
-/* ── IMAGE ── */
+/* ── PHOTO : s'adapte au format réel ── */
 .gallery-image {
     width:      100%;
-    height:     220px;
-    object-fit: cover;
+    height:     auto;
+    max-height: 500px;
+    object-fit: contain;
     display:    block;
+    background: #000;
 }
 
-@media (min-width: 600px) {
-    .gallery-image {
-        height: 200px;
-    }
+/* ── VIDÉO ── */
+.gallery-video {
+    width:      100%;
+    height:     auto;
+    max-height: 500px;
+    display:    block;
+    background: #000;
+}
+
+/* ── LIGHTBOX ── */
+#lightbox {
+    display:         none;
+    position:        fixed;
+    inset:           0;
+    background:      rgba(0,0,0,0.95);
+    z-index:         9999;
+    align-items:     center;
+    justify-content: center;
+    flex-direction:  column;
+}
+
+#lightbox.open { display: flex; }
+
+#lightbox-img {
+    max-width:  100vw;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+#lightbox-close {
+    position:  absolute;
+    top:       16px;
+    right:     20px;
+    color:     white;
+    font-size: 2rem;
+    cursor:    pointer;
+    background: none;
+    border:    none;
+    line-height: 1;
 }
 
 /* ── INFO SOUS LE MÉDIA ── */
