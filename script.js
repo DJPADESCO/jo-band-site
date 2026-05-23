@@ -177,24 +177,14 @@ const translations = {
 /* ==========================================================================
    4. FONCTIONS DE SÉCURITÉ ET UTILITAIRES
    ========================================================================== */
-function getDriveEmbedLink(url) {
-    if (!url) return '';
-    // Si le lien vient de Cloudinary, on le renvoie directement sans le toucher
-    if (url.includes('cloudinary.com')) return url;
-    
-    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    return match ? `https://google.com{match[1]}/preview?usp=drivesdk` : url;
+function sanitize(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
-
-function convertDriveLink(url) {
-    if (!url) return '';
-    // Si le lien vient de Cloudinary, c'est déjà un lien d'image direct
-    if (url.includes('cloudinary.com')) return url;
-
-    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    return match ? `https://google.com{match[1]}&sz=w800` : url;
-}
-
 
 /* ==========================================================================
    5. INTERFACE UTILISATEUR & CYCLES DE VIE
@@ -259,7 +249,7 @@ function applyLanguage(lang) {
 }
 
 // ==========================
-// 6. CLOUDINARY GALLERY ONLY
+// CLOUDINARY GALLERY ONLY
 // ==========================
 
 let allMediaItems = [];
@@ -269,6 +259,11 @@ function loadGallery() {
     const dict = translations[currentLang] || translations.fr;
 
     if (!container) return;
+
+    if (galleryLoaded && allMediaItems.length) {
+        renderGallery('all');
+        return;
+    }
 
     container.innerHTML = `
         <p class="gallery-msg">
@@ -286,10 +281,7 @@ function loadGallery() {
             allMediaItems = result.data.map(file => {
                 let type = 'photo';
 
-                if (
-                    file.resource_type === 'video' ||
-                    file.format === 'mp4'
-                ) {
+                if (file.resource_type === 'video' || file.format === 'mp4') {
                     type = 'video';
                 } else if (file.format === 'pdf' || file.resource_type === 'raw') {
                     type = 'document';
@@ -309,11 +301,11 @@ function loadGallery() {
                 };
             });
 
+            galleryLoaded = true;
             renderGallery('all');
         })
         .catch(error => {
             console.error('Cloudinary Error:', error);
-
             container.innerHTML = `
                 <p class="gallery-msg error">
                     Impossible de charger la galerie.
@@ -348,11 +340,7 @@ function renderGallery(filter = 'all') {
         if (item.type === 'video') {
             return `
                 <div class="media-card">
-                    <video
-                        controls
-                        preload="metadata"
-                        class="gallery-video"
-                    >
+                    <video controls preload="metadata" class="gallery-video">
                         <source src="${item.lien}" type="video/mp4">
                     </video>
                     <div class="media-info">${badge}${title}</div>
@@ -363,12 +351,7 @@ function renderGallery(filter = 'all') {
         if (item.type === 'document') {
             return `
                 <div class="media-card document-card">
-                    <a
-                        href="${item.lien}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="doc-link"
-                    >
+                    <a href="${item.lien}" target="_blank" rel="noopener noreferrer" class="doc-link">
                         <i class="fa-solid fa-file-pdf"></i>
                         ${title}
                         <span>Ouvrir</span>
@@ -400,8 +383,6 @@ function initGalleryFilters() {
         });
     });
 }
-
-document.addEventListener('DOMContentLoaded', loadGallery);
 
 /* ==========================================================================
    7. GESTION DU COLLECTIF & MODALES
