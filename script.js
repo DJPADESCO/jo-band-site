@@ -316,18 +316,12 @@ function renderGallery(filter = 'all') {
     const container = document.getElementById('galerie-container');
     if (!container) return;
 
-    let items = allMediaItems;
-
-    if (filter !== 'all') {
-        items = allMediaItems.filter(item => item.type === filter);
-    }
+    let items = filter === 'all'
+        ? allMediaItems
+        : allMediaItems.filter(item => item.type === filter);
 
     if (!items.length) {
-        container.innerHTML = `
-            <p class="gallery-msg">
-                Aucun média disponible.
-            </p>
-        `;
+        container.innerHTML = `<p class="gallery-msg">Aucun média disponible.</p>`;
         return;
     }
 
@@ -338,12 +332,11 @@ function renderGallery(filter = 'all') {
         if (item.type === 'video') {
             return `
                 <div class="media-card">
-                    <video controls preload="metadata" class="gallery-video">
+                    <video controls preload="metadata" class="gallery-video" playsinline>
                         <source src="${item.lien}" type="video/mp4">
                     </video>
                     <div class="media-info">${badge}${title}</div>
-                </div>
-            `;
+                </div>`;
         }
 
         if (item.type === 'document') {
@@ -354,22 +347,30 @@ function renderGallery(filter = 'all') {
                         ${title}
                         <span>Ouvrir</span>
                     </a>
-                </div>
-            `;
+                </div>`;
         }
 
+        // Photo — clic = lightbox
         return `
-            <div class="media-card">
-                <img
-                    src="${item.image}"
-                    alt="${sanitize(item.titre)}"
-                    class="gallery-image"
-                    loading="lazy"
-                >
+            <div class="media-card" onclick="ouvrirLightbox('${item.image}')">
+                <img src="${item.image}" alt="${sanitize(item.titre)}"
+                     class="gallery-image" loading="lazy">
                 <div class="media-info">${badge}${title}</div>
-            </div>
-        `;
+            </div>`;
     }).join('');
+}
+
+function ouvrirLightbox(src) {
+    const lb    = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img');
+    if (!lb || !lbImg) return;
+    lbImg.src = src;
+    lb.classList.add('open');
+}
+
+function fermerLightbox() {
+    const lb = document.getElementById('lightbox');
+    if (lb) lb.classList.remove('open');
 }
 
 function initGalleryFilters() {
