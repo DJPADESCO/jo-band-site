@@ -9,8 +9,8 @@ var AliceBot = (function () {
     var isTyping            = false;
     var joData              = null;
 
-    function byId(id)       { return document.getElementById(id); }
-    function safeText(val)  { return String(val == null ? '' : val); }
+    function byId(id)      { return document.getElementById(id); }
+    function safeText(val) { return String(val == null ? '' : val); }
 
     /* ── IMAGES ── */
     function loadImages() {
@@ -55,7 +55,32 @@ var AliceBot = (function () {
         return null;
     }
 
-    /* ── VOIX MICROSOFT EDGE TTS ── */
+    /* ── VOIX ── */
+    function setIdle(widget) {
+        if (widget) {
+            widget.classList.remove('speaking', 'waiting');
+            widget.classList.add('idle');
+        }
+    }
+
+    function setSpeaking(widget) {
+        if (widget) {
+            widget.classList.remove('idle', 'waiting');
+            widget.classList.add('speaking');
+        }
+    }
+
+    function fallbackTTS(cleanText, widget) {
+        if (!('speechSynthesis' in window)) { setIdle(widget); return; }
+        window.speechSynthesis.cancel();
+        var utterance      = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang     = 'fr-FR';
+        utterance.onstart  = function() { setSpeaking(widget); };
+        utterance.onend    = function() { setIdle(widget); };
+        utterance.onerror  = function() { setIdle(widget); };
+        window.speechSynthesis.speak(utterance);
+    }
+
     function speakText(text) {
         var cleanText = safeText(text)
             .replace(/\*/g, '')
@@ -76,68 +101,22 @@ var AliceBot = (function () {
             var url   = URL.createObjectURL(blob);
             var audio = new Audio(url);
 
-            audio.onplay = function() {
-                if (widget) {
-                    widget.classList.remove('idle', 'waiting');
-                    widget.classList.add('speaking');
-                }
-            };
-            audio.onended = function() {
-                if (widget) {
-                    widget.classList.remove('speaking', 'waiting');
-                    widget.classList.add('idle');
-                }
-                URL.revokeObjectURL(url);
-            };
-            audio.onerror = function() {
-                if (widget) {
-                    widget.classList.remove('speaking', 'waiting');
-                    widget.classList.add('idle');
-                }
-            };
+            audio.onplay  = function() { setSpeaking(widget); };
+            audio.onended = function() { setIdle(widget); URL.revokeObjectURL(url); };
+            audio.onerror = function() { setIdle(widget); fallbackTTS(cleanText, widget); };
 
-            .then(function(blob) {
-    var url   = URL.createObjectURL(blob);
-    var audio = new Audio(url);
-
-    audio.onplay = function() {
-        if (widget) {
-            widget.classList.remove('idle', 'waiting');
-            widget.classList.add('speaking');
-        }
-    };
-    audio.onended = function() {
-        if (widget) {
-            widget.classList.remove('speaking', 'waiting');
-            widget.classList.add('idle');
-        }
-        URL.revokeObjectURL(url);
-    };
-    audio.onerror = function() {
-        if (widget) {
-            widget.classList.remove('speaking', 'waiting');
-            widget.classList.add('idle');
-        }
-    };
-
-    // Gère le blocage autoplay du navigateur
-    var playPromise = audio.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(function(err) {
-            console.warn('Autoplay bloqué:', err);
-            // Fallback : TTS natif du navigateur
-            if ('speechSynthesis' in window) {
-                var utterance = new SpeechSynthesisUtterance(cleanText);
-                utterance.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterance);
+            var p = audio.play();
+            if (p !== undefined) {
+                p.catch(function() {
+                    URL.revokeObjectURL(url);
+                    fallbackTTS(cleanText, widget);
+                });
             }
-            if (widget) {
-                widget.classList.remove('speaking', 'waiting');
-                widget.classList.add('idle');
-            }
+        })
+        .catch(function() {
+            fallbackTTS(cleanText, widget);
         });
     }
-})
 
     /* ── BULLE ── */
     function updateBubble(text) {
@@ -167,7 +146,6 @@ var AliceBot = (function () {
 
         updateBubble('Je réfléchis... ⚡');
 
-        // Vérification FAQ locale d'abord
         var localAnswer = checkLocalAnswer(text);
         if (localAnswer) {
             setTimeout(function() {
@@ -179,7 +157,6 @@ var AliceBot = (function () {
             return;
         }
 
-        // Appel API Claude
         fetch('/api/alice', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -191,14 +168,12 @@ var AliceBot = (function () {
         })
         .then(function(data) {
             var reply = data.reply || "Je n'ai pas reçu de réponse stable.";
-
             conversationHistory.push({ role: 'user',      content: text  });
             conversationHistory.push({ role: 'assistant', content: reply });
             if (conversationHistory.length > 10) {
                 conversationHistory.shift();
                 conversationHistory.shift();
             }
-
             if (widget) widget.classList.remove('waiting');
             updateBubble(reply);
             speakText(reply);
