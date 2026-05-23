@@ -201,8 +201,8 @@ var AliceBot = (function () {
         window.speechSynthesis.onvoiceschanged = function () { voiceReady = true; };
     }
 
-    function init() {
-        loadImages(); // Chargement des images Cloudinary corrigé !
+        function init() {
+        loadImages(); 
         loadData();
         bindVoicesWhenReady();
 
@@ -212,22 +212,24 @@ var AliceBot = (function () {
         var input = byId('alice-input');
         var widget = byId('alice-widget');
 
-        // Action au clic sur le bouton flottant (Ouvrir)
+        // Action au clic sur le petit bouton flottant (Ouvrir)
         if (fab) {
-            fab.addEventListener('click', function() {
+            fab.addEventListener('click', function(e) {
                 if (widget) {
-                    widget.style.display = 'flex'; 
-                    fab.style.display = 'none';   
+                    // Force l'affichage flex en écrasant le CSS de base
+                    widget.style.setProperty('display', 'flex', 'important'); 
+                    fab.style.setProperty('display', 'none', 'important');   
                 }
             });
         }
 
-        // Action au clic sur la croix (Fermer)
+        // Action au clic sur la croix de fermeture
         if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
+            closeBtn.addEventListener('click', function(e) {
                 if (widget) {
-                    widget.style.display = 'none'; 
-                    if (fab) fab.style.display = 'block'; 
+                    // Force la fermeture en écrasant le CSS
+                    widget.style.setProperty('display', 'none', 'important'); 
+                    if (fab) fab.style.setProperty('display', 'flex', 'important'); 
                 }
             });
         }
@@ -243,6 +245,7 @@ var AliceBot = (function () {
             });
         }
     }
+
 
     return { init: init };
 })();
