@@ -281,3 +281,12 @@ body.alice-page {
     font-size: 2.5rem;
     color:     rgba(212,175,55,0.3);
 }
+
+/* Input toujours visible même en état waiting/speaking */
+#alice-input,
+#alice-send,
+.alice-input-row {
+    display:    flex !important;
+    visibility: visible !important;
+    opacity:    1 !important;
+}
