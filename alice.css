@@ -66,6 +66,26 @@ body.alice-page {
     pointer-events: auto !important;
 }
 
+/* Texte d'étiquette au-dessus du robot */
+#alice-fab::before {
+    content: "ALICE ASSISTANT JO BAND" !important;
+    position: absolute !important;
+    top: -30px !important; /* Place le texte juste au-dessus du rond */
+    right: 0 !important;
+    white-space: nowrap !important;
+    background: rgba(10, 25, 47, 0.9) !important;
+    color: #d4af37 !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 0.75rem !important;
+    font-weight: bold !important;
+    padding: 4px 10px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(212, 175, 55, 0.4) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+    letter-spacing: 0.5px !important;
+}
+
+
 
 /* ==========================================
    BOÎTIER PRINCIPAL DU WIDGET (MODIFIÉ)
