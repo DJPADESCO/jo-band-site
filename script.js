@@ -717,16 +717,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Lightbox Galerie
-    document.addEventListener('click', e => {
-        if (e.target.classList.contains('gallery-photo-thumb')) {
-            const lb = document.getElementById('lightbox');
-            const lbImg = document.getElementById('lightbox-img');
-            if (lb && lbImg) {
-                lbImg.src = e.target.src;
-                lb.style.display = 'flex';
-            }
+document.addEventListener('click', e => {
+    if (e.target.classList.contains('gallery-photo-thumb')) {
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
+        if (lb && lbImg) {
+            lbImg.src = e.target.src;
+            lb.style.display = 'flex';
         }
-    });
+    }
+});
 
     // Initialisations finales
     initFedaPayIntegration(closeBurger);
