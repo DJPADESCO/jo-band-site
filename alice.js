@@ -198,9 +198,8 @@ var AliceBot = (function () {
         window.speechSynthesis.onvoiceschanged = function () { voiceReady = true; };
     }
 
-    function init() {
+        function init() {
         loadData();
-        loadImages(); // Charge l'avatar depuis Cloudinary
         bindVoicesWhenReady();
 
         var fab = byId('alice-fab');
@@ -208,6 +207,39 @@ var AliceBot = (function () {
         var sendBtn = byId('alice-send');
         var input = byId('alice-input');
         var widget = byId('alice-widget');
+
+        // Action au clic sur le petit bouton flottant
+        if (fab) {
+            fab.addEventListener('click', function() {
+                if (widget) {
+                    widget.style.display = 'flex'; // Ouvre la fenêtre d'ALICE
+                    fab.style.display = 'none';   // Cache le petit bouton flottant
+                }
+            });
+        }
+
+        // Action au clic sur la croix de fermeture
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                if (widget) {
+                    widget.style.display = 'none'; // Cache la fenêtre d'ALICE
+                    if (fab) fab.style.display = 'block'; // Réaffiche le bouton flottant
+                }
+            });
+        }
+
+        if (sendBtn) sendBtn.addEventListener('click', handleSend);
+
+        if (input) {
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                }
+            });
+        }
+    }
+
 
         // Ouverture et fermeture du widget
         if (fab) {
