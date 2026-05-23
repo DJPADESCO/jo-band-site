@@ -6,39 +6,30 @@
 
 var AliceBot = (function () {
     var conversationHistory = [];
-    var isTyping = false;
-    var joData = null;
-    var voiceReady = false;
+    var isTyping            = false;
+    var joData              = null;
 
-    function byId(id) { return document.getElementById(id); }
-    function safeText(value) { return String(value == null ? '' : value); }
+    function byId(id)       { return document.getElementById(id); }
+    function safeText(val)  { return String(val == null ? '' : val); }
 
-    // --- Connexion Cloudinary ---
-    function getCloudinaryUrl(publicId) {
-        if (!publicId) return '';
-        if (publicId.startsWith('http')) return publicId;
-        return `https://res.cloudinary.com/dsk6ndsb0/image/upload/f_auto,q_auto/${publicId}`;
-    }
-
+    /* ── IMAGES ── */
     function loadImages() {
-        var fabAvatar = byId('alice-fab-avatar');
+        var avatarUrl   = 'images/alice-avatar.png';
+        var fabAvatar   = byId('alice-fab-avatar');
         var stageAvatar = byId('alice-avatar-img');
-
-        // Utilisation directe du dossier local pour une stabilité parfaite
-        var avatarUrl = 'images/alice-avatar.png'; 
-
-        if (fabAvatar) fabAvatar.src = avatarUrl;
+        if (fabAvatar)   fabAvatar.src   = avatarUrl;
         if (stageAvatar) stageAvatar.src = avatarUrl;
     }
 
+    /* ── DONNÉES FAQ ── */
     function loadData() {
         return fetch('/alice-data.json', { cache: 'no-store' })
-            .then(function (r) {
+            .then(function(r) {
                 if (!r.ok) throw new Error('Impossible de charger alice-data.json');
                 return r.json();
             })
-            .then(function (d) { joData = d || null; })
-            .catch(function () { joData = null; });
+            .then(function(d) { joData = d || null; })
+            .catch(function()  { joData = null; });
     }
 
     function getFaqList() {
@@ -52,7 +43,7 @@ var AliceBot = (function () {
 
         var msg = safeText(message).toLowerCase().trim();
         for (var i = 0; i < faqList.length; i++) {
-            var faq = faqList[i] || {};
+            var faq       = faqList[i] || {};
             var questions = Array.isArray(faq.questions) ? faq.questions : [];
             for (var j = 0; j < questions.length; j++) {
                 var q = safeText(questions[j]).toLowerCase().trim();
@@ -64,61 +55,59 @@ var AliceBot = (function () {
         return null;
     }
 
-    // --- Gestion de la voix ---
-   
-function speakText(text) {
-    var cleanText = safeText(text)
-        .replace(/\*/g, '')
-        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}]/gu, '');
+    /* ── VOIX MICROSOFT EDGE TTS ── */
+    function speakText(text) {
+        var cleanText = safeText(text)
+            .replace(/\*/g, '')
+            .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}]/gu, '');
 
-    var widget = byId('alice-widget');
+        var widget = byId('alice-widget');
 
-    fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ texte: cleanText, langue: 'fr' })
-    })
-    .then(function(response) {
-        if (!response.ok) throw new Error('TTS error');
-        return response.blob();
-    })
-    .then(function(blob) {
-        var url   = URL.createObjectURL(blob);
-        var audio = new Audio(url);
+        fetch('/api/tts', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ texte: cleanText, langue: 'fr' })
+        })
+        .then(function(response) {
+            if (!response.ok) throw new Error('TTS error');
+            return response.blob();
+        })
+        .then(function(blob) {
+            var url   = URL.createObjectURL(blob);
+            var audio = new Audio(url);
 
-        audio.onplay = function() {
-            if (widget) {
-                widget.classList.remove('idle', 'waiting');
-                widget.classList.add('speaking');
-            }
-        };
+            audio.onplay = function() {
+                if (widget) {
+                    widget.classList.remove('idle', 'waiting');
+                    widget.classList.add('speaking');
+                }
+            };
+            audio.onended = function() {
+                if (widget) {
+                    widget.classList.remove('speaking', 'waiting');
+                    widget.classList.add('idle');
+                }
+                URL.revokeObjectURL(url);
+            };
+            audio.onerror = function() {
+                if (widget) {
+                    widget.classList.remove('speaking', 'waiting');
+                    widget.classList.add('idle');
+                }
+            };
 
-        audio.onended = function() {
+            audio.play();
+        })
+        .catch(function(err) {
+            console.error('TTS Error:', err);
             if (widget) {
                 widget.classList.remove('speaking', 'waiting');
                 widget.classList.add('idle');
             }
-            URL.revokeObjectURL(url);
-        };
+        });
+    }
 
-        audio.onerror = function() {
-            if (widget) {
-                widget.classList.remove('speaking', 'waiting');
-                widget.classList.add('idle');
-            }
-        };
-
-        audio.play();
-    })
-    .catch(function(err) {
-        console.error('TTS Error:', err);
-        if (widget) {
-            widget.classList.remove('speaking', 'waiting');
-            widget.classList.add('idle');
-        }
-    });
-}
-
+    /* ── BULLE ── */
     function updateBubble(text) {
         var bubble = byId('alice-bubble');
         if (bubble) {
@@ -127,120 +116,100 @@ function speakText(text) {
         }
     }
 
+    /* ── ENVOI MESSAGE ── */
     function handleSend() {
-        var input = byId('alice-input');
+        var input  = byId('alice-input');
+        var widget = byId('alice-widget');
         if (!input || isTyping) return;
 
         var text = safeText(input.value).trim();
         if (!text) return;
 
-        input.value = ''; 
-        isTyping = true;
+        input.value = '';
+        isTyping    = true;
 
-        var widget = byId('alice-widget');
         if (widget) {
             widget.classList.remove('idle', 'speaking');
-            widget.classList.add('waiting'); 
+            widget.classList.add('waiting');
         }
 
-        updateBubble("Je réfléchis... ⚡");
+        updateBubble('Je réfléchis... ⚡');
 
+        // Vérification FAQ locale d'abord
         var localAnswer = checkLocalAnswer(text);
         if (localAnswer) {
-            setTimeout(function () {
+            setTimeout(function() {
                 isTyping = false;
-                if (widget) {
-                    widget.classList.remove('waiting');
-                }
+                if (widget) widget.classList.remove('waiting');
                 updateBubble(localAnswer);
                 speakText(localAnswer);
             }, 600);
             return;
         }
 
+        // Appel API Claude
         fetch('/api/alice', {
-            method: 'POST',
+            method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text, history: conversationHistory })
+            body:    JSON.stringify({ message: text, history: conversationHistory })
         })
-        .then(function (r) {
+        .then(function(r) {
             if (!r.ok) throw new Error('Erreur API');
             return r.json();
         })
-        .then(function (data) {
+        .then(function(data) {
             var reply = data.reply || "Je n'ai pas reçu de réponse stable.";
-            conversationHistory.push({ role: 'user', content: text });
+
+            conversationHistory.push({ role: 'user',      content: text  });
             conversationHistory.push({ role: 'assistant', content: reply });
             if (conversationHistory.length > 10) {
                 conversationHistory.shift();
                 conversationHistory.shift();
             }
 
-            if (widget) {
-                widget.classList.remove('waiting');
-            }
+            if (widget) widget.classList.remove('waiting');
             updateBubble(reply);
             speakText(reply);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             console.error(err);
-            if (widget) {
-                widget.classList.remove('waiting');
-            }
+            if (widget) widget.classList.remove('waiting');
             var fallback = 'ALICE est indisponible pour le moment.';
             updateBubble(fallback);
             speakText(fallback);
         })
-        .finally(function () {
-            isTyping = false;
-        });
+        .finally(function() { isTyping = false; });
     }
 
-    function bindVoicesWhenReady() {
-        if (!('speechSynthesis' in window)) return;
-        var voices = window.speechSynthesis.getVoices();
-        if (voices && voices.length) {
-            voiceReady = true;
-            return;
-        }
-        window.speechSynthesis.onvoiceschanged = function () { voiceReady = true; };
-    }
-
+    /* ── INITIALISATION ── */
     function init() {
-        loadImages(); 
+        loadImages();
         loadData();
-        bindVoicesWhenReady();
 
-        var fab = byId('alice-fab');
+        var fab      = byId('alice-fab');
         var closeBtn = byId('alice-close');
-        var sendBtn = byId('alice-send');
-        var input = byId('alice-input');
-        var widget = byId('alice-widget');
+        var sendBtn  = byId('alice-send');
+        var input    = byId('alice-input');
+        var widget   = byId('alice-widget');
 
-        // Action au clic sur le bouton flottant (Ouvrir)
         if (fab) {
-            fab.addEventListener('click', function(e) {
-                if (widget) {
-                    widget.style.setProperty('display', 'flex', 'important'); 
-                    fab.style.setProperty('display', 'none', 'important');   
-                }
+            fab.addEventListener('click', function() {
+                if (widget) widget.style.setProperty('display', 'flex', 'important');
+                fab.style.setProperty('display', 'none', 'important');
             });
         }
 
-        // Action au clic sur la croix de fermeture
         if (closeBtn) {
-            closeBtn.addEventListener('click', function(e) {
-                if (widget) {
-                    widget.style.setProperty('display', 'none', 'important'); 
-                    if (fab) fab.style.setProperty('display', 'flex', 'important'); 
-                }
+            closeBtn.addEventListener('click', function() {
+                if (widget) widget.style.setProperty('display', 'none', 'important');
+                if (fab)    fab.style.setProperty('display', 'flex', 'important');
             });
         }
 
         if (sendBtn) sendBtn.addEventListener('click', handleSend);
 
         if (input) {
-            input.addEventListener('keydown', function (e) {
+            input.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleSend();
@@ -252,6 +221,6 @@ function speakText(text) {
     return { init: init };
 })();
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     AliceBot.init();
 });
