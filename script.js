@@ -252,8 +252,6 @@ function applyLanguage(lang) {
 // CLOUDINARY GALLERY ONLY
 // ==========================
 
-let allMediaItems = [];
-
 function loadGallery() {
     const container = document.getElementById('galerie-container');
     const dict = translations[currentLang] || translations.fr;
@@ -646,8 +644,8 @@ document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (targetId === 'tab-galerie' && !galleryLoaded) {
-                loadMediaFromSheets();
-            }
+    loadGallery();   // ← la nouvelle fonction Cloudinary
+}
         });
     });
 
