@@ -330,3 +330,16 @@ body.alice-page {
         right: 15px;
     }
 }
+
+/* FORCE L'AFFICHAGE DU WIDGET QUAND LE JS L'OUVRE */
+.alice-live-container {
+    pointer-events: auto !important;
+    z-index: 999999 !important;
+}
+
+/* REND LE BOUTON CLICQUABLE SANS INTERFÉRENCE */
+#alice-fab {
+    pointer-events: auto !important;
+    z-index: 999998 !important;
+}
+
