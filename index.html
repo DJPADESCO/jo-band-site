@@ -379,9 +379,11 @@
     </div>
 
 <!-- ================= CONSOLE ALICE INTERACTIVE ================= -->
-<button id="alice-fab" aria-label="Parler à ALICE">
+<!-- Bouton flottant avec action de secours intégrée directement en HTML -->
+<button id="alice-fab" aria-label="Parler à ALICE" onclick="document.getElementById('alice-widget').style.setProperty('display', 'flex', 'important'); this.style.setProperty('display', 'none', 'important');">
     <img src="images/alice-avatar.png" alt="ALICE" id="alice-fab-avatar">
 </button>
+
 
 <div id="alice-widget" class="alice-live-container idle">
     <div class="alice-stage-header">
