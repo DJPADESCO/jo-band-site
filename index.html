@@ -420,7 +420,47 @@
 <!-- On appelle les scripts d'Alice directement ici -->
 <script src="alice.js" defer></script>
 
-<div id="galerie-videos"></div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const galerie = document.getElementById('galerie-videos');
+    if (!galerie) return;
+
+    // Appel de notre nouvelle API Vercel
+    fetch('/api/videos')
+        .then(response => response.json())
+        .then(resultat => {
+            if (resultat.success && resultat.data.length > 0) {
+                // On vide la galerie avant d'ajouter les nouveautés
+                galerie.innerHTML = ''; 
+
+                // LA BOUCLE MAGIQUE : Elle traite CHAQUE fichier du dossier Cloudinary
+                resultat.data.forEach(fichier => {
+                    let elementHtml = '';
+
+                    // Si le fichier est une vidéo, on crée un lecteur vidéo complet
+                    if (fichier.url.includes('/video/') || fichier.format === 'mp4') {
+                        elementHtml = `
+                            <div class="video-card" style="margin: 15px; display: inline-block;">
+                                <video src="${fichier.url}" controls width="320" style="border-radius: 12px; border: 2px solid #d4af37;"></video>
+                            </div>`;
+                    } 
+                    // Si c'est une image (affiche, photo), on crée une balise image
+                    else {
+                        elementHtml = `
+                            <div class="image-card" style="margin: 15px; display: inline-block;">
+                                <img src="${fichier.url}" width="320" style="border-radius: 12px; border: 2px solid #d4af37;" alt="Média JO BAND">
+                            </div>`;
+                    }
+
+                    // On injecte le média dans la page
+                    galerie.insertAdjacentHTML('beforeend', elementHtml);
+                });
+            }
+        })
+        .catch(err => console.error("Erreur d'affichage des médias:", err));
+});
+</script>
+
 
 
 </body>
