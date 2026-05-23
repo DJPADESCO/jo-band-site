@@ -261,41 +261,7 @@ function applyLanguage(lang) {
 /* ==========================================================================
    6. INTERACTION GOOGLE SHEETS & GALERIE
    ========================================================================== */
-function loadMediaFromSheets() {
-    const container = document.getElementById('galerie-container');
-    const dict = translations[currentLang] || translations.fr;
-    if (!container) return;
 
-    container.innerHTML = `<p class="gallery-msg">${dict['gallery-loading']}</p>`;
-
-    // On interroge votre API Vercel à la place de Google Sheets
-    fetch('/api/videos')
-        .then(res => res.json())
-        .then(resultat => {
-            if (resultat.success && resultat.data) {
-                allMediaItems = [];
-
-                // On transforme les données de Cloudinary pour correspondre au format attendu par votre galerie
-                resultat.data.forEach(fichier => {
-                    // On détermine le type à partir des informations de Cloudinary
-                    let type = 'photo';
-                    if (fichier.type === 'video' || fichier.format === 'mp4') {
-                        type = 'video';
-                    } else if (fichier.format === 'pdf') {
-                        type = 'document';
-                    } else
-        if (item.type === 'video') {
-            // Si c'est un lien direct Cloudinary, on utilise une vraie balise vidéo HTML5
-            if (item.lien.includes('cloudinary.com')) {
-                return `
-                    <div class="media-card">
-                        <div class="media-ratio">
-                            <video src="${item.lien}" controls preload="metadata" style="width:100%; height:220px; border-radius:12px; object-fit:cover;"></video>
-                        </div>
-                        <div class="media-info">${badge}${title}</div>
-                    </div>
-                `;
-            }
             // Sinon, on garde l'ancien système d'Iframe pour les anciens liens YouTube/Drive restants
             return `
                 <div class="media-card">
