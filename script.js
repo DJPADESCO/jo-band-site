@@ -261,108 +261,179 @@ function applyLanguage(lang) {
 /* ==========================================================================
    6. INTERACTION GOOGLE SHEETS & GALERIE
    ========================================================================== */
+// ==========================
+// CLOUDINARY GALLERY ONLY
+// ==========================
 
-            // Sinon, on garde l'ancien système d'Iframe pour les anciens liens YouTube/Drive restants
-            return `
-                <div class="media-card">
-                    <div class="media-ratio">
-                        <iframe src="${getDriveEmbedLink(item.lien)}" allowfullscreen frameborder="0" style="width:100%;height:220px;border:0;"></iframe>
-                    </div>
-                    <div class="media-info">${badge}${title}</div>
-                </div>
-            `;
-        }
+let allMediaItems = [];
 
+function loadGallery() {
+    const container = document.getElementById('galerie-container');
+    const dict = translations[currentLang] || translations.fr;
 
-                    // On extrait un titre propre à partir de l'identifiant du fichier
-                    const titreBrut = fichier.id.split('/').pop(); // Enlève le nom du dossier
-                    const titrePropre = titreBrut.replace(/[-_]/g, ' ').toUpperCase();
+    if (!container) return;
 
-                    allMediaItems.push({
-                        type: type,
-                        titre: titrePropre,
-                        lien: fichier.url
-                    });
-                });
+    container.innerHTML = `
+        <p class="gallery-msg">
+            ${dict['gallery-loading'] || 'Chargement...'}
+        </p>
+    `;
 
-                galleryLoaded = true;
-                renderGallery('all');
-            } else {
-                throw new Error("Erreur de lecture de l'API");
+    fetch('/api/videos')
+        .then(response => response.json())
+        .then(result => {
+
+            if (!result.success || !result.data) {
+                throw new Error('Erreur Cloudinary');
             }
+
+            allMediaItems = result.data.map(file => {
+
+                let type = 'photo';
+
+                if (
+                    file.resource_type === 'video' ||
+                    file.format === 'mp4'
+                ) {
+                    type = 'video';
+                }
+                else if (file.format === 'pdf') {
+                    type = 'document';
+                }
+
+                return {
+                    id: file.public_id,
+                    titre:
+                        file.display_name ||
+                        file.public_id ||
+                        'JO BAND',
+
+                    type: type,
+
+                    lien:
+                        file.secure_url,
+
+                    image:
+                        file.secure_url,
+
+                    date:
+                        file.created_at || ''
+                };
+            });
+
+            renderGallery('all');
         })
-        .catch(() => {
-            if (container) {
-                container.innerHTML = `<p class="gallery-msg error">${dict['gallery-error']}</p>`;
-            }
+        .catch(error => {
+            console.error('Cloudinary Error:', error);
+
+            container.innerHTML = `
+                <p class="gallery-msg">
+                    Impossible de charger la galerie.
+                </p>
+            `;
         });
 }
 
-function renderGallery(filter) {
-    const container = document.getElementById('galerie-container');
-    const dict = translations[currentLang] || translations.fr;
+function renderGallery(filter = 'all') {
+
+    const container =
+        document.getElementById('galerie-container');
+
     if (!container) return;
 
-    const items = filter === 'all'
-        ? allMediaItems
-        : allMediaItems.filter(i => i.type === filter);
+    let items = allMediaItems;
 
-    if (items.length === 0) {
-        container.innerHTML = `<p class="gallery-msg">${dict['gallery-empty']}</p>`;
+    if (filter !== 'all') {
+        items = allMediaItems.filter(
+            item => item.type === filter
+        );
+    }
+
+    if (!items.length) {
+        container.innerHTML = `
+            <p class="gallery-msg">
+                Aucun média disponible.
+            </p>
+        `;
         return;
     }
 
     container.innerHTML = items.map(item => {
-        const badge = `<span class="media-badge badge-${item.type}">${item.type}</span>`;
-        const title = `<p class="media-title">${sanitize(item.titre) || 'JO BAND'}</p>`;
+
+        const title = `
+            <h3 class="media-title">
+                ${item.titre}
+            </h3>
+        `;
 
         if (item.type === 'video') {
             return `
                 <div class="media-card">
-                    <div class="media-ratio">
-                        <iframe src="${getDriveEmbedLink(item.lien)}" allowfullscreen frameborder="0" style="width:100%;height:220px;border:0;"></iframe>
-                    </div>
-                    <div class="media-info">${badge}${title}</div>
-                </div>
-            `;
-        }
+                    <video
+                        controls
+                        preload="metadata"
+                        class="gallery-video"
+                    >
+                        <source
+                            src="${item.lien}"
+                            type="video/mp4"
+                        >
+                    </video>
 
-        if (item.type === 'photo' || item.type === 'affiche') {
-            return `
-                <div class="media-card">
-                    <div class="media-ratio">
-                        <img src="${convertDriveLink(item.lien)}" class="gallery-photo-thumb" alt="${sanitize(item.titre) || 'JO BAND'}" loading="lazy">
-                    </div>
-                    <div class="media-info">${badge}${title}</div>
+                    ${title}
                 </div>
             `;
         }
 
         if (item.type === 'document') {
             return `
-                <div class="media-card document-card">
-                    <a href="${item.lien}" target="_blank" rel="noopener noreferrer" class="doc-link">
-                        <i class="fa-solid fa-file-pdf"></i>
-                        ${title}
-                        <span>Ouvrir</span>
+                <div class="media-card">
+                    <a
+                        href="${item.lien}"
+                        target="_blank"
+                        class="document-card"
+                    >
+                        📄 Voir document
                     </a>
+
+                    ${title}
                 </div>
             `;
         }
 
-        return '';
+        return `
+            <div class="media-card">
+                <img
+                    src="${item.image}"
+                    alt="${item.titre}"
+                    class="gallery-image"
+                    loading="lazy"
+                >
+
+                ${title}
+            </div>
+        `;
     }).join('');
 }
 
-function initGalleryFilters() {
-    document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderGallery(btn.getAttribute('data-filter'));
-        });
-    });
-}
+document.addEventListener(
+    'DOMContentLoaded',
+    loadGallery
+);
+         
+ // Sinon, on garde l'ancien système d'Iframe pour les anciens liens YouTube/Drive restants
+            return `
+                <div class="media-card">
+                    <div class="media-ratio">
+                        <iframe src="${getDriveEmbedLink(item.lien)}" allowfullscreen frameborder="0" style="width:100%;height:220px;border:0;"></iframe>
+                    </div>
+                    <div class="media-info">${badge}${title}</div>
+                </div>
+            `;
+         }
+const titrePropre =
+    fichier.display_name ||
+    fichier.public_id.split('/').pop().replace(/[-_]/g, ' ').toUpperCase();
 
 /* ==========================================================================
    7. GESTION DU COLLECTIF & MODALES
