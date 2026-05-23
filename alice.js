@@ -20,12 +20,16 @@ var AliceBot = (function () {
         return `https://res.cloudinary.com/dsk6ndsb0/image/upload/f_auto,q_auto/${publicId}`;
     }
 
-    function loadImages() {
+        function loadImages() {
         var fabAvatar = byId('alice-fab-avatar');
         var stageAvatar = byId('alice-avatar-img');
 
-        // Récupération de l'image sur votre compte Cloudinary
-        var avatarUrl = getCloudinaryUrl('alice-avatar.png'); 
+        // On utilise directement le dossier local pour éviter le bug d'affichage
+        var avatarUrl = 'images/alice-avatar.png'; 
+
+        if (fabAvatar) fabAvatar.src = avatarUrl;
+        if (stageAvatar) stageAvatar.src = avatarUrl;
+    }
 
         if (fabAvatar) fabAvatar.src = avatarUrl;
         if (stageAvatar) stageAvatar.src = avatarUrl;
