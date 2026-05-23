@@ -177,21 +177,24 @@ const translations = {
 /* ==========================================================================
    4. FONCTIONS DE SÉCURITÉ ET UTILITAIRES
    ========================================================================== */
-function sanitize(str) {
-    return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
 function getDriveEmbedLink(url) {
     if (!url) return '';
+    // Si le lien vient de Cloudinary, on le renvoie directement sans le toucher
+    if (url.includes('cloudinary.com')) return url;
+    
     const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    return match ? `https://drive.google.com/file/d/${match[1]}/preview?usp=drivesdk` : url;
+    return match ? `https://google.com{match[1]}/preview?usp=drivesdk` : url;
 }
 
 function convertDriveLink(url) {
     if (!url) return '';
+    // Si le lien vient de Cloudinary, c'est déjà un lien d'image direct
+    if (url.includes('cloudinary.com')) return url;
+
     const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    return match ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800` : url;
+    return match ? `https://google.com{match[1]}&sz=w800` : url;
 }
+
 
 /* ==========================================================================
    5. INTERFACE UTILISATEUR & CYCLES DE VIE
@@ -265,29 +268,62 @@ function loadMediaFromSheets() {
 
     container.innerHTML = `<p class="gallery-msg">${dict['gallery-loading']}</p>`;
 
-    fetch(SHEETS_URL)
-        .then(res => res.text())
-        .then(text => {
-            const clean = text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, '');
-            const json = JSON.parse(clean);
-            const rows = (json.table && json.table.rows) ? json.table.rows : [];
+    // On interroge votre API Vercel à la place de Google Sheets
+    fetch('/api/videos')
+        .then(res => res.json())
+        .then(resultat => {
+            if (resultat.success && resultat.data) {
+                allMediaItems = [];
 
-            allMediaItems = [];
+                // On transforme les données de Cloudinary pour correspondre au format attendu par votre galerie
+                resultat.data.forEach(fichier => {
+                    // On détermine le type à partir des informations de Cloudinary
+                    let type = 'photo';
+                    if (fichier.type === 'video' || fichier.format === 'mp4') {
+                        type = 'video';
+                    } else if (fichier.format === 'pdf') {
+                        type = 'document';
+                    } else
+        if (item.type === 'video') {
+            // Si c'est un lien direct Cloudinary, on utilise une vraie balise vidéo HTML5
+            if (item.lien.includes('cloudinary.com')) {
+                return `
+                    <div class="media-card">
+                        <div class="media-ratio">
+                            <video src="${item.lien}" controls preload="metadata" style="width:100%; height:220px; border-radius:12px; object-fit:cover;"></video>
+                        </div>
+                        <div class="media-info">${badge}${title}</div>
+                    </div>
+                `;
+            }
+            // Sinon, on garde l'ancien système d'Iframe pour les anciens liens YouTube/Drive restants
+            return `
+                <div class="media-card">
+                    <div class="media-ratio">
+                        <iframe src="${getDriveEmbedLink(item.lien)}" allowfullscreen frameborder="0" style="width:100%;height:220px;border:0;"></iframe>
+                    </div>
+                    <div class="media-info">${badge}${title}</div>
+                </div>
+            `;
+        }
 
-            rows.forEach(row => {
-                if (!row.c || !row.c[0] || !row.c[0].v) return;
 
-                const type = (row.c[0].v || '').toString().trim().toLowerCase();
-                const titre = row.c[1] ? (row.c[1].v || '').toString().trim() : '';
-                const lien = row.c[2] ? (row.c[2].v || '').toString().trim() : '';
+                    // On extrait un titre propre à partir de l'identifiant du fichier
+                    const titreBrut = fichier.id.split('/').pop(); // Enlève le nom du dossier
+                    const titrePropre = titreBrut.replace(/[-_]/g, ' ').toUpperCase();
 
-                if (type && lien) {
-                    allMediaItems.push({ type, titre, lien });
-                }
-            });
+                    allMediaItems.push({
+                        type: type,
+                        titre: titrePropre,
+                        lien: fichier.url
+                    });
+                });
 
-            galleryLoaded = true;
-            renderGallery('all');
+                galleryLoaded = true;
+                renderGallery('all');
+            } else {
+                throw new Error("Erreur de lecture de l'API");
+            }
         })
         .catch(() => {
             if (container) {
