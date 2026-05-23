@@ -370,3 +370,54 @@ body.alice-page {
     z-index: 999998 !important;
 }
 
+/* ========================================================
+   CORRECTION DE L'ANIMATION ET EFFET PAUPIÈRES CHIRURGICAL
+   ======================================================== */
+
+/* 1. On adoucit l'animation de parole pour que l'image ne saute plus de haut en bas */
+.alice-live-container.speaking .alice-avatar-img {
+    animation: humanTalkingSmooth 0.3s ease-in-out infinite alternate !important;
+}
+
+@keyframes humanTalkingSmooth {
+    0% { transform: scale(1) rotate(0deg); }
+    100% { transform: scale(1.03) rotate(0.5deg); } /* Léger gonflement respiratoire au lieu d'un saut */
+}
+
+/* 2. Création des paupières artificielles sur l'avatar du chat */
+.alice-avatar-stage {
+    position: relative !important;
+}
+
+.alice-avatar-stage::before,
+.alice-avatar-stage::after {
+    content: "" !important;
+    position: absolute !important;
+    background: #19355a !important; /* Couleur sombre ajustée pour simuler la fermeture de l'œil */
+    width: 22px; /* Taille ajustée à la pupille du robot */
+    height: 0px; /* Masqué par défaut */
+    top: 52%; /* Position verticale estimée sur les yeux du robot */
+    border-radius: 50% !important;
+    z-index: 3 !important;
+    transition: height 0.1s ease;
+    animation: autoBlinkEffect 3.8s infinite ease-in-out;
+}
+
+/* Positionnement horizontal de l'œil gauche et droit par-dessus l'image */
+.alice-avatar-stage::before {
+    left: calc(50% - 36px); /* Aligné sur l'œil gauche */
+}
+
+.alice-avatar-stage::after {
+    right: calc(50% - 36px); /* Aligné sur l'œil droit */
+}
+
+/* Animation automatique du clignement (s'exécute en continu toutes les 3.8s) */
+@keyframes autoBlinkEffect {
+    0%, 95%, 100% { 
+        height: 0px; 
+    }
+    97% { 
+        height: 22px; /* La paupière descend et recouvre l'œil bleu */
+    }
+}
