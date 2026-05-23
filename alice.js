@@ -55,7 +55,7 @@ var AliceBot = (function () {
         return null;
     }
 
-    /* ── VOIX ── */
+    /* ── ÉTATS ANIMATION ── */
     function setIdle(widget) {
         if (widget) {
             widget.classList.remove('speaking', 'waiting');
@@ -70,17 +70,7 @@ var AliceBot = (function () {
         }
     }
 
-    function fallbackTTS(cleanText, widget) {
-        if (!('speechSynthesis' in window)) { setIdle(widget); return; }
-        window.speechSynthesis.cancel();
-        var utterance      = new SpeechSynthesisUtterance(cleanText);
-        utterance.lang     = 'fr-FR';
-        utterance.onstart  = function() { setSpeaking(widget); };
-        utterance.onend    = function() { setIdle(widget); };
-        utterance.onerror  = function() { setIdle(widget); };
-        window.speechSynthesis.speak(utterance);
-    }
-
+    /* ── VOIX EDGE TTS UNIQUEMENT ── */
     function speakText(text) {
         var cleanText = safeText(text)
             .replace(/\*/g, '')
@@ -102,19 +92,27 @@ var AliceBot = (function () {
             var audio = new Audio(url);
 
             audio.onplay  = function() { setSpeaking(widget); };
-            audio.onended = function() { setIdle(widget); URL.revokeObjectURL(url); };
-            audio.onerror = function() { setIdle(widget); fallbackTTS(cleanText, widget); };
+            audio.onended = function() {
+                setIdle(widget);
+                URL.revokeObjectURL(url);
+            };
+            audio.onerror = function() {
+                setIdle(widget);
+                URL.revokeObjectURL(url);
+            };
 
             var p = audio.play();
             if (p !== undefined) {
-                p.catch(function() {
+                p.catch(function(err) {
+                    console.warn('Audio bloqué:', err);
+                    setIdle(widget);
                     URL.revokeObjectURL(url);
-                    fallbackTTS(cleanText, widget);
                 });
             }
         })
-        .catch(function() {
-            fallbackTTS(cleanText, widget);
+        .catch(function(err) {
+            console.error('TTS Error:', err);
+            setIdle(widget);
         });
     }
 
