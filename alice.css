@@ -241,3 +241,25 @@ body.alice-page {
         right: 15px !important;
     }
 }
+
+/* ==========================================
+   FORCE L'AFFICHAGE DU BOUTON QUITTER (CROIX)
+========================================== */
+.alice-stage-close {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    color: #8892b0 !important;
+    font-size: 1.8rem !important; /* Agrandit la taille de la croix */
+    cursor: pointer !important;
+    z-index: 100001 !important; /* Passe au-dessus du titre */
+    padding: 5px !important;
+    transition: color 0.2s ease !important;
+}
+
+.alice-stage-close:hover {
+    color: #d4af37 !important; /* Devient dorée au survol ou au clic */
+}
+
