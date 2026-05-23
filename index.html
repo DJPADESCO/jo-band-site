@@ -417,38 +417,30 @@
     </div>
 </div>
 
-<!-- On appelle les scripts d'Alice directement ici -->
-<script src="alice.js" defer></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const galerie = document.getElementById('galerie-videos');
-    if (!galerie) return;
-
     // Appel de notre nouvelle API Vercel
     fetch('/api/videos')
         .then(response => response.json())
         .then(resultat => {
             if (resultat.success && resultat.data.length > 0) {
-                // On vide la galerie avant d'ajouter les nouveautés
+                // On vide le message d'attente de la galerie
                 galerie.innerHTML = ''; 
 
                 // LA BOUCLE MAGIQUE : Elle traite CHAQUE fichier du dossier Cloudinary
                 resultat.data.forEach(fichier => {
                     let elementHtml = '';
 
-                    // Si le fichier est une vidéo, on crée un lecteur vidéo complet
+                    // Détection des vidéos
                     if (fichier.url.includes('/video/') || fichier.format === 'mp4') {
                         elementHtml = `
-                            <div class="video-card" style="margin: 15px; display: inline-block;">
-                                <video src="${fichier.url}" controls width="320" style="border-radius: 12px; border: 2px solid #d4af37;"></video>
+                            <div class="video-card" style="margin: 10px; display: inline-block; vertical-align: top;">
+                                <video src="${fichier.url}" controls width="100%" style="max-width:340px; border-radius: 12px; border: 2px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"></video>
                             </div>`;
                     } 
-                    // Si c'est une image (affiche, photo), on crée une balise image
+                    // Détection des images (photos, affiches, etc.)
                     else {
                         elementHtml = `
-                            <div class="image-card" style="margin: 15px; display: inline-block;">
-                                <img src="${fichier.url}" width="320" style="border-radius: 12px; border: 2px solid #d4af37;" alt="Média JO BAND">
+                            <div class="image-card" style="margin: 10px; display: inline-block; vertical-align: top; cursor: pointer;" onclick="document.getElementById('lightbox-img').src='${fichier.url}'; document.getElementById('lightbox').style.display='flex';">
+                                <img src="${fichier.url}" width="100%" style="max-width:340px; border-radius: 12px; border: 2px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" alt="Média JO BAND">
                             </div>`;
                     }
 
@@ -461,7 +453,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
-
 </body>
 </html>
+
