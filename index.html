@@ -378,8 +378,46 @@
     <button onclick="document.getElementById('lightbox').style.display='none'" style="position:absolute; top:15px; right:20px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;">&times;</button>
     </div>
 
-<!-- ================= INTÉGRATION COMMUNICANTE ALICE IA ================= -->
-<iframe src="alice.html" id="alice-iframe" title="Assistant Virtuel ALICE"></iframe>
+<!-- ================= CONSOLE ALICE INTERACTIVE ================= -->
+<button id="alice-fab" aria-label="Parler à ALICE">
+    <img src="images/alice-avatar.png" alt="ALICE" id="alice-fab-avatar">
+</button>
+
+<div id="alice-widget" class="alice-live-container idle">
+    <div class="alice-stage-header">
+        <div class="alice-stage-title">
+            <div class="alice-live-dot"></div>
+            ALICE LIVE
+        </div>
+        <button id="alice-close" class="alice-stage-close" aria-label="Fermer">✕</button>
+    </div>
+
+    <div class="alice-stage-main">
+        <div class="alice-bubble-wrap">
+            <div class="alice-comic-bubble" id="alice-bubble">
+                Bonjour 👋 Je suis ALICE, assistante JO BAND.
+            </div>
+        </div>
+        <div class="alice-avatar-stage">
+            <img src="images/alice-avatar.png" alt="ALICE" class="alice-avatar-img" id="alice-avatar-img">
+            <div class="alice-stage-floor"></div>
+        </div>
+    </div>
+
+    <div class="alice-stage-footer">
+        <div class="alice-input-box">
+            <input type="text" id="alice-input" placeholder="Posez votre question..." maxlength="500">
+            <button id="alice-send" aria-label="Envoyer">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+        <div class="alice-brand-footer">ALICE CORE BY DJ PADESCO</div>
+    </div>
+</div>
+
+<!-- On appelle les scripts d'Alice directement ici -->
+<script src="alice.js" defer></script>
+
 
 </body>
 </html>
