@@ -10,12 +10,10 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   try {
-    const folder = 'jo-band-site-web-2026';
-
     const [images, videos, raw] = await Promise.all([
-      cloudinary.api.resources({ resource_type: 'image', type: 'upload', prefix: folder, max_results: 100 }),
-      cloudinary.api.resources({ resource_type: 'video', type: 'upload', prefix: folder, max_results: 100 }),
-      cloudinary.api.resources({ resource_type: 'raw',   type: 'upload', prefix: folder, max_results: 100 })
+      cloudinary.api.resources({ resource_type: 'image', type: 'upload', max_results: 100 }),
+      cloudinary.api.resources({ resource_type: 'video', type: 'upload', max_results: 100 }),
+      cloudinary.api.resources({ resource_type: 'raw',   type: 'upload', max_results: 100 })
     ]);
 
     const fichiers = [
