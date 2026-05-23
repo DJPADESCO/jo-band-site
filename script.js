@@ -350,28 +350,21 @@ function renderGallery(filter = 'all') {
                 </div>`;
         }
 
-        // Photo — clic = lightbox
         return `
-            <div class="media-card" onclick="ouvrirLightbox('${item.image}')">
-                <img src="${item.image}" alt="${sanitize(item.titre)}"
-                     class="gallery-image" loading="lazy">
-                <div class="media-info">${badge}${title}</div>
-            </div>`;
-    }).join('');
-}
+    <div class="media-card">
+        <img src="${item.image}"
+             alt="${sanitize(item.titre)}"
+             class="gallery-image"
+             loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="img-fallback" style="display:none;">
+            <i class="fa-solid fa-image"></i>
+            <span>Image non disponible</span>
+        </div>
+        <div class="media-info">${badge}${title}</div>
+    </div>`;
 
-function ouvrirLightbox(src) {
-    const lb    = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lightbox-img');
-    if (!lb || !lbImg) return;
-    lbImg.src = src;
-    lb.classList.add('open');
-}
 
-function fermerLightbox() {
-    const lb = document.getElementById('lightbox');
-    if (lb) lb.classList.remove('open');
-}
 
 function initGalleryFilters() {
     document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
