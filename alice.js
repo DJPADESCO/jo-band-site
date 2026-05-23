@@ -96,16 +96,48 @@ var AliceBot = (function () {
                 }
             };
 
-            audio.play();
-        })
-        .catch(function(err) {
-            console.error('TTS Error:', err);
+            .then(function(blob) {
+    var url   = URL.createObjectURL(blob);
+    var audio = new Audio(url);
+
+    audio.onplay = function() {
+        if (widget) {
+            widget.classList.remove('idle', 'waiting');
+            widget.classList.add('speaking');
+        }
+    };
+    audio.onended = function() {
+        if (widget) {
+            widget.classList.remove('speaking', 'waiting');
+            widget.classList.add('idle');
+        }
+        URL.revokeObjectURL(url);
+    };
+    audio.onerror = function() {
+        if (widget) {
+            widget.classList.remove('speaking', 'waiting');
+            widget.classList.add('idle');
+        }
+    };
+
+    // Gère le blocage autoplay du navigateur
+    var playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(function(err) {
+            console.warn('Autoplay bloqué:', err);
+            // Fallback : TTS natif du navigateur
+            if ('speechSynthesis' in window) {
+                var utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'fr-FR';
+                window.speechSynthesis.speak(utterance);
+            }
             if (widget) {
                 widget.classList.remove('speaking', 'waiting');
                 widget.classList.add('idle');
             }
         });
     }
+})
 
     /* ── BULLE ── */
     function updateBubble(text) {
