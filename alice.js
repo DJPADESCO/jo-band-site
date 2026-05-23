@@ -20,16 +20,12 @@ var AliceBot = (function () {
         return `https://res.cloudinary.com/dsk6ndsb0/image/upload/f_auto,q_auto/${publicId}`;
     }
 
-        function loadImages() {
+    function loadImages() {
         var fabAvatar = byId('alice-fab-avatar');
         var stageAvatar = byId('alice-avatar-img');
 
-        // On utilise directement le dossier local pour éviter le bug d'affichage
+        // Utilisation directe du dossier local pour une stabilité parfaite
         var avatarUrl = 'images/alice-avatar.png'; 
-
-        if (fabAvatar) fabAvatar.src = avatarUrl;
-        if (stageAvatar) stageAvatar.src = avatarUrl;
-    }
 
         if (fabAvatar) fabAvatar.src = avatarUrl;
         if (stageAvatar) stageAvatar.src = avatarUrl;
@@ -68,7 +64,7 @@ var AliceBot = (function () {
         return null;
     }
 
-    // --- Gestion de la voix et animation de parole ---
+    // --- Gestion de la voix ---
     function speakText(text) {
         if (!('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel(); 
@@ -88,7 +84,6 @@ var AliceBot = (function () {
 
         var widget = byId('alice-widget');
 
-        // AJOUT DE LA CLASSE DE PAROLE (Déclenche l'animation CSS)
         utterance.onstart = function () {
             if (widget) {
                 widget.classList.remove('idle', 'waiting');
@@ -96,7 +91,6 @@ var AliceBot = (function () {
             }
         };
 
-        // RETRAIT DE LA CLASSE (L'animation s'arrête)
         utterance.onend = function () {
             if (widget) {
                 widget.classList.remove('speaking', 'waiting');
@@ -201,7 +195,7 @@ var AliceBot = (function () {
         window.speechSynthesis.onvoiceschanged = function () { voiceReady = true; };
     }
 
-        function init() {
+    function init() {
         loadImages(); 
         loadData();
         bindVoicesWhenReady();
@@ -212,11 +206,10 @@ var AliceBot = (function () {
         var input = byId('alice-input');
         var widget = byId('alice-widget');
 
-        // Action au clic sur le petit bouton flottant (Ouvrir)
+        // Action au clic sur le bouton flottant (Ouvrir)
         if (fab) {
             fab.addEventListener('click', function(e) {
                 if (widget) {
-                    // Force l'affichage flex en écrasant le CSS de base
                     widget.style.setProperty('display', 'flex', 'important'); 
                     fab.style.setProperty('display', 'none', 'important');   
                 }
@@ -227,7 +220,6 @@ var AliceBot = (function () {
         if (closeBtn) {
             closeBtn.addEventListener('click', function(e) {
                 if (widget) {
-                    // Force la fermeture en écrasant le CSS
                     widget.style.setProperty('display', 'none', 'important'); 
                     if (fab) fab.style.setProperty('display', 'flex', 'important'); 
                 }
@@ -245,7 +237,6 @@ var AliceBot = (function () {
             });
         }
     }
-
 
     return { init: init };
 })();
