@@ -1,5 +1,5 @@
 /* ==========================================
-   ALICE LIVE STAGE — CODES STYLE SPECIFIQUE
+   ALICE INTERACTIVE STYLE — CLEAN UI EDITION
 ========================================== */
 
 * {
@@ -8,6 +8,7 @@
     box-sizing: border-box;
 }
 
+/* Style de la page de test */
 body.alice-page {
     background: radial-gradient(circle at center, #0f1c3f 0%, #050c1e 100%);
     min-height: 100vh;
@@ -19,34 +20,32 @@ body.alice-page {
     overflow: hidden;
 }
 
-.alice-page-wrap {
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 /* ==========================================
-   BOUTON FLOTTANT (FAB) repositionné et cliquable
+   BOUTON FLOTTANT (FAB) — VERSION FIXE & PRO
 ========================================== */
 #alice-fab {
     position: fixed !important;
-    bottom: 90px !important; /* Augmenté pour remonter le robot au-dessus du menu */
+    bottom: 95px !important; /* Placé juste au-dessus du menu de navigation */
     right: 20px !important;
-    width: 70px !important;
-    height: 70px !important;
+    width: 60px !important;
+    height: 60px !important;
     border-radius: 50% !important;
     border: 2px solid #d4af37 !important;
     background: #0a192f !important;
     cursor: pointer !important;
-    z-index: 2147483647 !important; /* Priorité maximale absolue sur l'écran */
+    z-index: 99999 !important;
     padding: 0 !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.4) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.3) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    pointer-events: auto !important; /* Force la détection du doigt/clic */
+    pointer-events: auto !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+#alice-fab:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 20px rgba(212, 175, 55, 0.5) !important;
 }
 
 #alice-fab-avatar {
@@ -54,370 +53,191 @@ body.alice-page {
     height: 100% !important;
     border-radius: 50% !important;
     object-fit: cover !important;
-    pointer-events: none !important; /* Évite que l'image bloque le clic sur le bouton */
 }
-
-/* Position de la fenêtre de discussion pour correspondre */
-.alice-live-container {
-    position: fixed !important;
-    bottom: 90px !important;
-    right: 20px !important;
-    z-index: 2147483647 !important;
-    pointer-events: auto !important;
-}
-
-/* Texte d'étiquette au-dessus du robot */
-#alice-fab::before {
-    content: "ALICE ASSISTANT JO BAND" !important;
-    position: absolute !important;
-    top: -30px !important; /* Place le texte juste au-dessus du rond */
-    right: 0 !important;
-    white-space: nowrap !important;
-    background: rgba(10, 25, 47, 0.9) !important;
-    color: #d4af37 !important;
-    font-family: 'Outfit', sans-serif !important;
-    font-size: 0.75rem !important;
-    font-weight: bold !important;
-    padding: 4px 10px !important;
-    border-radius: 10px !important;
-    border: 1px solid rgba(212, 175, 55, 0.4) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
-    letter-spacing: 0.5px !important;
-}
-
-
 
 /* ==========================================
-   BOÎTIER PRINCIPAL DU WIDGET (MODIFIÉ)
+   WIDGET DE CHAT (FENÊTRE PRINCIPALE)
 ========================================== */
 .alice-live-container {
-    width: 100%;
-    max-width: 420px;
-    height: 600px;
-    background: rgba(10, 25, 47, 0.98);
-    border: 2px solid #d4af37;
-    border-radius: 24px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.25);
-    
-    /* GESTION DE L'AFFICHAGE PAR DÉFAUT */
-    display: none; /* Masqué au départ, géré par le JS */
-    flex-direction: column;
-    
-    overflow: hidden;
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    z-index: 10000;
-    backdrop-filter: blur(15px);
+    position: fixed !important;
+    bottom: 95px !important;
+    right: 20px !important;
+    width: 380px !important;
+    height: 580px !important;
+    background: rgba(10, 25, 47, 0.98) !important;
+    border: 2px solid #d4af37 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6) !important;
+    display: none; /* Géré par le clic HTML / JS */
+    flex-direction: column !important;
+    overflow: hidden !important;
+    z-index: 100000 !important;
+    backdrop-filter: blur(10px) !important;
 }
 
-/* En-tête de la Scène */
+/* En-tête */
 .alice-stage-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    background: rgba(17, 34, 64, 0.85);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 14px 20px !important;
+    background: #112240 !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
 }
 
 .alice-stage-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    color: #d4af37;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    letter-spacing: 1.2px;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: #d4af37 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    letter-spacing: 0.5px !important;
 }
 
-/* Point Indicateur d'état (Live) */
+/* Point Indicateur d'état (Discret et élégant) */
 .alice-live-dot {
-    width: 9px;
-    height: 9px;
-    background-color: #00ffcc;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #00ffcc;
+    width: 8px !important;
+    height: 8px !important;
+    background-color: #00ffcc !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 6px #00ffcc !important;
 }
 
+/* Animation de pulsation douce uniquement sur le voyant lors de l'attente */
 .alice-live-container.waiting .alice-live-dot {
-    background-color: #ffaa00;
-    box-shadow: 0 0 8px #ffaa00;
-    animation: aliceGlowPulse 0.8s infinite alternate;
+    background-color: #ffaa00 !important;
+    box-shadow: 0 0 6px #ffaa00 !important;
+    animation: simplePulse 1s infinite alternate !important;
 }
 
-.alice-live-container.speaking .alice-live-dot {
-    background-color: #ff0055;
-    box-shadow: 0 0 8px #ff0055;
-    animation: aliceGlowPulse 0.4s infinite alternate;
-}
-
-@keyframes aliceGlowPulse {
-    from { opacity: 0.3; }
+@keyframes simplePulse {
+    from { opacity: 0.4; }
     to { opacity: 1; }
 }
 
 .alice-stage-close {
-    background: transparent;
-    border: none;
-    color: #8892b0;
-    font-size: 1.8rem;
-    cursor: pointer;
-    transition: color 0.2s;
+    background: transparent !important;
+    border: none !important;
+    color: #8892b0 !important;
+    font-size: 1.4rem !important;
+    cursor: pointer !important;
+    transition: color 0.2s !important;
 }
 
 .alice-stage-close:hover {
-    color: #d4af37;
+    color: #ffffff !important;
 }
 
-/* Plateau du Stage Central */
+/* Zone Centrale (Bulle + Avatar fixe et propre) */
 .alice-stage-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 20px;
-    position: relative;
-    background: radial-gradient(circle at 50% 70%, rgba(212, 175, 55, 0.08) 0%, transparent 65%);
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 20px !important;
+    background: radial-gradient(circle at 50% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 70%) !important;
 }
 
-/* Bulle Style Bande Dessinée */
+/* Bulle de texte moderne */
 .alice-bubble-wrap {
-    width: 100%;
-    z-index: 5;
+    width: 100% !important;
 }
 
 .alice-comic-bubble {
-    position: relative;
-    background: #112240;
-    border: 2px solid #d4af37;
-    border-radius: 20px;
-    padding: 14px 18px;
-    color: #ccd6f6;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-    max-height: 140px;
-    overflow-y: auto;
+    background: #112240 !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    border-radius: 16px !important;
+    padding: 14px 16px !important;
+    color: #ccd6f6 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+    max-height: 150px !important;
+    overflow-y: auto !important;
 }
 
-.alice-comic-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 12px 12px 0;
-    border-style: solid;
-    border-color: #112240 transparent;
-}
-
-.alice-comic-bubble::before {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 13px 13px 0;
-    border-style: solid;
-    border-color: #d4af37 transparent;
-    z-index: -1;
-}
-
-/* Zone d'ancrage de l'avatar */
+/* Avatar statique élégant */
 .alice-avatar-stage {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 10px;
+    flex: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 15px 0 !important;
 }
 
 .alice-avatar-img {
-    width: 185px;
-    height: auto;
-    object-fit: contain;
-    z-index: 2;
-    transform-origin: bottom center;
+    width: 150px !important;
+    height: 150px !important;
+    object-fit: cover !important;
+    border-radius: 50% !important; /* Transformé en cercle moderne et propre */
+    border: 2px solid #d4af37 !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
 }
 
-/* Ombre/Effet de sol */
+/* Suppression de l'effet de sol inutile */
 .alice-stage-floor {
-    width: 130px;
-    height: 10px;
-    background: rgba(212, 175, 55, 0.2);
-    border-radius: 50%;
-    filter: blur(4px);
-    margin-top: -4px;
-    z-index: 1;
-    box-shadow: 0 0 10px #d4af37;
+    display: none !important;
 }
 
-/* ==========================================
-   CONTRÔLE DES GESTES ET ANIMATIONS HUMAINES
-========================================== */
-.alice-live-container.idle .alice-avatar-img {
-    animation: humanIdle 3.2s ease-in-out infinite;
-}
-
-.alice-live-container.waiting .alice-avatar-img {
-    animation: humanWaiting 1.6s ease-in-out infinite;
-    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
-}
-
-.alice-live-container.speaking .alice-avatar-img {
-    animation: humanTalking 0.4s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 12px rgba(0, 255, 204, 0.45));
-}
-
-@keyframes humanIdle {
-    0%, 100% { transform: scale(1) translateY(0); }
-    50% { transform: scale(1.02) translateY(-4px); }
-}
-
-@keyframes humanWaiting {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-5px) rotate(-1.5deg); }
-    75% { transform: translateY(-3px) rotate(1.5deg); }
-}
-
-@keyframes humanTalking {
-    0% { transform: scale(1) translateY(0) rotate(0deg); }
-    100% { transform: scale(1.05) translateY(-8px) rotate(1deg); }
-}
-
-/* Barre de Saisie Inférieure */
+/* Zone de saisie inférieure */
 .alice-stage-footer {
-    padding: 15px 20px 12px;
-    background: rgba(17, 34, 64, 0.95);
-    border-top: 1px solid rgba(212, 175, 55, 0.15);
+    padding: 15px 20px !important;
+    background: #112240 !important;
+    border-top: 1px solid rgba(212, 175, 55, 0.15) !important;
 }
 
 .alice-input-box {
-    display: flex;
-    align-items: center;
-    background: #0a192f;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: 30px;
-    padding: 4px 6px 4px 16px;
-}
-
-.alice-input-box:focus-within {
-    border-color: #d4af37;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    display: flex !important;
+    align-items: center !important;
+    background: #0a192f !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    border-radius: 24px !important;
+    padding: 4px 6px 4px 14px !important;
 }
 
 .alice-input-box input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #fff;
-    font-size: 0.95rem;
-    padding: 8px 0;
-}
-
-.alice-input-box input::placeholder {
-    color: #4c5773;
+    flex: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: #fff !important;
+    font-size: 0.9rem !important;
+    padding: 6px 0 !important;
 }
 
 #alice-send {
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #d4af37, #b89225);
-    color: #0a192f;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.1s;
-}
-
-#alice-send:active {
-    transform: scale(0.92);
+    width: 34px !important;
+    height: 34px !important;
+    border: none !important;
+    border-radius: 50% !important;
+    background: #d4af37 !important;
+    color: #0a192f !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .alice-brand-footer {
-    text-align: center;
-    font-size: 0.65rem;
-    color: rgba(136, 146, 176, 0.4);
-    margin-top: 8px;
-    letter-spacing: 0.5px;
+    text-align: center !important;
+    font-size: 0.65rem !important;
+    color: #4c5773 !important;
+    margin-top: 8px !important;
+    letter-spacing: 0.5px !important;
 }
 
-/* RESPONSIVE IPAD & MOBILE */
+/* RESPONSIVE SMARTPHONES EXCLUSIF */
 @media (max-width: 480px) {
     .alice-live-container {
-        width: calc(100% - 30px);
-        height: calc(100vh - 80px);
-        bottom: 15px;
-        right: 15px;
+        width: calc(100% - 30px) !important;
+        height: 70vh !important; /* Évite de prendre tout l'écran, s'intègre harmonieusement */
+        bottom: 85px !important;
+        right: 15px !important;
     }
-}
-
-/* FORCE L'AFFICHAGE DU WIDGET QUAND LE JS L'OUVRE */
-.alice-live-container {
-    pointer-events: auto !important;
-    z-index: 999999 !important;
-}
-
-/* REND LE BOUTON CLICQUABLE SANS INTERFÉRENCE */
-#alice-fab {
-    pointer-events: auto !important;
-    z-index: 999998 !important;
-}
-
-/* ========================================================
-   CORRECTION DE L'ANIMATION ET EFFET PAUPIÈRES CHIRURGICAL
-   ======================================================== */
-
-/* 1. On adoucit l'animation de parole pour que l'image ne saute plus de haut en bas */
-.alice-live-container.speaking .alice-avatar-img {
-    animation: humanTalkingSmooth 0.3s ease-in-out infinite alternate !important;
-}
-
-@keyframes humanTalkingSmooth {
-    0% { transform: scale(1) rotate(0deg); }
-    100% { transform: scale(1.03) rotate(0.5deg); } /* Léger gonflement respiratoire au lieu d'un saut */
-}
-
-/* 2. Création des paupières artificielles sur l'avatar du chat */
-.alice-avatar-stage {
-    position: relative !important;
-}
-
-.alice-avatar-stage::before,
-.alice-avatar-stage::after {
-    content: "" !important;
-    position: absolute !important;
-    background: #19355a !important; /* Couleur sombre ajustée pour simuler la fermeture de l'œil */
-    width: 22px; /* Taille ajustée à la pupille du robot */
-    height: 0px; /* Masqué par défaut */
-    top: 52%; /* Position verticale estimée sur les yeux du robot */
-    border-radius: 50% !important;
-    z-index: 3 !important;
-    transition: height 0.1s ease;
-    animation: autoBlinkEffect 3.8s infinite ease-in-out;
-}
-
-/* Positionnement horizontal de l'œil gauche et droit par-dessus l'image */
-.alice-avatar-stage::before {
-    left: calc(50% - 36px); /* Aligné sur l'œil gauche */
-}
-
-.alice-avatar-stage::after {
-    right: calc(50% - 36px); /* Aligné sur l'œil droit */
-}
-
-/* Animation automatique du clignement (s'exécute en continu toutes les 3.8s) */
-@keyframes autoBlinkEffect {
-    0%, 95%, 100% { 
-        height: 0px; 
-    }
-    97% { 
-        height: 22px; /* La paupière descend et recouvre l'œil bleu */
+    #alice-fab {
+        bottom: 85px !important;
+        right: 15px !important;
     }
 }
