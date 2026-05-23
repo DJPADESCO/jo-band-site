@@ -263,22 +263,15 @@ function loadGallery() {
         return;
     }
 
-    container.innerHTML = `
-        <p class="gallery-msg">
-            ${dict['gallery-loading'] || 'Chargement...'}
-        </p>
-    `;
+    container.innerHTML = `<p class="gallery-msg">${dict['gallery-loading'] || 'Chargement...'}</p>`;
 
     fetch('/api/videos')
         .then(response => response.json())
         .then(result => {
-            if (!result.success || !result.data) {
-                throw new Error('Erreur Cloudinary');
-            }
+            if (!result.success || !result.data) throw new Error('Erreur Cloudinary');
 
             allMediaItems = result.data.map(file => {
                 let type = 'photo';
-
                 if (file.resource_type === 'video' || file.format === 'mp4') {
                     type = 'video';
                 } else if (file.format === 'pdf' || file.resource_type === 'raw') {
@@ -290,12 +283,12 @@ function loadGallery() {
                     file.public_id.split('/').pop().replace(/[-_]/g, ' ').toUpperCase();
 
                 return {
-                    id: file.public_id,
+                    id:    file.public_id,
                     titre: titrePropre,
-                    type: type,
-                    lien: file.secure_url,
+                    type:  type,
+                    lien:  file.secure_url,
                     image: file.secure_url,
-                    date: file.created_at || ''
+                    date:  file.created_at || ''
                 };
             });
 
@@ -304,11 +297,7 @@ function loadGallery() {
         })
         .catch(error => {
             console.error('Cloudinary Error:', error);
-            container.innerHTML = `
-                <p class="gallery-msg error">
-                    Impossible de charger la galerie.
-                </p>
-            `;
+            container.innerHTML = `<p class="gallery-msg error">Impossible de charger la galerie.</p>`;
         });
 }
 
@@ -351,20 +340,21 @@ function renderGallery(filter = 'all') {
         }
 
         return `
-    <div class="media-card">
-        <img src="${item.image}"
-             alt="${sanitize(item.titre)}"
-             class="gallery-image"
-             loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-        <div class="img-fallback" style="display:none;">
-            <i class="fa-solid fa-image"></i>
-            <span>Image non disponible</span>
-        </div>
-        <div class="media-info">${badge}${title}</div>
-    </div>`;
+            <div class="media-card">
+                <img src="${item.image}"
+                     alt="${sanitize(item.titre)}"
+                     class="gallery-image"
+                     loading="lazy"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                <div class="img-fallback" style="display:none;">
+                    <i class="fa-solid fa-image"></i>
+                    <span>Image non disponible</span>
+                </div>
+                <div class="media-info">${badge}${title}</div>
+            </div>`;
 
-
+    }).join('');
+}
 
 function initGalleryFilters() {
     document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
