@@ -9,23 +9,27 @@ cloudinary.config({
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  // ← DEBUG : voir si les variables sont chargées
-  const debug = {
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME ? '✅ OK' : '❌ MANQUANT',
-    api_key:    process.env.CLOUDINARY_API_KEY    ? '✅ OK' : '❌ MANQUANT',
-    api_secret: process.env.CLOUDINARY_API_SECRET ? '✅ OK' : '❌ MANQUANT',
-  };
-
   try {
-    const folder = 'jo-band-site-web-2026';
+    // Test SANS prefix pour voir tous les fichiers
     const images = await cloudinary.api.resources({
-      resource_type: 'image', type: 'upload',
-      prefix: folder, max_results: 10
+      resource_type: 'image',
+      type: 'upload',
+      max_results: 10
     });
 
-    res.status(200).json({ success: true, debug, total: images.resources.length });
+    res.status(200).json({
+      success: true,
+      total: images.resources.length,
+      // Montre les vrais noms des dossiers
+      fichiers: images.resources.map(f => f.public_id)
+    });
 
   } catch (err) {
-    res.status(500).json({ success: false, debug, error: err.message });
+    res.status(500).json({
+      success: false,
+      error: String(err),
+      message: err.message || 'pas de message',
+      http_code: err.http_code || 'inconnu'
+    });
   }
 };
