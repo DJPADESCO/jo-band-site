@@ -13,21 +13,20 @@ var AliceBot = (function () {
     function byId(id) { return document.getElementById(id); }
     function safeText(value) { return String(value == null ? '' : value); }
 
-    // --- NOUVEAUTÉ : Connexion Cloudinary ---
+    // --- Connexion Cloudinary ---
     function getCloudinaryUrl(publicId) {
         if (!publicId) return '';
         if (publicId.startsWith('http')) return publicId;
-        // Remplace par ton identifiant Cloudinary si nécessaire, ici dsk6ndsb0
         return `https://res.cloudinary.com/dsk6ndsb0/image/upload/f_auto,q_auto/${publicId}`;
     }
 
     function loadImages() {
         var fabAvatar = byId('alice-fab-avatar');
         var stageAvatar = byId('alice-avatar-img');
-        
-        // Assure-toi que "alice-avatar.png" est bien le nom de l'image sur ton Cloudinary
+
+        // Récupération de l'image sur votre compte Cloudinary
         var avatarUrl = getCloudinaryUrl('alice-avatar.png'); 
-        
+
         if (fabAvatar) fabAvatar.src = avatarUrl;
         if (stageAvatar) stageAvatar.src = avatarUrl;
     }
@@ -65,6 +64,7 @@ var AliceBot = (function () {
         return null;
     }
 
+    // --- Gestion de la voix et animation de parole ---
     function speakText(text) {
         if (!('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel(); 
@@ -84,6 +84,7 @@ var AliceBot = (function () {
 
         var widget = byId('alice-widget');
 
+        // AJOUT DE LA CLASSE DE PAROLE (Déclenche l'animation CSS)
         utterance.onstart = function () {
             if (widget) {
                 widget.classList.remove('idle', 'waiting');
@@ -91,6 +92,7 @@ var AliceBot = (function () {
             }
         };
 
+        // RETRAIT DE LA CLASSE (L'animation s'arrête)
         utterance.onend = function () {
             if (widget) {
                 widget.classList.remove('speaking', 'waiting');
@@ -140,7 +142,6 @@ var AliceBot = (function () {
                 isTyping = false;
                 if (widget) {
                     widget.classList.remove('waiting');
-                    widget.classList.add('idle');
                 }
                 updateBubble(localAnswer);
                 speakText(localAnswer);
@@ -168,7 +169,6 @@ var AliceBot = (function () {
 
             if (widget) {
                 widget.classList.remove('waiting');
-                widget.classList.add('idle');
             }
             updateBubble(reply);
             speakText(reply);
@@ -177,7 +177,6 @@ var AliceBot = (function () {
             console.error(err);
             if (widget) {
                 widget.classList.remove('waiting');
-                widget.classList.add('idle');
             }
             var fallback = 'ALICE est indisponible pour le moment.';
             updateBubble(fallback);
@@ -198,7 +197,8 @@ var AliceBot = (function () {
         window.speechSynthesis.onvoiceschanged = function () { voiceReady = true; };
     }
 
-        function init() {
+    function init() {
+        loadImages(); // Chargement des images Cloudinary corrigé !
         loadData();
         bindVoicesWhenReady();
 
@@ -208,54 +208,22 @@ var AliceBot = (function () {
         var input = byId('alice-input');
         var widget = byId('alice-widget');
 
-        // Action au clic sur le petit bouton flottant
+        // Action au clic sur le bouton flottant (Ouvrir)
         if (fab) {
             fab.addEventListener('click', function() {
                 if (widget) {
-                    widget.style.display = 'flex'; // Ouvre la fenêtre d'ALICE
-                    fab.style.display = 'none';   // Cache le petit bouton flottant
+                    widget.style.display = 'flex'; 
+                    fab.style.display = 'none';   
                 }
             });
         }
 
-        // Action au clic sur la croix de fermeture
+        // Action au clic sur la croix (Fermer)
         if (closeBtn) {
             closeBtn.addEventListener('click', function() {
                 if (widget) {
-                    widget.style.display = 'none'; // Cache la fenêtre d'ALICE
-                    if (fab) fab.style.display = 'block'; // Réaffiche le bouton flottant
-                }
-            });
-        }
-
-        if (sendBtn) sendBtn.addEventListener('click', handleSend);
-
-        if (input) {
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSend();
-                }
-            });
-        }
-    }
-
-
-        // Ouverture et fermeture du widget
-        if (fab) {
-            fab.addEventListener('click', function() {
-                if (widget) {
-                    widget.style.display = 'flex';
-                    fab.style.display = 'none'; // Cache le bouton quand c'est ouvert
-                }
-            });
-        }
-
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
-                if (widget) {
-                    widget.style.display = 'none';
-                    if (fab) fab.style.display = 'block'; // Réaffiche le bouton
+                    widget.style.display = 'none'; 
+                    if (fab) fab.style.display = 'block'; 
                 }
             });
         }
