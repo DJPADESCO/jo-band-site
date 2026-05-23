@@ -258,11 +258,8 @@ function applyLanguage(lang) {
     setDailyQuote(lang);
 }
 
-/* ==========================================================================
-   6. INTERACTION GOOGLE SHEETS & GALERIE
-   ========================================================================== */
 // ==========================
-// CLOUDINARY GALLERY ONLY
+// 6. CLOUDINARY GALLERY ONLY
 // ==========================
 
 let allMediaItems = [];
@@ -282,13 +279,11 @@ function loadGallery() {
     fetch('/api/videos')
         .then(response => response.json())
         .then(result => {
-
             if (!result.success || !result.data) {
                 throw new Error('Erreur Cloudinary');
             }
 
             allMediaItems = result.data.map(file => {
-
                 let type = 'photo';
 
                 if (
@@ -296,28 +291,21 @@ function loadGallery() {
                     file.format === 'mp4'
                 ) {
                     type = 'video';
-                }
-                else if (file.format === 'pdf') {
+                } else if (file.format === 'pdf' || file.resource_type === 'raw') {
                     type = 'document';
                 }
 
+                const titrePropre =
+                    file.display_name ||
+                    file.public_id.split('/').pop().replace(/[-_]/g, ' ').toUpperCase();
+
                 return {
                     id: file.public_id,
-                    titre:
-                        file.display_name ||
-                        file.public_id ||
-                        'JO BAND',
-
+                    titre: titrePropre,
                     type: type,
-
-                    lien:
-                        file.secure_url,
-
-                    image:
-                        file.secure_url,
-
-                    date:
-                        file.created_at || ''
+                    lien: file.secure_url,
+                    image: file.secure_url,
+                    date: file.created_at || ''
                 };
             });
 
@@ -327,7 +315,7 @@ function loadGallery() {
             console.error('Cloudinary Error:', error);
 
             container.innerHTML = `
-                <p class="gallery-msg">
+                <p class="gallery-msg error">
                     Impossible de charger la galerie.
                 </p>
             `;
@@ -335,18 +323,13 @@ function loadGallery() {
 }
 
 function renderGallery(filter = 'all') {
-
-    const container =
-        document.getElementById('galerie-container');
-
+    const container = document.getElementById('galerie-container');
     if (!container) return;
 
     let items = allMediaItems;
 
     if (filter !== 'all') {
-        items = allMediaItems.filter(
-            item => item.type === filter
-        );
+        items = allMediaItems.filter(item => item.type === filter);
     }
 
     if (!items.length) {
@@ -359,12 +342,8 @@ function renderGallery(filter = 'all') {
     }
 
     container.innerHTML = items.map(item => {
-
-        const title = `
-            <h3 class="media-title">
-                ${item.titre}
-            </h3>
-        `;
+        const badge = `<span class="media-badge badge-${item.type}">${item.type}</span>`;
+        const title = `<h3 class="media-title">${sanitize(item.titre) || 'JO BAND'}</h3>`;
 
         if (item.type === 'video') {
             return `
@@ -374,29 +353,26 @@ function renderGallery(filter = 'all') {
                         preload="metadata"
                         class="gallery-video"
                     >
-                        <source
-                            src="${item.lien}"
-                            type="video/mp4"
-                        >
+                        <source src="${item.lien}" type="video/mp4">
                     </video>
-
-                    ${title}
+                    <div class="media-info">${badge}${title}</div>
                 </div>
             `;
         }
 
         if (item.type === 'document') {
             return `
-                <div class="media-card">
+                <div class="media-card document-card">
                     <a
                         href="${item.lien}"
                         target="_blank"
-                        class="document-card"
+                        rel="noopener noreferrer"
+                        class="doc-link"
                     >
-                        📄 Voir document
+                        <i class="fa-solid fa-file-pdf"></i>
+                        ${title}
+                        <span>Ouvrir</span>
                     </a>
-
-                    ${title}
                 </div>
             `;
         }
@@ -405,35 +381,27 @@ function renderGallery(filter = 'all') {
             <div class="media-card">
                 <img
                     src="${item.image}"
-                    alt="${item.titre}"
+                    alt="${sanitize(item.titre)}"
                     class="gallery-image"
                     loading="lazy"
                 >
-
-                ${title}
+                <div class="media-info">${badge}${title}</div>
             </div>
         `;
     }).join('');
 }
 
-document.addEventListener(
-    'DOMContentLoaded',
-    loadGallery
-);
-         
- // Sinon, on garde l'ancien système d'Iframe pour les anciens liens YouTube/Drive restants
-            return `
-                <div class="media-card">
-                    <div class="media-ratio">
-                        <iframe src="${getDriveEmbedLink(item.lien)}" allowfullscreen frameborder="0" style="width:100%;height:220px;border:0;"></iframe>
-                    </div>
-                    <div class="media-info">${badge}${title}</div>
-                </div>
-            `;
-         }
-const titrePropre =
-    fichier.display_name ||
-    fichier.public_id.split('/').pop().replace(/[-_]/g, ' ').toUpperCase();
+function initGalleryFilters() {
+    document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderGallery(btn.getAttribute('data-filter'));
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', loadGallery);
 
 /* ==========================================================================
    7. GESTION DU COLLECTIF & MODALES
