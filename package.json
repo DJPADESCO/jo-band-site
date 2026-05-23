@@ -2,6 +2,7 @@
   "name": "jo-band-site",
   "version": "1.0.0",
   "dependencies": {
-    "cloudinary": "^2.0.0"
+    "cloudinary": "^2.0.0",
+    "msedge-tts": "^1.3.4"
   }
 }
