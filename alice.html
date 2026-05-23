@@ -5,18 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALICE | JO BAND</title>
     <meta name="theme-color" content="#0a192f">
+    <!-- Polices et Icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="alice.css">
 </head>
 <body class="alice-page">
 
     <main class="alice-page-wrap">
-        <button id="alice-fab" aria-label="Parler à ALICE" style="position: fixed; bottom: 20px; right: 20px; border-radius: 50%; border: 2px solid #d4af37; background: #0a192f; cursor: pointer; z-index: 1000; padding: 5px;">
-            <img src="" alt="ALICE" id="alice-fab-avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+        
+        <!-- ================= BOUTON FLOTTANT (FAB) ================= -->
+        <button id="alice-fab" aria-label="Parler à ALICE">
+            <img src="images/alice-avatar.png" alt="ALICE" id="alice-fab-avatar">
         </button>
 
-        <div id="alice-widget" class="alice-live-container idle" style="display: none;">
-            
+        <!-- ================= FENÊTRE DU WIDGET (LIVE STAGE) ================= -->
+        <!-- Note : La classe 'idle' ou un style CSS gérera la visibilité via alice.js -->
+        <div id="alice-widget" class="alice-live-container idle">
+
+            <!-- En-tête de la fenêtre -->
             <div class="alice-stage-header">
                 <div class="alice-stage-title">
                     <div class="alice-live-dot"></div>
@@ -27,6 +33,7 @@
                 </button>
             </div>
 
+            <!-- Zone centrale : Bulle et Avatar -->
             <div class="alice-stage-main">
                 <div class="alice-bubble-wrap">
                     <div class="alice-comic-bubble" id="alice-bubble">
@@ -34,12 +41,14 @@
                     </div>
                 </div>
 
+                <!-- Avatar animé local -->
                 <div class="alice-avatar-stage">
-                    <img src="" alt="ALICE" class="alice-avatar-img" id="alice-avatar-img">
+                    <img src="images/alice-avatar.png" alt="ALICE" class="alice-avatar-img" id="alice-avatar-img">
                     <div class="alice-stage-floor"></div>
                 </div>
             </div>
 
+            <!-- Pied de page : Zone de saisie -->
             <div class="alice-stage-footer">
                 <div class="alice-input-box">
                     <input type="text" id="alice-input" placeholder="Posez votre question..." maxlength="500">
@@ -53,53 +62,8 @@
         </div>
     </main>
 
+    <!-- Un seul appel de script à la fin du body pour de meilleures performances -->
     <script src="alice.js"></script>
-<!-- ================= CONSOLE ALICE INTERACTIVE ================= -->
-<!-- Bouton flottant (FAB) -->
-<button id="alice-fab" aria-label="Parler à ALICE">
-    <img src="images/alice-avatar.png" alt="ALICE" id="alice-fab-avatar">
-</button>
-
-<!-- Fenêtre du Widget "Live Stage" -->
-<div id="alice-widget" class="alice-live-container idle">
-    <!-- En-tête -->
-    <div class="alice-stage-header">
-        <div class="alice-stage-title">
-            <div class="alice-live-dot"></div>
-            ALICE LIVE
-        </div>
-        <button id="alice-close" class="alice-stage-close" aria-label="Fermer">✕</button>
-    </div>
-
-    <!-- Scène centrale -->
-    <div class="alice-stage-main">
-        <div class="alice-bubble-wrap">
-            <div class="alice-comic-bubble" id="alice-bubble">
-                Bonjour 👋 Je suis ALICE, assistante JO BAND.
-            </div>
-        </div>
-
-        <!-- Avatar animé local -->
-        <div class="alice-avatar-stage">
-            <img src="images/alice-avatar.png" alt="ALICE" class="alice-avatar-img" id="alice-avatar-img">
-            <div class="alice-stage-floor"></div>
-        </div>
-    </div>
-
-    <!-- Saisie Message -->
-    <div class="alice-stage-footer">
-        <div class="alice-input-box">
-            <input type="text" id="alice-input" placeholder="Posez votre question..." maxlength="500">
-            <button id="alice-send" aria-label="Envoyer">
-                <i class="fa-solid fa-paper-plane"></i>
-            </button>
-        </div>
-        <div class="alice-brand-footer">ALICE CORE BY DJ PADESCO</div>
-    </div>
-</div>
-
-<!-- Ton script -->
-<script src="alice.js"></script>
 
 </body>
 </html>
