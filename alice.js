@@ -72,35 +72,20 @@ var AliceBot = (function () {
 
     /* ── VOIX EDGE TTS UNIQUEMENT ── */
     function speakText(text) {
-    var cleanText = safeText(text)
-        .replace(/\*/g, '')
-        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}]/gu, '')
-        .trim();
+        var cleanText = safeText(text)
+            .replace(/\*/g, '')
+            .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}]/gu, '');
 
-    // Découpe en phrases courtes pour aller plus vite
-    var phrases = cleanText.match(/[^.!?]+[.!?]*/g) || [cleanText];
-    var widget  = byId('alice-widget');
-    var index   = 0;
-
-    function jouerPhrase() {
-        if (index >= phrases.length) {
-            setIdle(widget);
-            return;
-        }
-
-        var phrase = phrases[index].trim();
-        index++;
-
-        if (!phrase) { jouerPhrase(); return; }
+        var widget = byId('alice-widget');
 
         fetch('/api/tts', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ texte: phrase, langue: 'fr' })
+            body:    JSON.stringify({ texte: cleanText, langue: 'fr' })
         })
-        .then(function(r) {
-            if (!r.ok) throw new Error('TTS error');
-            return r.blob();
+        .then(function(response) {
+            if (!response.ok) throw new Error('TTS error');
+            return response.blob();
         })
         .then(function(blob) {
             var url   = URL.createObjectURL(blob);
@@ -108,28 +93,28 @@ var AliceBot = (function () {
 
             audio.onplay  = function() { setSpeaking(widget); };
             audio.onended = function() {
+                setIdle(widget);
                 URL.revokeObjectURL(url);
-                jouerPhrase(); // phrase suivante
             };
             audio.onerror = function() {
+                setIdle(widget);
                 URL.revokeObjectURL(url);
-                jouerPhrase();
             };
 
             var p = audio.play();
             if (p !== undefined) {
-                p.catch(function() {
+                p.catch(function(err) {
+                    console.warn('Audio bloqué:', err);
                     setIdle(widget);
+                    URL.revokeObjectURL(url);
                 });
             }
         })
-        .catch(function() {
+        .catch(function(err) {
+            console.error('TTS Error:', err);
             setIdle(widget);
         });
     }
-
-    jouerPhrase();
-}
 
     /* ── BULLE ── */
     function updateBubble(text) {
