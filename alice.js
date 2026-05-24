@@ -25,7 +25,7 @@ var AliceBot = (function () {
     function loadData() {
         return fetch('/alice-data.json', { cache: 'no-store' })
             .then(function(r) {
-                if (!r.ok) throw new Error('Impossible de charger alice-data.json');
+                if (!r.ok) throw new Error('Erreur chargement FAQ');
                 return r.json();
             })
             .then(function(d) { joData = d || null; })
@@ -40,7 +40,6 @@ var AliceBot = (function () {
     function checkLocalAnswer(message) {
         var faqList = getFaqList();
         if (!faqList.length) return null;
-
         var msg = safeText(message).toLowerCase().trim();
         for (var i = 0; i < faqList.length; i++) {
             var faq       = faqList[i] || {};
@@ -55,7 +54,7 @@ var AliceBot = (function () {
         return null;
     }
 
-    /* ── ÉTATS ANIMATION ── */
+    /* ── ÉTATS ── */
     function setIdle(widget) {
         if (widget) {
             widget.classList.remove('speaking', 'waiting');
@@ -70,7 +69,7 @@ var AliceBot = (function () {
         }
     }
 
-    /* ── VOIX EDGE TTS ── */
+    /* ── VOIX EDGE TTS PAR PHRASES ── */
     function speakText(text) {
         var cleanText = safeText(text)
             .replace(/\*/g, '')
@@ -117,7 +116,7 @@ var AliceBot = (function () {
         var bubble = byId('alice-bubble');
         if (bubble) {
             bubble.innerHTML = text;
-            bubble.scrollTop = 0;
+            bubble.scrollTop = bubble.scrollHeight;
         }
     }
 
@@ -161,7 +160,7 @@ var AliceBot = (function () {
             return r.json();
         })
         .then(function(data) {
-            var reply = data.reply || "Je n'ai pas reçu de réponse stable.";
+            var reply = data.reply || "Je n'ai pas reçu de réponse.";
             conversationHistory.push({ role: 'user',      content: text  });
             conversationHistory.push({ role: 'assistant', content: reply });
             if (conversationHistory.length > 10) {
@@ -182,10 +181,56 @@ var AliceBot = (function () {
         .finally(function() { isTyping = false; });
     }
 
+    /* ── MICRO (VOIX VERS TEXTE) ── */
+    function initMic() {
+        var micBtn = byId('alice-mic');
+        if (!micBtn) return;
+
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            micBtn.style.display = 'none';
+            return;
+        }
+
+        var recognition        = new SpeechRecognition();
+        recognition.lang       = 'fr-FR';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onresult = function(e) {
+            var transcript = e.results[0][0].transcript;
+            var inp        = byId('alice-input');
+            if (inp) {
+                inp.value = transcript;
+                micBtn.classList.remove('recording');
+                setTimeout(function() { handleSend(); }, 300);
+            }
+        };
+
+        recognition.onerror = function() {
+            micBtn.classList.remove('recording');
+        };
+
+        recognition.onend = function() {
+            micBtn.classList.remove('recording');
+        };
+
+        micBtn.addEventListener('click', function() {
+            if (micBtn.classList.contains('recording')) {
+                recognition.stop();
+                micBtn.classList.remove('recording');
+            } else {
+                recognition.start();
+                micBtn.classList.add('recording');
+            }
+        });
+    }
+
     /* ── INITIALISATION ── */
     function init() {
         loadImages();
         loadData();
+        initMic();
 
         var fab      = byId('alice-fab');
         var closeBtn = byId('alice-close');
