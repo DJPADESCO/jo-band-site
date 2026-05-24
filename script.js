@@ -613,6 +613,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.nav-item');
     const tabs = document.querySelectorAll('.tab-content');
 
+/* ── COMPTEUR ÉVÉNEMENT ── */
+function initEventCountdown() {
+    const cardEvent  = document.getElementById('event-countdown-card');
+    const cardNoEvent = document.getElementById('no-event-card');
+    if (!cardEvent || !cardNoEvent) return;
+
+    fetch('/alice-data.json', { cache: 'no-store' })
+        .then(r => r.json())
+        .then(data => {
+            const ev = data.prochain_event;
+
+            // Pas d'événement ou inactif
+            if (!ev || !ev.actif) {
+                cardNoEvent.style.display = 'flex';
+                return;
+            }
+
+            const dateEvent = new Date(ev.date).getTime();
+            const maintenant = Date.now();
+
+            // Événement passé
+            if (maintenant > dateEvent) {
+                cardNoEvent.style.display = 'flex';
+                document.querySelector('#no-event-card h3').textContent =
+                    'Événement terminé !';
+                document.querySelector('#no-event-card p').textContent =
+                    'Merci à tous ! Le prochain show arrive bientôt.';
+                return;
+            }
+
+            // Événement actif → affiche le compteur
+            cardEvent.style.display  = 'flex';
+            document.getElementById('event-title').textContent = ev.titre || 'Prochain Show';
+            document.getElementById('event-lieu').textContent  = ev.lieu  || '';
+
+            function majCompteur() {
+                const diff = new Date(ev.date).getTime() - Date.now();
+                if (diff <= 0) {
+                    clearInterval(timer);
+                    cardEvent.style.display   = 'none';
+                    cardNoEvent.style.display = 'flex';
+                    return;
+                }
+
+                const j  = Math.floor(diff / 86400000);
+                const h  = Math.floor((diff % 86400000) / 3600000);
+                const m  = Math.floor((diff % 3600000)  / 60000);
+                const s  = Math.floor((diff % 60000)    / 1000);
+
+                document.getElementById('cnt-jours').textContent    = String(j).padStart(2,'0');
+                document.getElementById('cnt-heures').textContent   = String(h).padStart(2,'0');
+                document.getElementById('cnt-minutes').textContent  = String(m).padStart(2,'0');
+                document.getElementById('cnt-secondes').textContent = String(s).padStart(2,'0');
+            }
+
+            majCompteur();
+            const timer = setInterval(majCompteur, 1000);
+        })
+        .catch(() => {
+            cardNoEvent.style.display = 'flex';
+        });
+}
+
     // Navigation par onglets
     navItems.forEach(item => {
         item.addEventListener('click', () => {
