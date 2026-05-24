@@ -41,6 +41,13 @@ body.alice-page {
     box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 20px rgba(212,175,55,0.5) !important;
 }
 
+#alice-fab-avatar {
+    width:         100% !important;
+    height:        100% !important;
+    border-radius: 50% !important;
+    object-fit:    cover !important;
+}
+
 /* ── WIDGET PRINCIPAL ── */
 .alice-live-container {
     position:        fixed !important;
