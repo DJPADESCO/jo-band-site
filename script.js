@@ -608,6 +608,7 @@ function initPWA() {
    10. INITIALISATION DOM (DÉMARRAGE PRINCIPAL)
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
+initEventCountdown();
     hideSplash();
 
     const navItems = document.querySelectorAll('.nav-item');
