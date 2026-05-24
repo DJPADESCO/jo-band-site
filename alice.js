@@ -12,40 +12,6 @@ var AliceBot = (function () {
     function byId(id)      { return document.getElementById(id); }
     function safeText(val) { return String(val == null ? '' : val); }
 
-// Stockage des IPs en mémoire
-const ipRequests = new Map();
-const LIMITE     = 20;   // max 20 messages
-const FENETRE    = 60000; // par minute
-
-function isRateLimited(ip) {
-    const now  = Date.now();
-    const data = ipRequests.get(ip) || { count: 0, start: now };
-
-    // Réinitialise si la fenêtre est passée
-    if (now - data.start > FENETRE) {
-        ipRequests.set(ip, { count: 1, start: now });
-        return false;
-    }
-
-    if (data.count >= LIMITE) return true;
-
-    data.count++;
-    ipRequests.set(ip, data);
-    return false;
-}
-
-module.exports = async function handler(req, res) {
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
-
-    if (isRateLimited(ip)) {
-        return res.status(429).json({
-            reply: "Trop de messages envoyés. Merci de patienter une minute."
-        });
-    }
-
-    // ... reste de ton code alice.js
-};
-
     /* ── IMAGES ── */
     function loadImages() {
         var avatarUrl   = 'images/alice-avatar.png';
@@ -104,50 +70,46 @@ module.exports = async function handler(req, res) {
         }
     }
 
-    /* ── VOIX EDGE TTS UNIQUEMENT ── */
+    /* ── VOIX EDGE TTS ── */
     function speakText(text) {
         var cleanText = safeText(text)
             .replace(/\*/g, '')
             .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}]/gu, '');
 
-        var widget = byId('alice-widget');
+        var widget  = byId('alice-widget');
+        var phrases = cleanText.match(/[^.!?]+[.!?]*/g) || [cleanText];
+        var index   = 0;
 
-        fetch('/api/tts', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ texte: cleanText, langue: 'fr' })
-        })
-        .then(function(response) {
-            if (!response.ok) throw new Error('TTS error');
-            return response.blob();
-        })
-        .then(function(blob) {
-            var url   = URL.createObjectURL(blob);
-            var audio = new Audio(url);
+        function jouerPhrase() {
+            if (index >= phrases.length) { setIdle(widget); return; }
+            var phrase = phrases[index].trim();
+            index++;
+            if (!phrase) { jouerPhrase(); return; }
 
-            audio.onplay  = function() { setSpeaking(widget); };
-            audio.onended = function() {
-                setIdle(widget);
-                URL.revokeObjectURL(url);
-            };
-            audio.onerror = function() {
-                setIdle(widget);
-                URL.revokeObjectURL(url);
-            };
+            fetch('/api/tts', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ texte: phrase, langue: 'fr' })
+            })
+            .then(function(r) {
+                if (!r.ok) throw new Error('TTS error');
+                return r.blob();
+            })
+            .then(function(blob) {
+                var url   = URL.createObjectURL(blob);
+                var audio = new Audio(url);
+                audio.onplay  = function() { setSpeaking(widget); };
+                audio.onended = function() { URL.revokeObjectURL(url); jouerPhrase(); };
+                audio.onerror = function() { URL.revokeObjectURL(url); jouerPhrase(); };
+                var p = audio.play();
+                if (p !== undefined) {
+                    p.catch(function() { setIdle(widget); });
+                }
+            })
+            .catch(function() { setIdle(widget); });
+        }
 
-            var p = audio.play();
-            if (p !== undefined) {
-                p.catch(function(err) {
-                    console.warn('Audio bloqué:', err);
-                    setIdle(widget);
-                    URL.revokeObjectURL(url);
-                });
-            }
-        })
-        .catch(function(err) {
-            console.error('TTS Error:', err);
-            setIdle(widget);
-        });
+        jouerPhrase();
     }
 
     /* ── BULLE ── */
