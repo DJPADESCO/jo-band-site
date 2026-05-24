@@ -14,12 +14,10 @@ var AliceBot = (function () {
 
     /* ── IMAGES ── */
     function loadImages() {
-        var avatarUrl   = 'images/alice-avatar.png';
-        var fabAvatar   = byId('alice-fab-avatar');
-        var stageAvatar = byId('alice-avatar-img');
-        if (fabAvatar)   fabAvatar.src   = avatarUrl;
-        if (stageAvatar) stageAvatar.src = avatarUrl;
-    }
+    var fabAvatar = byId('alice-fab-avatar');
+    if (fabAvatar) fabAvatar.src = 'images/alice-avatar.png';
+    // Avatar du widget supprimé
+}
 
     /* ── DONNÉES FAQ ── */
     function loadData() {
