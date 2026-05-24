@@ -12,6 +12,40 @@ var AliceBot = (function () {
     function byId(id)      { return document.getElementById(id); }
     function safeText(val) { return String(val == null ? '' : val); }
 
+// Stockage des IPs en mémoire
+const ipRequests = new Map();
+const LIMITE     = 20;   // max 20 messages
+const FENETRE    = 60000; // par minute
+
+function isRateLimited(ip) {
+    const now  = Date.now();
+    const data = ipRequests.get(ip) || { count: 0, start: now };
+
+    // Réinitialise si la fenêtre est passée
+    if (now - data.start > FENETRE) {
+        ipRequests.set(ip, { count: 1, start: now });
+        return false;
+    }
+
+    if (data.count >= LIMITE) return true;
+
+    data.count++;
+    ipRequests.set(ip, data);
+    return false;
+}
+
+module.exports = async function handler(req, res) {
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+
+    if (isRateLimited(ip)) {
+        return res.status(429).json({
+            reply: "Trop de messages envoyés. Merci de patienter une minute."
+        });
+    }
+
+    // ... reste de ton code alice.js
+};
+
     /* ── IMAGES ── */
     function loadImages() {
         var avatarUrl   = 'images/alice-avatar.png';
