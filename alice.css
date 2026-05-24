@@ -140,23 +140,7 @@ body.alice-page {
     background: radial-gradient(circle at 50% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 70%) !important;
 }
 
-/* Bulle de texte moderne */
-.alice-bubble-wrap {
-    width: 100% !important;
-}
 
-.alice-comic-bubble {
-    background: #112240 !important;
-    border: 1px solid rgba(212, 175, 55, 0.3) !important;
-    border-radius: 16px !important;
-    padding: 14px 16px !important;
-    color: #ccd6f6 !important;
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
-    max-height: 150px !important;
-    overflow-y: auto !important;
-}
 
 /* Avatar statique élégant */
 .alice-avatar-stage {
@@ -167,6 +151,35 @@ body.alice-page {
     margin: 15px 0 !important;
 }
 
+/* Zone de réponse plus grande et fixe */
+#alice-bubble {
+    min-height:  120px;
+    max-height:  220px;
+    overflow-y:  auto;
+    padding:     16px;
+    font-size:   0.95rem;
+    line-height: 1.6;
+    background:  rgba(255,255,255,0.05);
+    border-radius: 12px;
+    margin:      12px;
+}
+
+/* Widget fixe — ne bouge pas quand la réponse arrive */
+#alice-widget {
+    display:        flex;
+    flex-direction: column;
+    height:         520px !important;
+    max-height:     90vh  !important;
+    overflow:       hidden;
+}
+
+/* Avatar centré avec taille fixe */
+#alice-avatar-img {
+    width:      140px;
+    height:     140px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
 .alice-avatar-img {
     width: 150px !important;
     height: 150px !important;
