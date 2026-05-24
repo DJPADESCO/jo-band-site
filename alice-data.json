@@ -1,4 +1,15 @@
 {
+
+{
+  "prochain_event": {
+    "actif": true,
+    "titre": "Grand Show JO BAND - Lomé",
+    "date": "2026-06-15T20:00:00",
+    "lieu": "Salle de fête, Lomé"
+  },
+  "faq": []
+}
+
     "identity": {
         "name": "JO BAND",
         "slogan": "Partout où ça bouge, Jo Band est là.",
