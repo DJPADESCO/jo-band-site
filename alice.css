@@ -140,17 +140,6 @@ body.alice-page {
     background: radial-gradient(circle at 50% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 70%) !important;
 }
 
-
-
-/* Avatar statique élégant */
-.alice-avatar-stage {
-    flex: 1 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    margin: 15px 0 !important;
-}
-
 /* Zone de réponse plus grande et fixe */
 #alice-bubble {
     min-height:  120px;
