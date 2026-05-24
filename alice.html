@@ -13,50 +13,50 @@
     <main class="alice-page-wrap">
 
         <!-- BOUTON FLOTTANT -->
-        <button id="alice-fab" aria-label="Parler à ALICE">
-            <img src="images/alice-avatar.png" alt="ALICE" id="alice-fab-avatar">
-        </button>
+<button id="alice-fab" aria-label="Parler à ALICE">
+    <img src="images/alice-avatar.png" alt="ALICE" id="alice-fab-avatar">
+</button>
 
-        <!-- WIDGET PRINCIPAL -->
-        <div id="alice-widget" class="alice-live-container idle">
+<!-- WIDGET PRINCIPAL -->
+<div id="alice-widget" class="alice-live-container idle">
 
-            <!-- EN-TÊTE -->
-            <div class="alice-stage-header">
-                <div class="alice-stage-title">
-                    <div class="alice-live-dot"></div>
-                    ALICE LIVE
-                </div>
-                <button id="alice-close" class="alice-stage-close" aria-label="Fermer">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <!-- ZONE CENTRALE -->
-            <div class="alice-stage-main">
-                <div id="alice-bubble">
-                    Bonjour 👋 Je suis ALICE, l'assistante officielle de JO BAND. Comment puis-je vous aider ?
-                </div>
-            </div>
-
-            <!-- ZONE DE SAISIE -->
-            <div class="alice-stage-footer">
-                <div class="alice-input-box">
-                    <input type="text" id="alice-input"
-                           placeholder="Écrivez ou parlez..."
-                           maxlength="500"
-                           autocomplete="off">
-                    <button id="alice-mic" title="Parler" aria-label="Reconnaissance vocale">
-                        <i class="fa-solid fa-microphone"></i>
-                    </button>
-                    <button id="alice-send" aria-label="Envoyer">
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </div>
-                <div class="alice-brand-footer">ALICE CORE BY DJ PADESCO</div>
-            </div>
-
+    <!-- EN-TÊTE -->
+    <div class="alice-stage-header">
+        <div class="alice-stage-title">
+            <div class="alice-live-dot"></div>
+            ALICE LIVE
         </div>
-    </main>
+        <button id="alice-close" class="alice-stage-close" aria-label="Fermer">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <!-- BULLE DE RÉPONSE -->
+    <div class="alice-stage-main">
+        <div id="alice-bubble">
+            Bonjour 👋 Je suis ALICE, l'assistante officielle de JO BAND. Comment puis-je vous aider ?
+        </div>
+    </div>
+
+    <!-- ZONE DE SAISIE -->
+    <div class="alice-stage-footer">
+        <div class="alice-input-box">
+            <input type="text" id="alice-input"
+                   placeholder="Écrivez ou parlez..."
+                   maxlength="500"
+                   autocomplete="off">
+            <button id="alice-mic" title="Parler" aria-label="Reconnaissance vocale">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+            <button id="alice-send" aria-label="Envoyer">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+        <div class="alice-brand-footer">ALICE CORE BY DJ PADESCO</div>
+    </div>
+
+</div>
+</main>
 
     <script src="alice.js"></script>
 </body>
