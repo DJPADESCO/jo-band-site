@@ -492,3 +492,34 @@ select option { background: var(--navy-blue); }
         height: 100vh;
     }
 }
+
+/* ── COMPTEUR ÉVÉNEMENT ── */
+.countdown-grid {
+    display:               grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:                   8px;
+    margin:                8px 0;
+}
+
+.countdown-box {
+    background:    var(--navy-blue);
+    border:        1px solid rgba(212,175,55,0.3);
+    border-radius: 10px;
+    padding:       10px 4px;
+    text-align:    center;
+}
+
+.countdown-box span {
+    display:     block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size:   1.8rem;
+    color:       var(--gold);
+    line-height: 1;
+}
+
+.countdown-box small {
+    font-size:      0.6rem;
+    color:          #8892b0;
+    text-transform: uppercase;
+    font-weight:    bold;
+}
