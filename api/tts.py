@@ -6,8 +6,32 @@ import json
 
 class handler(BaseHTTPRequestHandler):
 
+# Dictionnaire simple en mémoire
+from collections import defaultdict
+import time
+
+ip_requests = defaultdict(list)
+LIMITE = 30  # max 30 appels TTS
+FENETRE = 60  # par minute
+
+def is_rate_limited(ip):
+    now = time.time()
+    # Garde seulement les requêtes dans la fenêtre
+    ip_requests[ip] = [t for t in ip_requests[ip] if now - t < FENETRE]
+    if len(ip_requests[ip]) >= LIMITE:
+        return True
+    ip_requests[ip].append(now)
+    return False
+
     def do_POST(self):
-        length = int(self.headers.get('Content-Length', 0))
+        length =
+ip = self.headers.get('X-Forwarded-For', self.client_address[0])
+if is_rate_limited(ip):
+    self.send_response(429)
+    self.send_header('Content-Type', 'application/json')
+    self.end_headers()
+    self.wfile.write(b'{"error": "Trop de requetes"}')
+    return int(self.headers.get('Content-Length', 0))
         body   = json.loads(self.rfile.read(length)) if length else {}
 
         texte  = body.get('texte', 'Bonjour')
