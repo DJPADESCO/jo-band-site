@@ -188,16 +188,6 @@ body.alice-page {
     border-top: 1px solid rgba(212, 175, 55, 0.15) !important;
 }
 
-/* Zone de saisie toujours visible */
-.alice-input-row,
-#alice-input,
-#alice-send {
-    display:    flex !important;
-    opacity:    1   !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-}
-
 .alice-input-box {
     display: flex !important;
     align-items: center !important;
@@ -299,4 +289,14 @@ body.alice-page {
     display:    flex !important;
     visibility: visible !important;
     opacity:    1 !important;
+}
+
+/* Zone de saisie toujours visible */
+.alice-input-row,
+#alice-input,
+#alice-send {
+    display:        flex    !important;
+    opacity:        1       !important;
+    visibility:     visible !important;
+    pointer-events: auto    !important;
 }
