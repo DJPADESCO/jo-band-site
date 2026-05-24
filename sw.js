@@ -1,6 +1,7 @@
-const CACHE_NAME = 'joband-cache-v2'; // Changez le numéro de version à chaque mise à jour
+const APP_VERSION = '2026.05.24.1'; // Modifiez cette date à chaque mise à jour de votre site
+const CACHE_NAME = `joband-cache-v-${APP_VERSION}`; // Crée le nom du cache automatiquement
 
-// On ne met en cache que les fichiers strictement vitaux au démarrage
+// Fichiers vitaux mis en cache au démarrage
 const ASSETS = [
   '/',
   '/index.html',
@@ -10,6 +11,7 @@ const ASSETS = [
   '/images/logo.jpg'
 ];
 
+// Installation du Service Worker
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -18,13 +20,14 @@ self.addEventListener('install', e => {
   );
 });
 
+// Nettoyage des anciens caches
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
         keys.map(key => {
           if (key !== CACHE_NAME) {
-            return caches.delete(key); // Supprime l'ancien cache bloquant
+            return caches.delete(key); // Supprime l'ancien cache devenu inutile
           }
         })
       );
@@ -32,18 +35,18 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Stratégie Réseau en premier pour éviter le blocage de mise à jour
+// Stratégie : Réseau en premier, Cache en secours
 self.addEventListener('fetch', e => {
   e.respondWith(
     fetch(e.request).then(response => {
-      // Si le réseau fonctionne, on met à jour le cache
+      // Si le réseau fonctionne, on met à jour le cache (uniquement pour les requêtes GET)
       if(e.request.method === 'GET') {
         const resClone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(e.request, resClone));
       }
       return response;
     }).catch(() => {
-      // Si pas d'internet (mode hors-ligne), on utilise le cache
+      // Si pas d'internet, on utilise le cache
       return caches.match(e.request);
     })
   );
