@@ -267,4 +267,35 @@ var AliceBot = (function () {
 
 document.addEventListener('DOMContentLoaded', function() {
     AliceBot.init();
+initAnnonce();
+
 });
+
+function initAnnonce() {
+    fetch('/alice-data.json', { cache: 'no-store' })
+        .then(r => r.json())
+        .then(data => {
+            const annonce = data.annonce;
+            if (!annonce || !annonce.actif) return;
+
+            const banner = document.getElementById('annonce-banner');
+            const msg    = document.getElementById('annonce-message');
+            const lien   = document.getElementById('annonce-lien');
+            const close  = document.getElementById('annonce-close');
+            if (!banner || !msg) return;
+
+            msg.textContent    = annonce.message || '';
+            lien.href          = annonce.lien    || '#';
+            lien.textContent   = annonce.lien_texte || 'Voir';
+            lien.style.display = annonce.lien ? 'inline-block' : 'none';
+
+            if (annonce.couleur === 'rouge') banner.classList.add('rouge');
+            if (annonce.couleur === 'vert')  banner.classList.add('vert');
+
+            banner.style.display = 'flex';
+            close.addEventListener('click', () => {
+                banner.style.display = 'none';
+            });
+        })
+        .catch(() => {});
+}
