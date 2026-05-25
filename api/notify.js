@@ -5,6 +5,8 @@ const { getFirestore } = require('firebase-admin/firestore');
 function getApp() {
   if (getApps().length) return getApps()[0];
   return initializeApp({
+console.log("DEBUG - Project ID:", process.env.FIREBASE_PROJECT_ID);
+
     credential: cert({
       projectId:   process.env.FIREBASE_PROJECT_ID_ONE   || process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL_ONE || process.env.FIREBASE_CLIENT_EMAIL,
