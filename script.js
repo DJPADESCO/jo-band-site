@@ -781,4 +781,48 @@ document.addEventListener('click', e => {
     initShare();
     initTTS();
     initPWA();
+/* ── NOTIFICATIONS PUSH ── */
+function initNotifications() {
+    const VAPID_KEY = 'BEmflxm0W984vE7ZPJ9ADXn2ZfJhUyFVn1pY7lq9d02L1rpgjofPZrcBdaV-s6gARn1_MdnpTM1ZJCrZKWE3p1E';
+
+    firebase.initializeApp({
+        apiKey:            'AIzaSyDol8OdWq6YoBY5XMyuPYue25mQnOoIOYE',
+        authDomain:        'jo-band-notifications-aea69.firebaseapp.com',
+        projectId:         'jo-band-notifications-aea69',
+        storageBucket:     'jo-band-notifications-aea69.firebasestorage.app',
+        messagingSenderId: '942336247693',
+        appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
+    });
+
+    const messaging = firebase.messaging();
+
+    // Demander permission automatiquement
+    Notification.requestPermission().then(permission => {
+        if (permission !== 'granted') return;
+
+        messaging.getToken({ vapidKey: VAPID_KEY })
+            .then(token => {
+                if (!token) return;
+                // Envoyer le token au serveur
+                fetch('/api/subscribe', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ token })
+                });
+            })
+            .catch(err => console.error('Token error:', err));
+    });
+
+    // Message en avant-plan
+    messaging.onMessage(payload => {
+        const { title, body } = payload.notification;
+        if (Notification.permission === 'granted') {
+            new Notification(title, {
+                body,
+                icon: '/images/logo.jpg'
+            });
+        }
+    });
+}
+
 });
