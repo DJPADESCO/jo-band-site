@@ -614,6 +614,7 @@ initEventCountdown();
     const navItems = document.querySelectorAll('.nav-item');
     const tabs = document.querySelectorAll('.tab-content');
 initNotifications();
+initAnnonce();
 
 /* ── COMPTEUR ÉVÉNEMENT ── */
 function initEventCountdown() {
