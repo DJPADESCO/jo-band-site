@@ -5,6 +5,13 @@
     "date": "2026-06-15T20:00:00",
     "lieu": "Salle de fête, Lomé"
   },
+"annonce": {
+  "actif": true,
+  "message": "🎭 Nouveau show le 15 juin à Lomé ! Réservez votre place maintenant.",
+  "lien": "https://wa.me/22870002539",
+  "lien_texte": "Réserver",
+  "couleur": "gold"
+}
   "identity": {
     "name": "JO BAND",
     "slogan": "Partout où ça bouge, Jo Band est là.",
