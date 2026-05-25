@@ -1,19 +1,15 @@
-const { initializeApp, cert } = require('firebase-admin/app');
-const { getMessaging } = require('firebase-admin/messaging');
+const { initializeApp, cert, getApps } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 
-let app;
 function getApp() {
-  if (!app) {
-    app = initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_PROJECT_ID_ONE,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
-      })
-    });
-  }
-  return app;
+  if (getApps().length) return getApps()[0];
+  return initializeApp({
+    credential: cert({
+      projectId:   process.env.FIREBASE_PROJECT_ID_ONE   || process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL_ONE || process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey:  (process.env.FIREBASE_PRIVATE_KEY_ONE || process.env.FIREBASE_PRIVATE_KEY)?.replace(/\\n/g, '\n')
+    })
+  });
 }
 
 module.exports = async function handler(req, res) {
@@ -22,7 +18,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).end();
+  if (req.method !== 'POST')   return res.status(405).end();
 
   const { token } = req.body;
   if (!token) return res.status(400).json({ error: 'Token manquant' });
