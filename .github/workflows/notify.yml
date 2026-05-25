@@ -2,53 +2,94 @@ name: Notify JO BAND
 
 on:
   issues:
-    types: [opened]
+    types: [opened, closed]
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Envoyer notification
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Mettre à jour annonce
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_LABELS: ${{ toJson(github.event.issue.labels) }}
-          NOTIFY_SECRET: ${{ secrets.NOTIFY_SECRET }}
-          SITE_URL: https://jo-band-site.vercel.app
+          ACTION: ${{ github.event.action }}
         run: |
-          # Détecter le label
+          python3 << 'EOF'
+          import json, os
+
+          with open('alice-data.json', 'r', encoding='utf-8') as f:
+              data = json.load(f)
+
+          action = os.environ.get('ACTION', '')
+          labels = json.loads(os.environ.get('ISSUE_LABELS', '[]'))
+          label_names = [l['name'] for l in labels]
+          title = os.environ.get('ISSUE_TITLE', '')
+          body  = os.environ.get('ISSUE_BODY', '')
+
+          if action == 'closed':
+              data['annonce'] = { 'actif': False }
+          else:
+              if 'show' in label_names:
+                  couleur = 'gold'
+                  lien_texte = 'Réserver'
+                  lien = 'https://wa.me/22870002539'
+              elif 'video' in label_names:
+                  couleur = 'rouge'
+                  lien_texte = 'Regarder'
+                  lien = 'https://youtube.com/@jobandofficiel'
+              elif 'photo' in label_names:
+                  couleur = 'bleu'
+                  lien_texte = 'Voir'
+                  lien = 'https://jo-band-site.vercel.app'
+              else:
+                  couleur = 'vert'
+                  lien_texte = 'Voir'
+                  lien = body.strip() if body.strip().startswith('http') else 'https://jo-band-site.vercel.app'
+
+              data['annonce'] = {
+                  'actif': True,
+                  'message': title,
+                  'lien': lien,
+                  'lien_texte': lien_texte,
+                  'couleur': couleur
+              }
+
+          with open('alice-data.json', 'w', encoding='utf-8') as f:
+              json.dump(data, f, ensure_ascii=False, indent=2)
+          EOF
+
+      - name: Commit annonce
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add alice-data.json
+          git diff --staged --quiet || git commit -m "Annonce mise à jour automatiquement"
+          git push
+
+      - name: Envoyer notification push
+        if: github.event.action == 'opened'
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_LABELS: ${{ toJson(github.event.issue.labels) }}
+          NOTIFY_SECRET: ${{ secrets.NOTIFY_SECRET }}
+        run: |
           LABEL=$(echo $ISSUE_LABELS | python3 -c "
-          import json, sys
-          labels = json.load(sys.stdin)
-          names = [l['name'] for l in labels]
-          if 'show' in names: print('show')
-          elif 'video' in names: print('video')
-          elif 'photo' in names: print('photo')
-          elif 'annonce' in names: print('annonce')
-          else: print('annonce')
+          import json,sys
+          labels=json.load(sys.stdin)
+          names=[l['name'] for l in labels]
+          print('show' if 'show' in names else 'video' if 'video' in names else 'photo' if 'photo' in names else 'annonce')
           ")
+          if [ "$LABEL" = "show" ]; then EMOJI="🎭 Nouveau Show"
+          elif [ "$LABEL" = "video" ]; then EMOJI="🎥 Nouvelle Vidéo"
+          elif [ "$LABEL" = "photo" ]; then EMOJI="📸 Nouvelles Photos"
+          else EMOJI="📢 Annonce"; fi
 
-          # Choisir emoji et message
-          if [ "$LABEL" = "show" ]; then
-            EMOJI="🎭"
-            TYPE="Nouveau Show JO BAND"
-          elif [ "$LABEL" = "video" ]; then
-            EMOJI="🎥"
-            TYPE="Nouvelle Vidéo JO BAND"
-          elif [ "$LABEL" = "photo" ]; then
-            EMOJI="📸"
-            TYPE="Nouvelles Photos JO BAND"
-          else
-            EMOJI="📢"
-            TYPE="Annonce JO BAND"
-          fi
-
-          # Envoyer notification push
-          curl -X POST "$SITE_URL/api/notify" \
+          curl -X POST "https://jo-band-site.vercel.app/api/notify" \
             -H "Content-Type: application/json" \
             -H "x-notify-secret: $NOTIFY_SECRET" \
-            -d "{
-              \"titre\": \"$EMOJI $TYPE\",
-              \"corps\": \"$ISSUE_TITLE\",
-              \"url\": \"$SITE_URL\"
-            }"
+            -d "{\"titre\":\"$EMOJI JO BAND\",\"corps\":\"$ISSUE_TITLE\",\"url\":\"https://jo-band-site.vercel.app\"}"
