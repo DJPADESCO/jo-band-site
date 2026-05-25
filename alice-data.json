@@ -6,7 +6,7 @@
     "lieu": "Salle de fête, Lomé"
   },
 "annonce": {
-  "actif": true,
+  "actif": false,
   "message": "🎭 Nouveau show le 15 juin à Lomé ! Réservez votre place maintenant.",
   "lien": "https://wa.me/22870002539",
   "lien_texte": "Réserver",
