@@ -1,0 +1,54 @@
+name: Notify JO BAND
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Envoyer notification
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_LABELS: ${{ toJson(github.event.issue.labels) }}
+          NOTIFY_SECRET: ${{ secrets.NOTIFY_SECRET }}
+          SITE_URL: https://jo-band-site.vercel.app
+        run: |
+          # Détecter le label
+          LABEL=$(echo $ISSUE_LABELS | python3 -c "
+          import json, sys
+          labels = json.load(sys.stdin)
+          names = [l['name'] for l in labels]
+          if 'show' in names: print('show')
+          elif 'video' in names: print('video')
+          elif 'photo' in names: print('photo')
+          elif 'annonce' in names: print('annonce')
+          else: print('annonce')
+          ")
+
+          # Choisir emoji et message
+          if [ "$LABEL" = "show" ]; then
+            EMOJI="🎭"
+            TYPE="Nouveau Show JO BAND"
+          elif [ "$LABEL" = "video" ]; then
+            EMOJI="🎥"
+            TYPE="Nouvelle Vidéo JO BAND"
+          elif [ "$LABEL" = "photo" ]; then
+            EMOJI="📸"
+            TYPE="Nouvelles Photos JO BAND"
+          else
+            EMOJI="📢"
+            TYPE="Annonce JO BAND"
+          fi
+
+          # Envoyer notification push
+          curl -X POST "$SITE_URL/api/notify" \
+            -H "Content-Type: application/json" \
+            -H "x-notify-secret: $NOTIFY_SECRET" \
+            -d "{
+              \"titre\": \"$EMOJI $TYPE\",
+              \"corps\": \"$ISSUE_TITLE\",
+              \"url\": \"$SITE_URL\"
+            }"
