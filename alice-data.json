@@ -9,11 +9,7 @@
   "__SECTION_FIN_PROCHAIN_EVENT": "----------------------------------------------------------------",
   "__SECTION_DEBUT_ANNONCE": "----------------- BLOC DE LA BANNIÈRE D'ANNONCE -----------------",
   "annonce": {
-    "actif": true,
-    "message": "Message Spécial de JO BAND : Bonne Fête !",
-    "lien": "https://jo-band-site.vercel.app",
-    "lien_texte": "Voir",
-    "couleur": "vert"
+    "actif": false
   },
   "__SECTION_FIN_ANNONCE": "----------------------------------------------------------------",
   "__SECTION_DEBUT_IDENTITY": "----------------- BLOC D'IDENTITÉ -----------------",
