@@ -1,9 +1,9 @@
 {
   "__SECTION_DEBUT_PROCHAIN_EVENT": "----------------- BLOC DU PROCHAIN ÉVÉNEMENT -----------------",
   "prochain_event": {
-    "actif": false,
-    "titre": "Grand Show JO BAND - Lomé",
-    "date": "2026-06-15T20:00:00",
+    "actif": true,
+    "titre": "Grande fete cher bar la vie du bon coter",
+    "date": "2026-06-15T17:30:00",
     "lieu": "Salle de fête, Lomé"
   },
   "__SECTION_FIN_PROCHAIN_EVENT": "----------------------------------------------------------------",
