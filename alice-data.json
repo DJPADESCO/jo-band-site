@@ -9,7 +9,7 @@
   "__SECTION_FIN_PROCHAIN_EVENT": "----------------------------------------------------------------",
   "__SECTION_DEBUT_ANNONCE": "----------------- BLOC DE LA BANNIÈRE D'ANNONCE -----------------",
   "annonce": {
-    "actif": false
+    "actif": true
   },
   "__SECTION_FIN_ANNONCE": "----------------------------------------------------------------",
   "__SECTION_DEBUT_IDENTITY": "----------------- BLOC D'IDENTITÉ -----------------",
