@@ -18,24 +18,6 @@ def is_rate_limited(ip):
     ip_requests[ip].append(now)
     return False
 
-# --- 1. NOUVELLE FONCTION AJOUTÉE ICI ---
-# Elle prépare le texte au format SSML pour éviter les pauses robotiques
-def preparer_ssml(texte, voice):
-    texte_propre = texte.replace('...', ', ')
-    
-    # Le format SSML indique à l'IA comment parler (rate='+5%' augmente un peu la vitesse)
-    ssml = f"""
-    <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='fr-FR'>
-        <voice name='{voice}'>
-            <prosody rate='+5%'>
-                {texte_propre}
-            </prosody>
-        </voice>
-    </speak>
-    """
-    return ssml
-# ----------------------------------------
-
 class handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
@@ -60,14 +42,7 @@ class handler(BaseHTTPRequestHandler):
         asyncio.set_event_loop(loop)
 
         try:
-            # --- 2. NOUVELLE MODIFICATION ICI ---
-            # On génère le texte avec les balises SSML
-            texte_ssml = preparer_ssml(texte, voice)
-            
-            # edge_tts détecte automatiquement que c'est du SSML grâce à la balise <speak>
-            communicate = edge_tts.Communicate(texte_ssml, voice)
-            # ------------------------------------
-
+            communicate = edge_tts.Communicate(texte, voice)
             audio_data  = loop.run_until_complete(self._get_audio(communicate))
 
             self.send_response(200)
