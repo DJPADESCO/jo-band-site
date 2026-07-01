@@ -1,7 +1,7 @@
 {
   "__SECTION_DEBUT_PROCHAIN_EVENT": "----------------- BLOC DU PROCHAIN ÉVÉNEMENT -----------------",
   "prochain_event": {
-    "actif": true,
+    "actif": false,
     "titre": "Grande fete chez bar la vie du bon cote",
     "date": "2026-08-15T17:30:00",
     "lieu": "Salle de fête, Lomé"
@@ -9,7 +9,7 @@
   "__SECTION_FIN_PROCHAIN_EVENT": "----------------------------------------------------------------",
   "__SECTION_DEBUT_ANNONCE": "----------------- BLOC DE LA BANNIÈRE D'ANNONCE -----------------",
   "annonce": {
-    "actif": true
+    "actif": false
   },
   "__SECTION_FIN_ANNONCE": "----------------------------------------------------------------",
   "__SECTION_DEBUT_IDENTITY": "----------------- BLOC D'IDENTITÉ -----------------",
