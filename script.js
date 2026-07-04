@@ -879,7 +879,7 @@ function initTikTokRedirect() {
     function openExternalAndroid() {
         const cleanUrl  = currentUrl.replace(/^https?:\/\//, '');
         const intentUrl = 'intent://' + cleanUrl +
-            '#Intent;scheme=https;package=com.android.chrome;end';
+            '#Intent;scheme=https;launchFlags=0x10000000;end';
         window.location.href = intentUrl;
     }
 
