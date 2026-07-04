@@ -622,3 +622,51 @@ select option { background: var(--navy-blue); }
 /* ======================================================== */
 /* FIN : STYLES POUR LA BANNIERE D'ANNONCE                  */
 /* ======================================================== */
+
+/* ======================================================== */
+/* DEBUT : BANNIERE OUVERTURE NAVIGATEUR EXTERNE (TIKTOK)   */
+/* ======================================================== */
+#tiktok-banner {
+    position:    fixed;
+    top:         0;
+    left:        0;
+    right:       0;
+    z-index:     99999;
+    background:  var(--navy, #0a1128);
+    color:       var(--gold, #d4af37);
+    padding:     10px 40px 10px 16px;
+    display:     flex;
+    align-items: center;
+    gap:         10px;
+    font-size:   0.85rem;
+    font-weight: bold;
+    flex-wrap:   wrap;
+    box-shadow:  0 2px 8px rgba(0,0,0,0.3);
+    border-bottom: 2px solid var(--gold, #d4af37);
+}
+#tiktok-banner-btn {
+    background:      var(--gold, #d4af37);
+    color:           var(--navy, #0a1128);
+    padding:         5px 14px;
+    border-radius:   6px;
+    border:          none;
+    font-size:       0.8rem;
+    font-weight:     bold;
+    white-space:     nowrap;
+    cursor:          pointer;
+}
+#tiktok-banner-close {
+    position:  absolute;
+    right:     10px;
+    top:       50%;
+    transform: translateY(-50%);
+    background: none;
+    border:    none;
+    font-size: 1.1rem;
+    cursor:    pointer;
+    color:     inherit;
+    opacity:   0.7;
+}
+/* ======================================================== */
+/* FIN : BANNIERE OUVERTURE NAVIGATEUR EXTERNE (TIKTOK)     */
+/* ======================================================== */
