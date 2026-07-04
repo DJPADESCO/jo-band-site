@@ -904,7 +904,7 @@ function initTikTokRedirect() {
     }
 
     if (isAndroid) {
-        setTimeout(openExternalAndroid, 800);
+        setTimeout(openExternalAndroid, 5500);
     }
 }
 
