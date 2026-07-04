@@ -859,4 +859,52 @@ function initAnnonce() {
         .catch(() => {});
 }
 
+/* ── OUVERTURE FORCEE DANS LE NAVIGATEUR EXTERNE (ANTI-TIKTOK) ── */
+function initTikTokRedirect() {
+    const ua = navigator.userAgent || navigator.vendor || '';
+
+    const isTikTok = /TikTok|BytedanceWebview|musical_ly/i.test(ua);
+    if (!isTikTok) return;
+
+    const isAndroid = /Android/i.test(ua);
+
+    const banner   = document.getElementById('tiktok-banner');
+    const btn      = document.getElementById('tiktok-banner-btn');
+    const close    = document.getElementById('tiktok-banner-close');
+    if (!banner || !btn) return;
+
+    const currentUrl = window.location.href;
+
+    function openExternalAndroid() {
+        const cleanUrl  = currentUrl.replace(/^https?:\/\//, '');
+        const intentUrl = 'intent://' + cleanUrl +
+            '#Intent;scheme=https;package=com.android.chrome;end';
+        window.location.href = intentUrl;
+    }
+
+    function openExternalGeneric() {
+        window.open(currentUrl, '_blank');
+    }
+
+    banner.style.display = 'flex';
+
+    btn.addEventListener('click', () => {
+        if (isAndroid) {
+            openExternalAndroid();
+        } else {
+            openExternalGeneric();
+        }
+    });
+
+    if (close) {
+        close.addEventListener('click', () => {
+            banner.style.display = 'none';
+        });
+    }
+
+    if (isAndroid) {
+        setTimeout(openExternalAndroid, 800);
+    }
+}
+
 });
