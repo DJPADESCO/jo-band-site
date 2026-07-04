@@ -615,6 +615,7 @@ initEventCountdown();
     const tabs = document.querySelectorAll('.tab-content');
 initNotifications();
 initAnnonce();
+initTikTokRedirect();
 
 /* ── COMPTEUR ÉVÉNEMENT ── */
 function initEventCountdown() {
