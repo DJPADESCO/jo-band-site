@@ -1,4 +1,4 @@
-const APP_VERSION = '2026.07.04.1'; // Modifiez cette date à chaque mise à jour de votre site
+const APP_VERSION = '2026.07.05.1'; // Modifiez cette date à chaque mise à jour de votre site
 const CACHE_NAME = `joband-cache-v-${APP_VERSION}`; // Crée le nom du cache automatiquement
 
 // Fichiers vitaux mis en cache au démarrage
