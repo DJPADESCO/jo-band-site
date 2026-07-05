@@ -375,7 +375,7 @@ function buildMembersGrid() {
 
     grid.innerHTML = members.map(m => `
         <div class="member-card" data-id="${m.id}" data-name="${m.name}" data-role="${m.role}">
-            <img src="images/${m.id}.jpg" alt="${m.name}" class="member-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <img src="images/${m.id}.jpg" alt="${m.name}" class="member-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
             <div class="member-fallback-bg" style="display:none;"><i class="fa-solid fa-user"></i></div>
             <h3>${m.name}</h3>
             <p>${m.role}</p>
