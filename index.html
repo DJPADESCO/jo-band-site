@@ -6,11 +6,29 @@
 (function(){
   var ua = navigator.userAgent || '';
   if (!/TikTok|BytedanceWebview|musical_ly/i.test(ua)) return;
+  var url = window.location.href;
   document.write(
     '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0a1128;color:#d4af37;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:sans-serif;">' +
     '<p style="font-size:1.4rem;font-weight:bold;line-height:1.6;">Pour profiter pleinement du site JO BAND,<br>appuyez sur les 3 points \u22EE en haut à droite,<br>puis « Ouvrir dans le navigateur ».</p>' +
+    '<p style="font-size:1rem;color:#8892b0;margin-top:8px;">Si ça ne fonctionne pas, copiez le lien et collez-le dans votre navigateur :</p>' +
+    '<button id="tiktok-copy-btn" style="margin-top:16px;background:#d4af37;color:#0a1128;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;font-weight:bold;cursor:pointer;">📋 Copier le lien</button>' +
+    '<p id="tiktok-copy-msg" style="margin-top:10px;font-size:0.9rem;color:#25D366;display:none;">✅ Lien copié !</p>' +
     '</div>'
   );
+  window.addEventListener('load', function(){
+    var btn = document.getElementById('tiktok-copy-btn');
+    var msg = document.getElementById('tiktok-copy-msg');
+    if (!btn) return;
+    btn.addEventListener('click', function(){
+      var temp = document.createElement('textarea');
+      temp.value = url;
+      document.body.appendChild(temp);
+      temp.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(temp);
+      if (msg) msg.style.display = 'block';
+    });
+  });
 })();
 </script>
     <meta charset="UTF-8">
