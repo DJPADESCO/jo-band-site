@@ -908,4 +908,44 @@ function initTikTokRedirect() {
     }
 }
 
+initYouTubeFeed();
 });
+
+/* ── FLUX YOUTUBE DYNAMIQUE (SHORTS + VIDEOS CLASSIQUES) ── */
+function initYouTubeFeed() {
+    const channelId = 'UCxj3ygXxMVzbKmq4ctSCN5Q';
+    const rssUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channelId;
+    const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
+
+    const container = document.getElementById('yt-video-container');
+    const iframe    = document.getElementById('yt-latest-iframe');
+    if (!container || !iframe) return;
+
+    fetch(apiUrl)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.items || !data.items.length) return;
+
+            const latestLink = data.items[0].link;
+            const isShort = latestLink.includes('/shorts/');
+
+            let videoId = '';
+            if (isShort) {
+                videoId = latestLink.split('/shorts/')[1].split('?')[0];
+            } else if (latestLink.includes('watch?v=')) {
+                videoId = latestLink.split('watch?v=')[1].split('&')[0];
+            }
+            if (!videoId) return;
+
+            iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=0&rel=0';
+
+            if (isShort) {
+                container.classList.add('portrait-short');
+            } else {
+                container.classList.remove('portrait-short');
+            }
+        })
+        .catch(() => {
+            // En cas d'échec, l'ancienne playlist reste affichée telle quelle (déjà dans le src par défaut)
+        });
+       }
