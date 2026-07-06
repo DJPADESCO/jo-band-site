@@ -3,6 +3,15 @@
 <head>
 
 <script>
+window.addEventListener('error', function(e) {
+  var box = document.createElement('div');
+  box.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:red;color:white;padding:10px;font-size:12px;z-index:999999999;max-height:40%;overflow:auto;';
+  box.innerText = 'ERREUR JS: ' + e.message + ' | Fichier: ' + e.filename + ' | Ligne: ' + e.lineno;
+  document.body.appendChild(box);
+});
+</script>
+
+<script>
 (function(){
   var ua = navigator.userAgent || '';
   if (!/TikTok|BytedanceWebview|musical_ly/i.test(ua)) return;
