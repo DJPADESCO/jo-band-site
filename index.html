@@ -396,6 +396,38 @@
         <section id="tab-contact" class="tab-content">
             <h2 class="title-gold" data-i18n="contact-title">Réserver le Show</h2>
             <p class="section-subtitle" data-i18n="contact-subtitle">Planifiez votre événement avec l'équipe du JO BAND</p>
+
+            <div class="testimonials-block">
+                <h3 class="section-title-accent"><i class="fa-solid fa-star text-gold"></i> <span data-i18n="testi-title">Ce que disent nos clients</span></h3>
+                <div id="testimonials-container" class="testimonials-container">
+                    <p class="testi-msg" data-i18n="testi-loading">Chargement des avis...</p>
+                </div>
+                <button type="button" id="btn-open-testi-form" class="btn-tiktok-profile"><i class="fa-solid fa-pen"></i> <span data-i18n="testi-btn-add">Laisser un avis</span></button>
+
+                <div id="testi-form-wrapper" class="testi-form-wrapper" style="display:none;">
+                    <div class="form-input-group">
+                        <label for="testi-name" data-i18n="testi-name-label">Votre nom</label>
+                        <input type="text" id="testi-name" placeholder="Ex: Ama K." maxlength="60">
+                    </div>
+                    <div class="form-input-group">
+                        <label for="testi-rating" data-i18n="testi-rating-label">Votre note</label>
+                        <select id="testi-rating">
+                            <option value="5">⭐⭐⭐⭐⭐</option>
+                            <option value="4">⭐⭐⭐⭐</option>
+                            <option value="3">⭐⭐⭐</option>
+                            <option value="2">⭐⭐</option>
+                            <option value="1">⭐</option>
+                        </select>
+                    </div>
+                    <div class="form-input-group">
+                        <label for="testi-message" data-i18n="testi-message-label">Votre témoignage</label>
+                        <textarea id="testi-message" rows="3" maxlength="500" placeholder="Partagez votre expérience avec JO BAND..."></textarea>
+                    </div>
+                    <button type="button" id="btn-submit-testi" class="submit-form-btn" data-i18n="testi-submit">Envoyer mon avis</button>
+                    <div id="testi-status-message" class="form-status-box"></div>
+                </div>
+            </div>
+
             <form id="formspree-contact" action="https://formspree.io/f/xbdwnyer" method="POST" class="booking-form">
                 <div class="form-input-group">
                     <label for="input-name" data-i18n="form-name">Votre Nom complet / Entreprise</label>
