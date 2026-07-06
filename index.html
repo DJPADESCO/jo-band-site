@@ -17,10 +17,10 @@ window.addEventListener('error', function(e) {
   if (!/TikTok|BytedanceWebview|musical_ly/i.test(ua)) return;
   var url = window.location.href;
   document.write(
-    '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0a1128;color:#d4af37;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:sans-serif;">' +
-    '<p style="font-size:1.4rem;font-weight:bold;line-height:1.6;">Pour profiter pleinement du site JO BAND,<br>appuyez sur les 3 points \u22EE en haut à droite,<br>puis « Ouvrir dans le navigateur ».</p>' +
+    '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0a1128;color:#d4af37;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;tex[...]
+    '<p style="font-size:1.4rem;font-weight:bold;line-height:1.6;">Pour profiter pleinement du site JO BAND,<br>appuyez sur les 3 points \u22EE en haut à droite,<br>puis « Ouvrir dans le navigateur [...]
     '<p style="font-size:1rem;color:#8892b0;margin-top:8px;">Si ça ne fonctionne pas, copiez le lien et collez-le dans votre navigateur :</p>' +
-    '<button id="tiktok-copy-btn" style="margin-top:16px;background:#d4af37;color:#0a1128;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;font-weight:bold;cursor:pointer;">📋 Copier le lien</button>' +
+    '<button id="tiktok-copy-btn" style="margin-top:16px;background:#d4af37;color:#0a1128;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;font-weight:bold;cursor:pointer;">📋 Copi[...]
     '<p id="tiktok-copy-msg" style="margin-top:10px;font-size:0.9rem;color:#25D366;display:none;">✅ Lien copié !</p>' +
     '</div>'
   );
@@ -191,7 +191,7 @@ window.addEventListener('error', function(e) {
         <section id="tab-accueil" class="tab-content active">
             <div class="hero-section">
                 <h2 class="hero-main-title">JO BAND</h2>
-                <p class="hero-desc" id="about-text" data-i18n="about-text">Le collectif artistique incontournable du Togo. Humour, prestations DJ, chants vibrants et productions vidéo de haute qualité : nous transformons chaque instant en un événement mémorable.</p>
+                <p class="hero-desc" id="about-text" data-i18n="about-text">Le collectif artistique incontournable du Togo. Humour, prestations DJ, chants vibrants et productions vidéo de haute quali[...]
                 <div class="audio-controls-row">
                     <button id="btn-play" class="audio-action-btn" aria-label="Lire"><i class="fa-solid fa-volume-high"></i></button>
                     <button id="btn-pause" class="audio-action-btn" aria-label="Pause"><i class="fa-solid fa-pause"></i></button>
@@ -277,7 +277,7 @@ window.addEventListener('error', function(e) {
                 <div class="promo-text-box">
                     <h3 data-i18n="wa-booking-title">Réservation Instantanée</h3>
                     <p data-i18n="wa-booking-desc">Discutez directement avec notre management sur WhatsApp.</p>
-                    <a href="https://wa.me/22870002539?text=Bonjour%20JO%20BAND%2C%20je%20viens%20de%20visiter%20votre%20application%20et%20je%20souhaite%20r%C3%A9server%20vos%20services%20pour%20un%20%C3%A9v%C3%A9nement.%20Pouvons-nous%20en%20discuter%20%3F" target="_blank" class="action-whatsapp-btn">
+                    <a href="https://wa.me/22870002539?text=Bonjour%20JO%20BAND%2C%20je%20viens%20de%20visiter%20votre%20application%20et%20je%20souhaite%20r%C3%A9server%20vos%20services%20pour%2[...]
                         <i class="fa-brands fa-whatsapp"></i> <span data-i18n="wa-btn">Je veux ce show</span>
                     </a>
                 </div>
@@ -304,11 +304,31 @@ window.addEventListener('error', function(e) {
                 </div>
             </div>
 
+            <!-- CAROUSEL TÉMOIGNAGES CLIENT (ACCUEIL) - PLAY STORE STYLE -->
+            <div class="section-block border-top-gold">
+                <h3 class="section-title-accent"><i class="fa-solid fa-star text-gold"></i> <span data-i18n="testi-title">Ce que disent nos clients</span></h3>
+                <div class="testimonials-carousel-wrapper">
+                    <div class="testimonials-carousel" id="testimonials-carousel">
+                        <!-- Les avis s'ajoutent ici dynamiquement -->
+                    </div>
+                    <!-- Flèches de navigation -->
+                    <button class="carousel-nav prev" id="carousel-prev" aria-label="Avis précédent">❮</button>
+                    <button class="carousel-nav next" id="carousel-next" aria-label="Avis suivant">❯</button>
+                    <!-- Points indicateurs -->
+                    <div class="carousel-dots" id="carousel-dots"></div>
+                </div>
+                <div style="text-align:center; margin-top:16px;">
+                    <a href="#" class="btn-tiktok-profile" onclick="document.querySelector('[data-tab=tab-contact]').click(); return false;">
+                        <i class="fa-solid fa-pen"></i> <span data-i18n="testi-btn-add">Laisser un avis</span>
+                    </a>
+                </div>
+            </div>
+
             <div class="social-buttons-section">
                 <a href="https://www.youtube.com/@jobandofficiel" target="_blank" class="btn-social yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
                 <div class="social-row">
                     <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-social tk"><i class="fa-brands fa-tiktok"></i> TikTok</a>
-                    <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="btn-social wa-chan"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="wa-channel">Chaîne</span></a>
+                    <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="btn-social wa-chan"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="wa-channel">C[...]
                 </div>
             </div>
         </section>
@@ -346,7 +366,7 @@ window.addEventListener('error', function(e) {
             <p class="section-subtitle" data-i18n="videos-subtitle">Découvrez nos meilleurs sketchs et exclusivités</p>
             <div class="video-main-card">
                 <div id="yt-video-container" class="video-ratio-container">
-                    <iframe id="yt-latest-iframe" src="https://www.youtube.com/embed/videoseries?list=UUxj3ygXxMVzbKmq4ctSCN5Q&autoplay=0&rel=0" title="JO BAND Videos" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe id="yt-latest-iframe" src="https://www.youtube.com/embed/videoseries?list=UUxj3ygXxMVzbKmq4ctSCN5Q&autoplay=0&rel=0" title="JO BAND Videos" frameborder="0" allow="accelerom[...]
                 </div>
                 <p class="video-caption" data-i18n="video-caption">Nouvelle vidéo publiée sur YouTube = elle apparaît ici automatiquement.</p>
             </div>
@@ -355,7 +375,7 @@ window.addEventListener('error', function(e) {
             <div class="tiktok-section">
                 <h3 class="section-title-accent"><i class="fa-brands fa-tiktok text-gold"></i> TikTok JO BAND</h3>
                 <p class="section-subtitle" data-i18n="tiktok-desc">Retrouvez nos sketchs viraux sur notre page TikTok officielle.</p>
-                <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-tiktok-profile"><i class="fa-brands fa-tiktok"></i> <span data-i18n="tiktok-btn">Voir tous nos TikToks</span></a>
+                <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-tiktok-profile"><i class="fa-brands fa-tiktok"></i> <span data-i18n="tiktok-btn">Voir tous nos TikToks<[...]
             </div>
             <div class="packages-section">
                 <h2 class="title-gold" data-i18n="packages-title">Nos Formules Prestations</h2>
@@ -485,7 +505,7 @@ window.addEventListener('error', function(e) {
                 <div class="social-pills-row">
                     <a href="https://www.youtube.com/@jobandofficiel" target="_blank" class="social-pill yt-pill"><i class="fa-brands fa-youtube"></i> YouTube</a>
                     <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="social-pill tk-pill"><i class="fa-brands fa-tiktok"></i> TikTok</a>
-                    <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="social-pill wa-pill"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="wa-channel">Chaîne</span></a>
+                    <a href="https://whatsapp.com/channel/0029Vb8IOV77IUYN1pS9Kl1C" target="_blank" class="social-pill wa-pill"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="wa-channel">[...]
                 </div>
             </div>
         </section>
@@ -535,7 +555,7 @@ window.addEventListener('error', function(e) {
                 <div class="promo-text-box">
                     <h3>Contact direct</h3>
                     <p>Discutez directement avec notre management pour un partenariat.</p>
-                    <a href="https://wa.me/22870002539?text=Bonjour%20JO%20BAND%2C%20je%20souhaite%20devenir%20partenaire%20ou%20sponsor%20du%20collectif.%20Pouvons-nous%20en%20discuter%20%3F" target="_blank" class="action-whatsapp-btn">
+                    <a href="https://wa.me/22870002539?text=Bonjour%20JO%20BAND%2C%20je%20souhaite%20devenir%20partenaire%20ou%20sponsor%20du%20collectif.%20Pouvons-nous%20en%20discuter%20%3F" ta[...]
                         <i class="fa-brands fa-whatsapp"></i> Devenir Sponsor
                     </a>
                 </div>
@@ -599,11 +619,11 @@ window.addEventListener('error', function(e) {
     <script src="script.js"></script>
     <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center;">
     <img id="lightbox-img" src="" style="max-width:95%; max-height:90vh; object-fit:contain;">
-    <button onclick="document.getElementById('lightbox').style.display='none'" style="position:absolute; top:15px; right:20px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;">&times;</button>
+    <button onclick="document.getElementById('lightbox').style.display='none'" style="position:absolute; top:15px; right:20px; background:none; border:none; color:#fff; font-size:2rem; cursor:poi[...]
     </div>
 
 <!-- ================= CONSOLE ALICE INTERACTIVE ================= -->
-<button id="alice-fab" aria-label="Parler à ALICE" onclick="document.getElementById('alice-widget').style.setProperty('display', 'flex', 'important'); this.style.setProperty('display', 'none', 'important');">
+<button id="alice-fab" aria-label="Parler à ALICE" onclick="document.getElementById('alice-widget').style.setProperty('display', 'flex', 'important'); this.style.setProperty('display', 'none', '[...]
     <img src="images/alice-avatar.png" alt="ALICE" id="alice-fab-avatar">
 </button>
 
@@ -654,4 +674,3 @@ window.addEventListener('error', function(e) {
 
 </body>
 </html>
-
