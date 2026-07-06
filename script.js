@@ -61,7 +61,7 @@ const translations = {
         "slogan": "Partout où ça bouge, Jo Band est là.",
         "live-text": "EN LIVE",
         "wa-channel": "Chaîne",
-        "about-text": "Le collectif artistique incontournable du Togo. Humour, prestations DJ, chants vibrants et productions vidéo de haute qualité : nous transformons chaque instant en un événement mémorable.",
+        "about-text": "Le collectif artistique incontournable du Togo. Humour, prestations DJ, chants vibrants et productions vidéo de haute qualité : nous transformons chaque instant en un événement inoubliable.",
         "stat-views": "K Vues", "stat-artists": "Artistes", "stat-shows": "Shows",
         "pwa-title": "JO BAND sur votre écran !",
         "pwa-desc": "Installez l'application officielle sur votre téléphone pour ne rien manquer.",
@@ -114,7 +114,14 @@ const translations = {
         "gallery-empty": "Aucun média disponible pour le moment. Ajoutez des contenus dans Google Sheets.",
         "gallery-error": "Impossible de charger la galerie. Vérifiez la connexion.",
         "filter-all": "Tout", "filter-video": "Vidéos", "filter-photo": "Photos",
-        "filter-affiche": "Affiches", "filter-document": "Documents"
+        "filter-affiche": "Affiches", "filter-document": "Documents",
+        "testi-title": "Ce que disent nos clients",
+        "testi-loading": "Chargement des avis...",
+        "testi-btn-add": "Laisser un avis",
+        "testi-name-label": "Votre nom",
+        "testi-rating-label": "Votre note",
+        "testi-message-label": "Votre témoignage",
+        "testi-submit": "Envoyer mon avis"
     },
     en: {
         "slogan": "Wherever it moves, Jo Band is there.",
@@ -170,7 +177,14 @@ const translations = {
         "gallery-empty": "No media available yet. Add content in Google Sheets.",
         "gallery-error": "Unable to load gallery. Check connection.",
         "filter-all": "All", "filter-video": "Videos", "filter-photo": "Photos",
-        "filter-affiche": "Posters", "filter-document": "Documents"
+        "filter-affiche": "Posters", "filter-document": "Documents",
+        "testi-title": "What our clients say",
+        "testi-loading": "Loading reviews...",
+        "testi-btn-add": "Leave a review",
+        "testi-name-label": "Your name",
+        "testi-rating-label": "Your rating",
+        "testi-message-label": "Your testimonial",
+        "testi-submit": "Send my review"
     }
 };
 
@@ -605,20 +619,231 @@ function initPWA() {
 }
 
 /* ==========================================================================
-   10. INITIALISATION DOM (DÉMARRAGE PRINCIPAL)
+   10. NOTIFICATIONS PUSH
    ========================================================================== */
-document.addEventListener('DOMContentLoaded', () => {
-initEventCountdown();
-    hideSplash();
+function initNotifications() {
+    const VAPID_KEY = 'BEmflxm0W984vE7ZPJ9ADXn2ZfJhUyFVn1pY7lq9d02L1rpgjofPZrcBdaV-s6gARn1_MdnpTM1ZJCrZKWE3p1E';
 
-    const navItems = document.querySelectorAll('.nav-item');
-    const tabs = document.querySelectorAll('.tab-content');
-initNotifications();
-initAnnonce();
-initTikTokRedirect();
-initTestimonials();
+    firebase.initializeApp({
+        apiKey:            'AIzaSyDol8OdWq6YoBY5XMyuPYue25mQnOoIOYE',
+        authDomain:        'jo-band-notifications-aea69.firebaseapp.com',
+        projectId:         'jo-band-notifications-aea69',
+        storageBucket:     'jo-band-notifications-aea69.firebasestorage.app',
+        messagingSenderId: '942336247693',
+        appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
+    });
 
-/* ── COMPTEUR ÉVÉNEMENT ── */
+    const messaging = firebase.messaging();
+
+    // Demander permission automatiquement
+    Notification.requestPermission().then(permission => {
+        if (permission !== 'granted') return;
+
+        messaging.getToken({ vapidKey: VAPID_KEY })
+            .then(token => {
+                if (!token) return;
+                // Envoyer le token au serveur
+                fetch('/api/subscribe', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ token })
+                });
+            })
+            .catch(err => console.error('Token error:', err));
+    });
+
+    // Message en avant-plan
+    messaging.onMessage(payload => {
+        const { title, body } = payload.notification;
+        if (Notification.permission === 'granted') {
+            new Notification(title, {
+                body,
+                icon: '/images/logo.jpg'
+            });
+        }
+    });
+}
+
+/* ==========================================================================
+   11. BANNIÈRE ANNONCE
+   ========================================================================== */
+function initAnnonce() {
+    fetch('/alice-data.json', { cache: 'no-store' })
+        .then(r => r.json())
+        .then(data => {
+            const annonce = data.annonce;
+            if (!annonce || !annonce.actif) return;
+
+            const banner = document.getElementById('annonce-banner');
+            const msg    = document.getElementById('annonce-message');
+            const lien   = document.getElementById('annonce-lien');
+            const close  = document.getElementById('annonce-close');
+
+            if (!banner || !msg) return;
+
+            msg.textContent      = annonce.message || '';
+            lien.href            = annonce.lien    || '#';
+            lien.textContent     = annonce.lien_texte || 'Voir';
+            lien.style.display   = annonce.lien ? 'inline-block' : 'none';
+
+            if (annonce.couleur === 'rouge') banner.classList.add('rouge');
+            if (annonce.couleur === 'vert')  banner.classList.add('vert');
+
+            banner.style.display = 'flex';
+
+            close.addEventListener('click', () => {
+                banner.style.display = 'none';
+            });
+        })
+        .catch(() => {});
+}
+
+/* ==========================================================================
+   12. OUVERTURE FORCEE DANS LE NAVIGATEUR EXTERNE (ANTI-TIKTOK)
+   ========================================================================== */
+function initTikTokRedirect() {
+    const ua = navigator.userAgent || navigator.vendor || '';
+
+    const isTikTok = /TikTok|BytedanceWebview|musical_ly/i.test(ua);
+    if (!isTikTok) return;
+
+    const isAndroid = /Android/i.test(ua);
+
+    const banner   = document.getElementById('tiktok-banner');
+    const btn      = document.getElementById('tiktok-banner-btn');
+    const close    = document.getElementById('tiktok-banner-close');
+    if (!banner || !btn) return;
+
+    const currentUrl = window.location.href;
+
+    function openExternalAndroid() {
+        const cleanUrl  = currentUrl.replace(/^https?:\/\//, '');
+        const intentUrl = 'intent://' + cleanUrl +
+            '#Intent;scheme=https;launchFlags=0x10000000;end';
+        window.location.href = intentUrl;
+    }
+
+    function openExternalGeneric() {
+        window.open(currentUrl, '_blank');
+    }
+
+    banner.style.display = 'flex';
+
+    btn.addEventListener('click', () => {
+        if (isAndroid) {
+            openExternalAndroid();
+        } else {
+            openExternalGeneric();
+        }
+    });
+
+    if (close) {
+        close.addEventListener('click', () => {
+            banner.style.display = 'none';
+        });
+    }
+
+    if (isAndroid) {
+        setTimeout(openExternalAndroid, 5500);
+    }
+}
+
+/* ==========================================================================
+   13. TÉMOIGNAGES CLIENTS - VERSION CORRIGÉE
+   ========================================================================== */
+function initTestimonials() {
+    const container   = document.getElementById('testimonials-container');
+    const openBtn     = document.getElementById('btn-open-testi-form');
+    const formWrapper = document.getElementById('testi-form-wrapper');
+    const submitBtn   = document.getElementById('btn-submit-testi');
+    const statusBox   = document.getElementById('testi-status-message');
+    
+    // Vérifier que TOUS les éléments existent
+    if (!container || !openBtn || !formWrapper) {
+        console.error('Éléments manquants pour initTestimonials');
+        return;
+    }
+
+    // Charger les témoignages existants
+    fetch('/api/testimonials')
+        .then(r => r.json())
+        .then(result => {
+            if (!result.success || !result.data || !result.data.length) {
+                container.innerHTML = '<p class="testi-msg">Soyez le premier à laisser un avis !</p>';
+                return;
+            }
+            container.innerHTML = result.data.map(t => {
+                const stars = '⭐'.repeat(Math.min(5, Math.max(1, t.rating || 5)));
+                return `
+                    <div class="testi-card">
+                        <div class="testi-card-stars">${stars}</div>
+                        <p class="testi-card-text">${sanitize(t.message)}</p>
+                        <p class="testi-card-name">— ${sanitize(t.name)}</p>
+                    </div>`;
+            }).join('');
+        })
+        .catch(err => {
+            console.error('Erreur témoignages:', err);
+            container.innerHTML = '<p class="testi-msg">Impossible de charger les avis pour le moment.</p>';
+        });
+
+    // Toggle formulaire - ÉVÉNEMENT PRINCIPAL CORRIGÉ
+    openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Clic sur le bouton "Laisser un avis"');
+        const isHidden = formWrapper.style.display === 'none' || formWrapper.style.display === '';
+        formWrapper.style.display = isHidden ? 'block' : 'none';
+    });
+
+    // Soumettre le formulaire
+    if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+            const name    = document.getElementById('testi-name').value.trim();
+            const rating  = document.getElementById('testi-rating').value;
+            const message = document.getElementById('testi-message').value.trim();
+
+            if (!name || !message) {
+                statusBox.textContent = 'Merci de remplir votre nom et votre témoignage.';
+                statusBox.className = 'form-status-box error';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Envoi...';
+
+            fetch('/api/testimonials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, message, rating })
+            })
+                .then(r => r.json())
+                .then(result => {
+                    if (result.success) {
+                        statusBox.textContent = 'Merci ! Votre avis sera publié après validation.';
+                        statusBox.className = 'form-status-box success';
+                        document.getElementById('testi-name').value = '';
+                        document.getElementById('testi-message').value = '';
+                    } else {
+                        statusBox.textContent = "Une erreur s'est produite, réessayez.";
+                        statusBox.className = 'form-status-box error';
+                    }
+                })
+                .catch(() => {
+                    statusBox.textContent = "Une erreur s'est produite, réessayez.";
+                    statusBox.className = 'form-status-box error';
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Envoyer mon avis';
+                });
+        });
+    }
+}
+
+/* ==========================================================================
+   14. COMPTEUR ÉVÉNEMENT
+   ========================================================================== */
 function initEventCountdown() {
     const cardEvent  = document.getElementById('event-countdown-card');
     const cardNoEvent = document.getElementById('no-event-card');
@@ -681,6 +906,63 @@ function initEventCountdown() {
         });
 }
 
+/* ==========================================================================
+   15. FLUX YOUTUBE DYNAMIQUE (SHORTS + VIDEOS CLASSIQUES)
+   ========================================================================== */
+function initYouTubeFeed() {
+    const channelId = 'UCxj3ygXxMVzbKmq4ctSCN5Q';
+    const rssUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channelId;
+    const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
+
+    const container = document.getElementById('yt-video-container');
+    const iframe    = document.getElementById('yt-latest-iframe');
+    if (!container || !iframe) return;
+
+    fetch(apiUrl)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.items || !data.items.length) return;
+
+            const latestLink = data.items[0].link;
+            const isShort = latestLink.includes('/shorts/');
+
+            let videoId = '';
+            if (isShort) {
+                videoId = latestLink.split('/shorts/')[1].split('?')[0];
+            } else if (latestLink.includes('watch?v=')) {
+                videoId = latestLink.split('watch?v=')[1].split('&')[0];
+            }
+            if (!videoId) return;
+
+            iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=0&rel=0';
+
+            if (isShort) {
+                container.classList.add('portrait-short');
+            } else {
+                container.classList.remove('portrait-short');
+            }
+        })
+        .catch(() => {
+            // En cas d'échec, l'ancienne playlist reste affichée telle quelle
+        });
+}
+
+/* ==========================================================================
+   16. INITIALISATION DOM (DÉMARRAGE PRINCIPAL)
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+    hideSplash();
+
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabs = document.querySelectorAll('.tab-content');
+
+    // Initialiser les modules
+    initNotifications();
+    initAnnonce();
+    initTikTokRedirect();
+    initEventCountdown();
+    initTestimonials();
+
     // Navigation par onglets
     navItems.forEach(item => {
         item.addEventListener('click', () => {
@@ -696,8 +978,8 @@ function initEventCountdown() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (targetId === 'tab-galerie' && !galleryLoaded) {
-    loadGallery();   // ← la nouvelle fonction Cloudinary
-}
+                loadGallery();
+            }
         });
     });
 
@@ -768,16 +1050,16 @@ function initEventCountdown() {
     });
 
     // Lightbox Galerie
-document.addEventListener('click', e => {
-    if (e.target.classList.contains('gallery-photo-thumb')) {
-        const lb = document.getElementById('lightbox');
-        const lbImg = document.getElementById('lightbox-img');
-        if (lb && lbImg) {
-            lbImg.src = e.target.src;
-            lb.style.display = 'flex';
+    document.addEventListener('click', e => {
+        if (e.target.classList.contains('gallery-photo-thumb')) {
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            if (lb && lbImg) {
+                lbImg.src = e.target.src;
+                lb.style.display = 'flex';
+            }
         }
-    }
-});
+    });
 
     // Initialisations finales
     initFedaPayIntegration(closeBurger);
@@ -785,247 +1067,5 @@ document.addEventListener('click', e => {
     initShare();
     initTTS();
     initPWA();
-    initTestimonials();
-/* ── NOTIFICATIONS PUSH ── */
-function initNotifications() {
-    const VAPID_KEY = 'BEmflxm0W984vE7ZPJ9ADXn2ZfJhUyFVn1pY7lq9d02L1rpgjofPZrcBdaV-s6gARn1_MdnpTM1ZJCrZKWE3p1E';
-
-    firebase.initializeApp({
-        apiKey:            'AIzaSyDol8OdWq6YoBY5XMyuPYue25mQnOoIOYE',
-        authDomain:        'jo-band-notifications-aea69.firebaseapp.com',
-        projectId:         'jo-band-notifications-aea69',
-        storageBucket:     'jo-band-notifications-aea69.firebasestorage.app',
-        messagingSenderId: '942336247693',
-        appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
-    });
-
-    const messaging = firebase.messaging();
-
-    // Demander permission automatiquement
-    Notification.requestPermission().then(permission => {
-        if (permission !== 'granted') return;
-
-        messaging.getToken({ vapidKey: VAPID_KEY })
-            .then(token => {
-                if (!token) return;
-                // Envoyer le token au serveur
-                fetch('/api/subscribe', {
-                    method:  'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body:    JSON.stringify({ token })
-                });
-            })
-            .catch(err => console.error('Token error:', err));
-    });
-
-    // Message en avant-plan
-    messaging.onMessage(payload => {
-        const { title, body } = payload.notification;
-        if (Notification.permission === 'granted') {
-            new Notification(title, {
-                body,
-                icon: '/images/logo.jpg'
-            });
-        }
-    });
-}
-
-/* ── BANNIÈRE ANNONCE ── */
-function initAnnonce() {
-    fetch('/alice-data.json', { cache: 'no-store' })
-        .then(r => r.json())
-        .then(data => {
-            const annonce = data.annonce;
-            if (!annonce || !annonce.actif) return;
-
-            const banner = document.getElementById('annonce-banner');
-            const msg    = document.getElementById('annonce-message');
-            const lien   = document.getElementById('annonce-lien');
-            const close  = document.getElementById('annonce-close');
-
-            if (!banner || !msg) return;
-
-            msg.textContent      = annonce.message || '';
-            lien.href            = annonce.lien    || '#';
-            lien.textContent     = annonce.lien_texte || 'Voir';
-            lien.style.display   = annonce.lien ? 'inline-block' : 'none';
-
-            if (annonce.couleur === 'rouge') banner.classList.add('rouge');
-            if (annonce.couleur === 'vert')  banner.classList.add('vert');
-
-            banner.style.display = 'flex';
-
-            close.addEventListener('click', () => {
-                banner.style.display = 'none';
-            });
-        })
-        .catch(() => {});
-}
-
-/* ── OUVERTURE FORCEE DANS LE NAVIGATEUR EXTERNE (ANTI-TIKTOK) ── */
-function initTikTokRedirect() {
-    const ua = navigator.userAgent || navigator.vendor || '';
-
-    const isTikTok = /TikTok|BytedanceWebview|musical_ly/i.test(ua);
-    if (!isTikTok) return;
-
-    const isAndroid = /Android/i.test(ua);
-
-    const banner   = document.getElementById('tiktok-banner');
-    const btn      = document.getElementById('tiktok-banner-btn');
-    const close    = document.getElementById('tiktok-banner-close');
-    if (!banner || !btn) return;
-
-    const currentUrl = window.location.href;
-
-    function openExternalAndroid() {
-        const cleanUrl  = currentUrl.replace(/^https?:\/\//, '');
-        const intentUrl = 'intent://' + cleanUrl +
-            '#Intent;scheme=https;launchFlags=0x10000000;end';
-        window.location.href = intentUrl;
-    }
-
-    function openExternalGeneric() {
-        window.open(currentUrl, '_blank');
-    }
-
-    banner.style.display = 'flex';
-
-    btn.addEventListener('click', () => {
-        if (isAndroid) {
-            openExternalAndroid();
-        } else {
-            openExternalGeneric();
-        }
-    });
-
-    if (close) {
-        close.addEventListener('click', () => {
-            banner.style.display = 'none';
-        });
-    }
-
-    if (isAndroid) {
-        setTimeout(openExternalAndroid, 5500);
-    }
-}
-
-   /* ── TEMOIGNAGES CLIENTS ── */
-function initTestimonials() {
-    const container   = document.getElementById('testimonials-container');
-    const openBtn     = document.getElementById('btn-open-testi-form');
-    const formWrapper = document.getElementById('testi-form-wrapper');
-    const submitBtn   = document.getElementById('btn-submit-testi');
-    const statusBox   = document.getElementById('testi-status-message');
-    if (!container || !openBtn) return;
-
-    fetch('/api/testimonials')
-        .then(r => r.json())
-        .then(result => {
-            if (!result.success || !result.data || !result.data.length) {
-                container.innerHTML = '<p class="testi-msg">Soyez le premier à laisser un avis !</p>';
-                return;
-            }
-            container.innerHTML = result.data.map(t => {
-                const stars = '⭐'.repeat(Math.min(5, Math.max(1, t.rating || 5)));
-                return `
-                    <div class="testi-card">
-                        <div class="testi-card-stars">${stars}</div>
-                        <p class="testi-card-text">${sanitize(t.message)}</p>
-                        <p class="testi-card-name">— ${sanitize(t.name)}</p>
-                    </div>`;
-            }).join('');
-        })
-        .catch(() => {
-            container.innerHTML = '<p class="testi-msg">Impossible de charger les avis pour le moment.</p>';
-        });
-
-    openBtn.addEventListener('click', () => {
-        formWrapper.style.display = formWrapper.style.display === 'none' ? 'block' : 'none';
-    });
-
-    if (submitBtn) {
-        submitBtn.addEventListener('click', () => {
-            const name    = document.getElementById('testi-name').value.trim();
-            const rating  = document.getElementById('testi-rating').value;
-            const message = document.getElementById('testi-message').value.trim();
-
-            if (!name || !message) {
-                statusBox.textContent = 'Merci de remplir votre nom et votre témoignage.';
-                statusBox.className = 'form-status-box error';
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Envoi...';
-
-            fetch('/api/testimonials', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, message, rating })
-            })
-                .then(r => r.json())
-                .then(result => {
-                    if (result.success) {
-                        statusBox.textContent = 'Merci ! Votre avis sera publié après validation.';
-                        statusBox.className = 'form-status-box success';
-                        document.getElementById('testi-name').value = '';
-                        document.getElementById('testi-message').value = '';
-                    } else {
-                        statusBox.textContent = "Une erreur s'est produite, réessayez.";
-                        statusBox.className = 'form-status-box error';
-                    }
-                })
-                .catch(() => {
-                    statusBox.textContent = "Une erreur s'est produite, réessayez.";
-                    statusBox.className = 'form-status-box error';
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Envoyer mon avis';
-                });
-        });
-    }
-               }
-   
-initYouTubeFeed();
+    initYouTubeFeed();
 });
-
-/* ── FLUX YOUTUBE DYNAMIQUE (SHORTS + VIDEOS CLASSIQUES) ── */
-function initYouTubeFeed() {
-    const channelId = 'UCxj3ygXxMVzbKmq4ctSCN5Q';
-    const rssUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channelId;
-    const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
-
-    const container = document.getElementById('yt-video-container');
-    const iframe    = document.getElementById('yt-latest-iframe');
-    if (!container || !iframe) return;
-
-    fetch(apiUrl)
-        .then(r => r.json())
-        .then(data => {
-            if (!data.items || !data.items.length) return;
-
-            const latestLink = data.items[0].link;
-            const isShort = latestLink.includes('/shorts/');
-
-            let videoId = '';
-            if (isShort) {
-                videoId = latestLink.split('/shorts/')[1].split('?')[0];
-            } else if (latestLink.includes('watch?v=')) {
-                videoId = latestLink.split('watch?v=')[1].split('&')[0];
-            }
-            if (!videoId) return;
-
-            iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=0&rel=0';
-
-            if (isShort) {
-                container.classList.add('portrait-short');
-            } else {
-                container.classList.remove('portrait-short');
-            }
-        })
-        .catch(() => {
-            // En cas d'échec, l'ancienne playlist reste affichée telle quelle (déjà dans le src par défaut)
-        });
-       }
