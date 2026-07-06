@@ -785,7 +785,7 @@ document.addEventListener('click', e => {
     initShare();
     initTTS();
     initPWA();
-   initTestimonials();
+      initTestimonials();
 /* ── NOTIFICATIONS PUSH ── */
 function initNotifications() {
     const VAPID_KEY = 'BEmflxm0W984vE7ZPJ9ADXn2ZfJhUyFVn1pY7lq9d02L1rpgjofPZrcBdaV-s6gARn1_MdnpTM1ZJCrZKWE3p1E';
