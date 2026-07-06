@@ -616,6 +616,7 @@ initEventCountdown();
 initNotifications();
 initAnnonce();
 initTikTokRedirect();
+initTestimonials();
 
 /* ── COMPTEUR ÉVÉNEMENT ── */
 function initEventCountdown() {
@@ -784,6 +785,7 @@ document.addEventListener('click', e => {
     initShare();
     initTTS();
     initPWA();
+    initTestimonials();
 /* ── NOTIFICATIONS PUSH ── */
 function initNotifications() {
     const VAPID_KEY = 'BEmflxm0W984vE7ZPJ9ADXn2ZfJhUyFVn1pY7lq9d02L1rpgjofPZrcBdaV-s6gARn1_MdnpTM1ZJCrZKWE3p1E';
@@ -908,6 +910,84 @@ function initTikTokRedirect() {
     }
 }
 
+   /* ── TEMOIGNAGES CLIENTS ── */
+function initTestimonials() {
+    const container   = document.getElementById('testimonials-container');
+    const openBtn     = document.getElementById('btn-open-testi-form');
+    const formWrapper = document.getElementById('testi-form-wrapper');
+    const submitBtn   = document.getElementById('btn-submit-testi');
+    const statusBox   = document.getElementById('testi-status-message');
+    if (!container || !openBtn) return;
+
+    fetch('/api/testimonials')
+        .then(r => r.json())
+        .then(result => {
+            if (!result.success || !result.data || !result.data.length) {
+                container.innerHTML = '<p class="testi-msg">Soyez le premier à laisser un avis !</p>';
+                return;
+            }
+            container.innerHTML = result.data.map(t => {
+                const stars = '⭐'.repeat(Math.min(5, Math.max(1, t.rating || 5)));
+                return `
+                    <div class="testi-card">
+                        <div class="testi-card-stars">${stars}</div>
+                        <p class="testi-card-text">${sanitize(t.message)}</p>
+                        <p class="testi-card-name">— ${sanitize(t.name)}</p>
+                    </div>`;
+            }).join('');
+        })
+        .catch(() => {
+            container.innerHTML = '<p class="testi-msg">Impossible de charger les avis pour le moment.</p>';
+        });
+
+    openBtn.addEventListener('click', () => {
+        formWrapper.style.display = formWrapper.style.display === 'none' ? 'block' : 'none';
+    });
+
+    if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+            const name    = document.getElementById('testi-name').value.trim();
+            const rating  = document.getElementById('testi-rating').value;
+            const message = document.getElementById('testi-message').value.trim();
+
+            if (!name || !message) {
+                statusBox.textContent = 'Merci de remplir votre nom et votre témoignage.';
+                statusBox.className = 'form-status-box error';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Envoi...';
+
+            fetch('/api/testimonials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, message, rating })
+            })
+                .then(r => r.json())
+                .then(result => {
+                    if (result.success) {
+                        statusBox.textContent = 'Merci ! Votre avis sera publié après validation.';
+                        statusBox.className = 'form-status-box success';
+                        document.getElementById('testi-name').value = '';
+                        document.getElementById('testi-message').value = '';
+                    } else {
+                        statusBox.textContent = "Une erreur s'est produite, réessayez.";
+                        statusBox.className = 'form-status-box error';
+                    }
+                })
+                .catch(() => {
+                    statusBox.textContent = "Une erreur s'est produite, réessayez.";
+                    statusBox.className = 'form-status-box error';
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Envoyer mon avis';
+                });
+        });
+    }
+               }
+   
 initYouTubeFeed();
 });
 
