@@ -238,6 +238,64 @@
     </div>
 </div>
 
+          <div class="events-calendar-block">
+    <h3 class="section-title-accent"><i class="fa-solid fa-calendar-days text-gold"></i> <span data-i18n="events-title">Prochains Événements</span></h3>
+    <div id="events-container" class="events-container">
+        <p class="testi-msg" data-i18n="events-loading">Chargement des événements...</p>
+    </div>
+
+    <button type="button" id="btn-admin-events" class="btn-admin-toggle">⚙️</button>
+
+    <div id="admin-events-wrapper" class="testi-form-wrapper" style="display:none;">
+        <div class="form-input-group">
+            <label>Mot de passe admin</label>
+            <input type="password" id="admin-password">
+        </div>
+        <div class="form-input-group">
+            <label>Titre de l'événement</label>
+            <input type="text" id="event-title" maxlength="100">
+        </div>
+        <div class="form-input-group">
+            <label>Date</label>
+            <input type="date" id="event-date">
+        </div>
+        <div class="form-input-group">
+            <label>Heure (optionnel)</label>
+            <input type="time" id="event-time">
+        </div>
+        <div class="form-input-group">
+            <label>Lieu</label>
+            <input type="text" id="event-location" maxlength="150" placeholder="Ex: Salle Kodjoviakopé, Lomé">
+        </div>
+        <div class="form-input-group">
+            <label>Description</label>
+            <textarea id="event-description" rows="2" maxlength="500"></textarea>
+        </div>
+        <div class="form-input-group">
+            <label>Prix des billets</label>
+            <input type="text" id="event-price" placeholder="Ex: 2000 FCFA ou Entrée gratuite">
+        </div>
+        <div class="form-input-group">
+            <label>Lien billetterie/réservation (optionnel)</label>
+            <input type="text" id="event-ticket-link" placeholder="https://...">
+        </div>
+        <div class="form-input-group">
+            <label>Image de l'affiche (URL, optionnel)</label>
+            <input type="text" id="event-image" placeholder="https://...">
+        </div>
+        <div class="form-input-group">
+            <label>Statut</label>
+            <select id="event-status">
+                <option value="confirmed">Confirmé</option>
+                <option value="soldout">Complet</option>
+                <option value="cancelled">Annulé</option>
+            </select>
+        </div>
+        <button type="button" id="btn-submit-event" class="submit-form-btn">Publier l'événement</button>
+        <div id="event-status-message" class="form-status-box"></div>
+    </div>
+          </div>
+
             <div class="stats-section">
                 <div class="stat-card"><div class="stat-number" data-target="500">0</div><div class="stat-label" data-i18n="stat-views">K Vues</div></div>
                 <div class="stat-card"><div class="stat-number" data-target="13">0</div><div class="stat-label" data-i18n="stat-artists">Artistes</div></div>
