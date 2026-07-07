@@ -1047,7 +1047,7 @@ function initEventsCalendar() {
                 container.innerHTML = '<p class="testi-msg">Aucun événement prévu pour l\'instant. Restez connectés !</p>';
                 return;
             }
-            container.innerHTML = result.data.map(ev => {
+            container.innerHTML = result.data.filter(ev => ev.status !== 'cancelled').map(ev => {
                 const badgeLabel = ev.status === 'soldout' ? 'Complet' : ev.status === 'cancelled' ? 'Annulé' : 'Confirmé';
                 const img = ev.imageUrl
                     ? `<img src="${ev.imageUrl}" alt="${sanitize(ev.title)}">`
