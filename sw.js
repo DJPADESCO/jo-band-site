@@ -1,7 +1,6 @@
-const APP_VERSION = '2026.07.07.6'; // Modifiez cette date à chaque mise à jour de votre site
-const CACHE_NAME = `joband-cache-v-${APP_VERSION}`; // Crée le nom du cache automatiquement
+const APP_VERSION = '2026.07.07.7'; // Changez ce numéro pour forcer la mise à jour
+const CACHE_NAME = `joband-cache-v-${APP_VERSION}`;
 
-// Fichiers vitaux mis en cache au démarrage
 const ASSETS = [
   '/',
   '/index.html',
@@ -11,23 +10,21 @@ const ASSETS = [
   '/images/logo.jpg'
 ];
 
-// Installation du Service Worker
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(ASSETS);
-    }).then(() => self.skipWaiting()) // Force l'activation immédiate
+    }).then(() => self.skipWaiting())
   );
 });
 
-// Nettoyage des anciens caches
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
         keys.map(key => {
           if (key !== CACHE_NAME) {
-            return caches.delete(key); // Supprime l'ancien cache devenu inutile
+            return caches.delete(key);
           }
         })
       );
@@ -35,18 +32,23 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Stratégie : Réseau en premier, Cache en secours
+// Stratégie corrigée et sécurisée pour l'iPhone 7
 self.addEventListener('fetch', e => {
+  // On ne gère en cache QUE les requêtes de notre propre site
+  if (e.request.method !== 'GET' || !e.request.url.startsWith(self.location.origin)) {
+    return; // Laisse passer le réseau normal pour les API/Firestore sans bloquer
+  }
+
   e.respondWith(
     fetch(e.request).then(response => {
-      // Si le réseau fonctionne, on met à jour le cache (uniquement pour les requêtes GET)
-      if(e.request.method === 'GET') {
+      // On vérifie que la réponse du réseau est valide avant de la mettre en cache
+      if (response && response.status === 200) {
         const resClone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(e.request, resClone));
       }
       return response;
     }).catch(() => {
-      // Si pas d'internet, on utilise le cache
+      // Si le réseau est coupé (hors-ligne), on cherche dans le cache
       return caches.match(e.request);
     })
   );
