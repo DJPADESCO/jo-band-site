@@ -1076,8 +1076,7 @@ function initEventsCalendar() {
             `;
         }).join('');
     });
-   
         .catch(() => {
-            container.innerHTML = '<p class="testi-msg">Impossible de charger les événements.</p>';
+            container.innerHTML = `<p class="testi-msg">Impossible de charger les événements.</p>`;
         });
-           }
+}
