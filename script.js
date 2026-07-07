@@ -1043,7 +1043,7 @@ function initEventsCalendar() {
     fetch('/api/events')
         .then(r => r.json())
         .then(result => {
-            if (!result.success || !result.data || !result.data.length) {
+            container.innerHTML = result.data.filter(ev => ev.status !== 'cancelled').map(ev => {
                 container.innerHTML = '<p class="testi-msg">Aucun événement prévu pour l\'instant. Restez connectés !</p>';
                 return;
             }
