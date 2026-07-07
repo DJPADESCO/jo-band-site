@@ -11,8 +11,7 @@ const ASSETS = [
   '/images/logo.jpg'
 ];
 
-// ... (Le reste du code du Service Worker que je vous ai donné reste identique)
-
+// ... (Le reste du code du Service Worker)
 
 self.addEventListener('install', e => {
   e.waitUntil(
