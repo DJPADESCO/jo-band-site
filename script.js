@@ -1027,6 +1027,8 @@ function initYouTubeFeed() {
         })
         .catch(() => {
             // En cas d'échec, l'ancienne playlist reste affichée telle quelle (déjà dans le src par défaut)
+           });
+}
            
 /* ── CALENDRIER D'EVENEMENTS ── */
 function initEventsCalendar() {
