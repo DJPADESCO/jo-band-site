@@ -1,17 +1,14 @@
-const APP_VERSION = '2026.07.07.7'; // Même version que dans le HTML
+const APP_VERSION = '2026.07.07.8'; // Changez ce numéro pour forcer la mise à jour
 const CACHE_NAME = `joband-cache-v-${APP_VERSION}`;
 
-// On indique les fichiers avec leur version pour le cache
 const ASSETS = [
   '/',
   '/index.html',
-  '/style.css?v=2026.07.07.7',
-  '/script.js?v=2026.07.07.7',
+  '/style.css',
+  '/script.js',
   '/manifest.json',
   '/images/logo.jpg'
 ];
-
-// ... (Le reste du code du Service Worker)
 
 self.addEventListener('install', e => {
   e.waitUntil(
