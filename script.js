@@ -1041,33 +1041,42 @@ function initEventsCalendar() {
     }
 
     fetch('/api/events')
-        .then(r => r.json())
-        .then(result => {
-            container.innerHTML = result.data.filter(ev => ev.status !== 'cancelled').map(ev => {
-                container.innerHTML = '<p class="testi-msg">Aucun événement prévu pour l\'instant. Restez connectés !</p>';
-                return;
-            }
-            container.innerHTML = result.data.filter(ev => ev.status !== 'cancelled').map(ev => {
-                const badgeLabel = ev.status === 'soldout' ? 'Complet' : ev.status === 'cancelled' ? 'Annulé' : 'Confirmé';
-                const img = ev.imageUrl
-                    ? `<img src="${ev.imageUrl}" alt="${sanitize(ev.title)}">`
-                    : '';
-                const ticket = ev.ticketLink
-                    ? `<a href="${ev.ticketLink}" target="_blank" class="event-ticket-btn">Réserver</a>`
-                    : '';
-                return `
-                    <div class="event-card">
-                        ${img}
-                        <div class="event-card-info">
-                            <div class="event-card-title">${sanitize(ev.title)} <span class="event-badge ${ev.status}">${badgeLabel}</span></div>
-                            <div class="event-card-meta">📅 ${formatDate(ev.date)}${ev.time ? ' à ' + ev.time : ''}<br>📍 ${sanitize(ev.location)}</div>
-                            ${ev.description ? `<div class="event-card-desc">${sanitize(ev.description)}</div>` : ''}
-                            <div class="event-card-price">${sanitize(ev.price)}</div>
-                            ${ticket}
-                        </div>
-                    </div>`;
-            }).join('');
-        })
+    .then(r => r.json())
+    .then(result => {
+        // 1. On filtre pour enlever les événements annulés
+        const activeEvents = result.data.filter(ev => ev.status !== 'cancelled');
+
+        // 2. Si la liste est vide après filtrage, on affiche le message d'absence
+        if (activeEvents.length === 0) {
+            container.innerHTML = `<p class="testi-msg">Aucun événement prévu pour l'instant. Restez connectés !</p>`;
+            return;
+        }
+
+        // 3. Sinon, on génère le HTML pour les événements restants
+        container.innerHTML = activeEvents.map(ev => {
+            const badgeLabel = ev.status === 'soldout' ? 'Complet' : 'Confirmé';
+            const img = ev.imageUrl 
+                ? `<img src="${ev.imageUrl}" alt="${sanitize(ev.title)}">` 
+                : '';
+            
+            const ticket = ev.ticketLink 
+                ? `<a href="${ev.ticketLink}" target="_blank" class="event-ticket-btn">Réserver</a>` 
+                : '';
+                
+            return `
+                <div class="event-card">
+                    ${img}
+                    <div class="event-card-info">
+                        <div class="event-card-title">${sanitize(ev.title)} <span class="event-badge ${ev.status}">${badgeLabel}</span></div>
+                        <div class="event-card-meta">${formatDate(ev.date)}${ev.time ? ' à ' + ev.time : ''}</div>
+                        ${ev.description ? `<div class="event-card-desc">${sanitize(ev.description)}</div>` : ''}
+                        ${ticket}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    });
+   
         .catch(() => {
             container.innerHTML = '<p class="testi-msg">Impossible de charger les événements.</p>';
         });
