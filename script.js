@@ -616,8 +616,7 @@ initEventCountdown();
 initNotifications();
 initAnnonce();
 initTikTokRedirect();
-initTestimonials();
-
+   
 /* ── COMPTEUR ÉVÉNEMENT ── */
 function initEventCountdown() {
     const cardEvent  = document.getElementById('event-countdown-card');
