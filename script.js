@@ -1075,7 +1075,7 @@ function initEventsCalendar() {
                 </div>
             `;
         }).join('');
-    });
+    })
         .catch(() => {
             container.innerHTML = `<p class="testi-msg">Impossible de charger les événements.</p>`;
         });
