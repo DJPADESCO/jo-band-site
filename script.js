@@ -1027,5 +1027,119 @@ function initYouTubeFeed() {
         })
         .catch(() => {
             // En cas d'échec, l'ancienne playlist reste affichée telle quelle (déjà dans le src par défaut)
+
+           /* ── CALENDRIER D'EVENEMENTS ── */
+function initEventsCalendar() {
+    const container      = document.getElementById('events-container');
+    const adminToggle    = document.getElementById('btn-admin-events');
+    const adminWrapper    = document.getElementById('admin-events-wrapper');
+    const submitBtn       = document.getElementById('btn-submit-event');
+    const statusBox       = document.getElementById('event-status-message');
+    if (!container || !adminToggle) return;
+
+    function formatDate(dateStr) {
+        const d = new Date(dateStr + 'T00:00:00');
+        return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function loadEvents() {
+        fetch('/api/events')
+            .then(r => r.json())
+            .then(result => {
+                if (!result.success || !result.data || !result.data.length) {
+                    container.innerHTML = '<p class="testi-msg">Aucun événement prévu pour l\'instant. Restez connectés !</p>';
+                    return;
+                }
+                container.innerHTML = result.data.map(ev => {
+                    const badgeLabel = ev.status === 'soldout' ? 'Complet' : ev.status === 'cancelled' ? 'Annulé' : 'Confirmé';
+                    const img = ev.imageUrl
+                        ? `<img src="${ev.imageUrl}" alt="${sanitize(ev.title)}">`
+                        : '';
+                    const ticket = ev.ticketLink
+                        ? `<a href="${ev.ticketLink}" target="_blank" class="event-ticket-btn">Réserver</a>`
+                        : '';
+                    return `
+                        <div class="event-card">
+                            ${img}
+                            <div class="event-card-info">
+                                <div class="event-card-title">${sanitize(ev.title)} <span class="event-badge ${ev.status}">${badgeLabel}</span></div>
+                                <div class="event-card-meta">📅 ${formatDate(ev.date)}${ev.time ? ' à ' + ev.time : ''}<br>📍 ${sanitize(ev.location)}</div>
+                                ${ev.description ? `<div class="event-card-desc">${sanitize(ev.description)}</div>` : ''}
+                                <div class="event-card-price">${sanitize(ev.price)}</div>
+                                ${ticket}
+                            </div>
+                        </div>`;
+                }).join('');
+            })
+            .catch(() => {
+                container.innerHTML = '<p class="testi-msg">Impossible de charger les événements.</p>';
+            });
+    }
+
+    loadEvents();
+
+    adminToggle.addEventListener('click', () => {
+        adminWrapper.style.display = adminWrapper.style.display === 'none' ? 'block' : 'none';
+    });
+
+    if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+            const payload = {
+                adminPassword: document.getElementById('admin-password').value,
+                title:       document.getElementById('event-title').value.trim(),
+                date:        document.getElementById('event-date').value,
+                time:        document.getElementById('event-time').value,
+                location:    document.getElementById('event-location').value.trim(),
+                description: document.getElementById('event-description').value.trim(),
+                price:       document.getElementById('event-price').value.trim(),
+                ticketLink:  document.getElementById('event-ticket-link').value.trim(),
+                imageUrl:    document.getElementById('event-image').value.trim(),
+                status:      document.getElementById('event-status').value
+            };
+
+            if (!payload.title || !payload.date || !payload.location) {
+                statusBox.textContent = 'Titre, date et lieu sont obligatoires.';
+                statusBox.className = 'form-status-box error';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Publication...';
+
+            fetch('/api/events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(r => r.json())
+                .then(result => {
+                    if (result.success) {
+                        statusBox.textContent = 'Événement publié avec succès !';
+                        statusBox.className = 'form-status-box success';
+                        document.getElementById('event-title').value = '';
+                        document.getElementById('event-date').value = '';
+                        document.getElementById('event-time').value = '';
+                        document.getElementById('event-location').value = '';
+                        document.getElementById('event-description').value = '';
+                        document.getElementById('event-price').value = '';
+                        document.getElementById('event-ticket-link').value = '';
+                        document.getElementById('event-image').value = '';
+                        loadEvents();
+                    } else {
+                        statusBox.textContent = result.error || "Une erreur s'est produite.";
+                        statusBox.className = 'form-status-box error';
+                    }
+                })
+                .catch(() => {
+                    statusBox.textContent = "Une erreur s'est produite, réessayez.";
+                    statusBox.className = 'form-status-box error';
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Publier l'événement";
+                });
+        });
+    }
+               }
         });
        }
