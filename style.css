@@ -712,3 +712,98 @@ select option { background: var(--navy-blue); }
 /* ======================================================== */
 /* FIN : SECTION TEMOIGNAGES CLIENTS                        */
 /* ======================================================== */
+
+/* ======================================================== */
+/* DEBUT : CALENDRIER D'EVENEMENTS                          */
+/* ======================================================== */
+.events-calendar-block {
+    background: var(--navy-light);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(212,175,55,0.08);
+    margin-bottom: 20px;
+    position: relative;
+}
+.events-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.event-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(212,175,55,0.1);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+}
+.event-card img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+.event-card-info { flex: 1; min-width: 0; }
+.event-card-title {
+    color: var(--gold, #d4af37);
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+.event-card-meta {
+    color: #8892b0;
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+.event-card-desc {
+    color: #e0e0e0;
+    font-size: 0.88rem;
+    margin-bottom: 8px;
+}
+.event-card-price {
+    color: var(--gold, #d4af37);
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+.event-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: bold;
+    margin-left: 8px;
+}
+.event-badge.confirmed { background: rgba(37,211,102,0.15); color: #25D366; }
+.event-badge.soldout   { background: rgba(255,68,68,0.15);  color: #ff4444; }
+.event-badge.cancelled { background: rgba(150,150,150,0.15); color: #999; }
+
+.event-ticket-btn {
+    display: inline-block;
+    margin-top: 8px;
+    background: var(--gold, #d4af37);
+    color: var(--navy, #0a1128);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+.btn-admin-toggle {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    opacity: 0.5;
+}
+/* ======================================================== */
+/* FIN : CALENDRIER D'EVENEMENTS                            */
+/* ======================================================== */
