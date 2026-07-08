@@ -827,3 +827,58 @@ select option { background: var(--navy-blue); }
 /* ======================================================== */
 /* FIN : CALENDRIER D'EVENEMENTS                            */
 /* ======================================================== */
+
+/* ======================================================== */
+/* DEBUT : NEWSLETTER FOOTER                                */
+/* ======================================================== */
+.newsletter-block {
+    background: rgba(212,175,55,0.05);
+    border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+.newsletter-title {
+    color: var(--gold, #d4af37);
+    font-size: 0.95rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 320px;
+    margin: 0 auto;
+}
+.newsletter-form input {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(212,175,55,0.25);
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    font-size: 0.9rem;
+}
+.newsletter-form input::placeholder { color: #8892b0; }
+.newsletter-form button {
+    background: var(--gold, #d4af37);
+    color: var(--navy, #0a1128);
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.newsletter-status {
+    margin-top: 10px;
+    font-size: 0.82rem;
+    min-height: 1em;
+}
+.newsletter-status.success { color: #25D366; }
+.newsletter-status.error   { color: #ff4444; }
+/* ======================================================== */
+/* FIN : NEWSLETTER FOOTER                                  */
+/* ======================================================== */
