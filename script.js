@@ -918,7 +918,7 @@ function initTestimonials() {
     const submitBtn   = document.getElementById('btn-submit-testi');
     const statusBox   = document.getElementById('testi-status-message');
     if (!container || !openBtn) return;
-}
+
     fetch('/api/testimonials')
         .then(r => r.json())
         .then(result => {
