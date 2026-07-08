@@ -1007,6 +1007,7 @@ function initTestimonials() {
         }
    
 initYouTubeFeed();
+    initNewsletter();
 });
 
 /* ── FLUX YOUTUBE DYNAMIQUE (SHORTS + VIDEOS CLASSIQUES) ── */
@@ -1098,3 +1099,97 @@ function initEventsCalendar() {
             container.innerHTML = `<p class="testi-msg">Impossible de charger les événements.</p>`;
         });
 }
+/* ── NEWSLETTER (CASCADE FORMSPREE → WEB3FORMS → WHATSAPP) ── */
+function initNewsletter() {
+    const form   = document.getElementById('newsletter-form');
+    const email  = document.getElementById('newsletter-email');
+    const submit = document.getElementById('newsletter-submit');
+    const status = document.getElementById('newsletter-status');
+    if (!form) return;
+
+    const FORMSPREE_URL   = 'https://formspree.io/f/mjgqdjeo';
+    const WEB3FORMS_KEY    = '997522c2-87a5-46d9-86d2-7234af185212';
+    const WHATSAPP_NUMBER = '22897668021';
+
+    function showStatus(message, type) {
+        status.textContent = message;
+        status.className = 'newsletter-status ' + type;
+    }
+
+    function tryFormspree(userEmail) {
+        return fetch(FORMSPREE_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                email: userEmail,
+                _subject: 'Nouvelle inscription Newsletter JO BAND'
+            })
+        }).then(r => {
+            if (!r.ok) throw new Error('Formspree failed');
+            return true;
+        });
+    }
+
+    function tryWeb3Forms(userEmail) {
+        return fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                access_key: WEB3FORMS_KEY,
+                email: userEmail,
+                subject: 'Nouvelle inscription Newsletter JO BAND (secours)'
+            })
+        }).then(r => {
+            if (!r.ok) throw new Error('Web3Forms failed');
+            return true;
+        });
+    }
+
+    function fallbackWhatsApp(userEmail) {
+        const message = encodeURIComponent(
+            "Bonjour JO BAND, je souhaite m'inscrire à la newsletter avec l'adresse : " + userEmail
+        );
+        window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message, '_blank');
+        showStatus('Redirection vers WhatsApp pour finaliser votre inscription...', 'success');
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const userEmail = email.value.trim();
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+            showStatus('Merci de saisir une adresse email valide.', 'error');
+            return;
+        }
+
+        submit.disabled = true;
+        submit.textContent = 'Envoi...';
+        showStatus('', '');
+
+        tryFormspree(userEmail)
+            .then(() => {
+                showStatus('Merci ! Vous êtes bien inscrit(e) à la newsletter.', 'success');
+                email.value = '';
+            })
+            .catch(() => {
+                tryWeb3Forms(userEmail)
+                    .then(() => {
+                        showStatus('Merci ! Vous êtes bien inscrit(e) à la newsletter.', 'success');
+                        email.value = '';
+                    })
+                    .catch(() => {
+                        fallbackWhatsApp(userEmail);
+                    });
+            })
+            .finally(() => {
+                submit.disabled = false;
+                submit.textContent = "S'abonner";
+            });
+    });
+                   }
