@@ -1,4 +1,4 @@
-const APP_VERSION = '2026.07.08.7'; // Changez ce numéro pour forcer la mise à jour
+const APP_VERSION = '2026.07.08.8'; // Changez ce numéro pour forcer la mise à jour
 const CACHE_NAME = `joband-cache-v-${APP_VERSION}`;
 
 const ASSETS = [
