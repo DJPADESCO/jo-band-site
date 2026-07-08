@@ -1001,13 +1001,13 @@ function initTestimonials() {
                     statusBox.textContent = "Une erreur s'est produite, réessayez.";
                     statusBox.className = 'form-status-box error';
                 })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Envoyer mon avis';
-                });
-        });
+               .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Envoyer mon avis';
+    }); // Parenthèse de finally d'abord
+}); // Accolade et parenthèse du fetch ensuite
     }
-               }
+        }
    
 initYouTubeFeed();
 });
