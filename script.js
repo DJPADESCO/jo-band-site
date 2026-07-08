@@ -922,11 +922,15 @@ function initTestimonials() {
     fetch('/api/testimonials')
         .then(r => r.json())
         .then(result => {
+    fetch('/api/testimonials')
+        .then(r => r.json())
+        .then(result => {
             if (!result.success || !result.data || !result.data.length) {
                 container.innerHTML = '<p class="testi-msg">Soyez le premier à laisser un avis !</p>';
                 return;
             }
-            container.innerHTML = result.data.map(t => {
+
+            const cardsHtml = result.data.map(t => {
                 const stars = '⭐'.repeat(Math.min(5, Math.max(1, t.rating || 5)));
                 return `
                     <div class="testi-card">
@@ -935,6 +939,23 @@ function initTestimonials() {
                         <p class="testi-card-name">— ${sanitize(t.name)}</p>
                     </div>`;
             }).join('');
+
+            container.innerHTML = `<div class="testi-carousel-track">${cardsHtml}</div>`;
+
+            if (result.data.length > 1) {
+                const track = container.querySelector('.testi-carousel-track');
+                const cards = track.querySelectorAll('.testi-card');
+                let current = 0;
+                cards[0].classList.add('testi-active');
+
+                setInterval(() => {
+                    cards[current].classList.remove('testi-active');
+                    current = (current + 1) % cards.length;
+                    cards[current].classList.add('testi-active');
+                }, 5000);
+            } else {
+                container.querySelector('.testi-card').classList.add('testi-active');
+            }
         })
         .catch(() => {
             container.innerHTML = '<p class="testi-msg">Impossible de charger les avis pour le moment.</p>';
