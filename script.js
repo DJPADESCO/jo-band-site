@@ -922,7 +922,10 @@ function initTestimonials() {
     fetch('/api/testimonials')
         .then(r => r.json())
         .then(result => {
-            if (!result.success || !result.data || !result.data.length) {
+      if (!result.success || !result.data || !result.data.length) {
+                container.innerHTML = '<p class="testi-msg">Soyez le premier à laisser un avis !</p>';
+                return;
+            }
 
             const cardsHtml = result.data.map(t => {
                 const stars = '⭐'.repeat(Math.min(5, Math.max(1, t.rating || 5)));
