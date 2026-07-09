@@ -21,15 +21,12 @@ module.exports = async function handler(req, res) {
     try {
       const snapshot = await db.collection('testimonials')
         .where('approved', '==', true)
-        .orderBy('createdAt', 'desc')
         .limit(20)
         .get();
 
-      const items = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-
+      const items = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
       return res.status(200).json({ success: true, data: items });
     } catch (err) {
