@@ -1172,6 +1172,13 @@ function initNewsletter() {
         submit.textContent = 'Envoi...';
         showStatus('', '');
 
+        // On envoie aussi vers Brevo en parallèle, sans bloquer ni afficher d'erreur si ça échoue
+        fetch('/api/brevo-subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: userEmail })
+        }).catch(() => {});
+
         tryFormspree(userEmail)
             .then(() => {
                 showStatus('Merci ! Vous êtes bien inscrit(e) à la newsletter.', 'success');
