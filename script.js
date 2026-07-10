@@ -866,8 +866,8 @@ function initAnnonce() {
 function initTikTokRedirect() {
     const ua = navigator.userAgent || navigator.vendor || '';
 
-    const isTikTok = /TikTok|BytedanceWebview|musical_ly/i.test(ua);
-    if (!isTikTok) return;
+    const isInAppBrowser = /TikTok|BytedanceWebview|musical_ly|FBAN|FBAV|Instagram|Snapchat|VidMate|Line\/|MicroMessenger/i.test(ua);
+    if (!isInAppBrowser) return;
 
     const isAndroid = /Android/i.test(ua);
 
