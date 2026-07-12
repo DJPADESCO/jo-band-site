@@ -919,6 +919,7 @@ function initTestimonials() {
     const statusBox   = document.getElementById('testi-status-message');
     if (!container || !openBtn) return;
 
+    try {
     fetch('/api/testimonials')
         .then(r => r.json())
         .then(result => {
@@ -957,6 +958,9 @@ function initTestimonials() {
         .catch(() => {
             container.innerHTML = '<p class="testi-msg">Impossible de charger les avis pour le moment.</p>';
         });
+    } catch (e) {
+        container.innerHTML = '<p class="testi-msg">Impossible de charger les avis pour le moment.</p>';
+    }
 
     openBtn.addEventListener('click', () => {
         formWrapper.style.display = formWrapper.style.display === 'none' ? 'block' : 'none';
@@ -1059,8 +1063,9 @@ function initEventsCalendar() {
         return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    fetch('/api/events')
-    .then(r => r.json())
+    try {
+        fetch('/api/events')
+        .then(r => r.json())
     .then(result => {
         // 1. On filtre pour enlever les événements annulés
         const activeEvents = result.data.filter(ev => ev.status !== 'cancelled');
@@ -1096,8 +1101,11 @@ function initEventsCalendar() {
         }).join('');
     })
         .catch(() => {
-            container.innerHTML = `<p class="testi-msg">Impossible de charger les événements.</p>`;
+            container.innerHTML = '<p class="testi-msg">Impossible de charger les événements.</p>';
         });
+        } catch (e) {
+            container.innerHTML = '<p class="testi-msg">Impossible de charger les événements.</p>';
+        }
 }
 /* ── NEWSLETTER (CASCADE FORMSPREE → WEB3FORMS → WHATSAPP) ── */
 function initNewsletter() {
@@ -1179,6 +1187,7 @@ function initNewsletter() {
             body: JSON.stringify({ email: userEmail })
         }).catch(() => {});
 
+        try {
         tryFormspree(userEmail)
             .then(() => {
                 showStatus('Merci ! Vous êtes bien inscrit(e) à la newsletter.', 'success');
@@ -1198,5 +1207,10 @@ function initNewsletter() {
                 submit.disabled = false;
                 submit.textContent = "S'abonner";
             });
+        } catch (e) {
+            showStatus('Une erreur est survenue, réessayez plus tard.', 'error');
+            submit.disabled = false;
+            submit.textContent = "S'abonner";
+        }
     });
-                   }
+}
