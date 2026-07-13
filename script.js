@@ -799,6 +799,8 @@ function initNotifications() {
     appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
 });
 
+   const messaging = firebase.messaging();
+
     // Demander permission automatiquement
     Notification.requestPermission().then(permission => {
         if (permission !== 'granted') return;
