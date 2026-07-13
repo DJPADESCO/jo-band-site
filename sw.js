@@ -7,6 +7,8 @@ const ASSETS = [
   '/style.css',
   '/script.js',
   '/manifest.json',
+  '/privacy_policy.html',
+  '/terms_of_use.html',
   '/images/logo.jpg'
 ];
 
