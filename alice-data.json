@@ -126,60 +126,56 @@
   "__SECTION_DEBUT_FAQ": "----------------- BLOC FAQ -----------------",
   "faq": [
     {
-      "questions": [
-        "prix",
-        "tarif",
-        "combien",
-        "coût"
-      ],
+      "questions": ["prix", "tarif", "combien", "coût", "budget", "cher"],
       "answer": "Les prix sont négociés directement selon votre événement. Contactez le management au +228 70 00 25 39 sur WhatsApp pour un devis personnalisé."
     },
     {
-      "questions": [
-        "réserver",
-        "réservation",
-        "booker",
-        "disponible",
-        "date"
-      ],
+      "questions": ["réserver", "réservation", "booker", "disponible", "date", "engager", "louer"],
       "answer": "Pour réserver JO BAND, envoyez un message WhatsApp au +228 70 00 25 39 avec la date, le lieu et le type d'événement. Vous pouvez aussi utiliser le formulaire dans l'onglet Contact."
     },
     {
-      "questions": [
-        "membres",
-        "qui",
-        "collectif",
-        "artistes"
-      ],
+      "questions": ["membres", "qui êtes", "collectif", "artistes", "combien de personnes", "équipe"],
       "answer": "JO BAND compte 13 membres : humoristes, chanteurs, DJ, caméramen et équipe de management. Visitez l'onglet Collectif pour découvrir chaque membre."
     },
     {
-      "questions": [
-        "vidéo",
-        "youtube",
-        "tiktok",
-        "sketch"
-      ],
+      "questions": ["vidéo", "youtube", "tiktok", "sketch", "regarder", "voir vos vidéos"],
       "answer": "Retrouvez toutes nos vidéos sur YouTube @jobandofficiel et TikTok @jobandofficiel. Vous pouvez aussi les voir directement dans l'onglet Vidéos du site."
     },
     {
-      "questions": [
-        "où",
-        "togo",
-        "lomé",
-        "déplacement",
-        "voyage"
-      ],
+      "questions": ["où", "togo", "lomé", "déplacement", "voyage", "basé", "localisation"],
       "answer": "JO BAND est basé à Lomé, Togo et se déplace partout au Togo et dans la région pour vos événements."
     },
     {
-      "questions": [
-        "formule",
-        "prestation",
-        "show",
-        "animation"
-      ],
+      "questions": ["formule", "prestation", "show", "animation", "que proposez", "services"],
       "answer": "Nous proposons deux formules : Standard (Show + DJ) et Premium VIP (Show complet + DJ + Captation vidéo). Contactez-nous pour plus de détails."
+    },
+    {
+      "questions": ["événement", "événements à venir", "prochain show", "prochaine date", "calendrier", "quand jouez"],
+      "answer": "Consultez la section 'Prochains Événements' sur la page d'accueil pour voir toutes nos dates à venir. Aucun événement pour l'instant ? Suivez notre chaîne WhatsApp pour être prévenu en premier !"
+    },
+    {
+      "questions": ["avis", "témoignage", "client satisfait", "expérience", "recommandation", "reviews"],
+      "answer": "Découvrez les avis de nos clients directement sur la page d'accueil ! Vous pouvez aussi laisser le vôtre après avoir vécu un événement avec JO BAND."
+    },
+    {
+      "questions": ["newsletter", "abonner", "s'inscrire", "être informé", "alerte email"],
+      "answer": "Abonnez-vous à notre newsletter tout en bas du site pour recevoir les infos sur nos prochains shows directement par email !"
+    },
+    {
+      "questions": ["réseaux sociaux", "instagram", "facebook", "whatsapp channel", "chaîne whatsapp", "suivre"],
+      "answer": "Suivez-nous sur Instagram, Facebook, TikTok, YouTube et notre chaîne WhatsApp ! Tous les liens sont disponibles en bas du site."
+    },
+    {
+      "questions": ["contact", "téléphone", "appeler", "numéro", "joindre"],
+      "answer": "Vous pouvez nous contacter au +228 97 66 80 21 ou +228 70 00 25 39, par appel ou WhatsApp."
+    },
+    {
+      "questions": ["anglais", "english", "language", "langue"],
+      "answer": "Ce site est disponible en français et en anglais ! Utilisez le bouton FR/EN en haut de la page pour changer de langue."
+    },
+    {
+      "questions": ["histoire", "à propos", "depuis quand", "origine", "création"],
+      "answer": "JO BAND est le collectif artistique incontournable du Togo, mêlant humour, DJ, chants et productions vidéo depuis plusieurs années à Lomé."
     }
   ],
   "__SECTION_FIN_FAQ": "----------------------------------------------------------------"
