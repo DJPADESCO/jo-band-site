@@ -272,3 +272,23 @@ body.alice-page {
     font-size: 2.5rem;
     color:     rgba(212,175,55,0.3);
 }
+
+/* ======================================================== */
+/* DEBUT : LABEL TEXTE PRES DE L'ICONE ALICE                */
+/* ======================================================== */
+#alice-fab-label {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold, #d4af37);
+    color: var(--navy, #0a1128);
+    font-size: 0.62rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+/* ======================================================== */
+/* FIN : LABEL TEXTE PRES DE L'ICONE ALICE                  */
+/* ======================================================== */
