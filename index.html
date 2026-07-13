@@ -388,7 +388,14 @@ window.addEventListener('error', function(e) {
                 </div>
                 <p class="video-caption" data-i18n="video-caption">Nouvelle vidéo publiée sur YouTube = elle apparaît ici automatiquement.</p>
             </div>
-                <p class="video-caption" data-i18n="video-caption">Nouvelle vidéo publiée sur YouTube = elle apparaît ici automatiquement.</p>
+
+            <div class="yt-subscribe-wrap">
+                <div class="g-ytsubscribe" data-channelid="UCxj3ygXxMVzbKmq4ctSCN5Q" data-layout="full" data-count="default"></div>
+            </div>
+
+            <h3 class="section-title-accent"><i class="fa-brands fa-youtube text-gold"></i> <span data-i18n="yt-more-title">Toutes nos vidéos</span></h3>
+            <div id="yt-gallery-grid" class="yt-gallery-grid">
+                <p class="testi-msg">Chargement des vidéos...</p>
             </div>
             <div class="tiktok-section">
                 <h3 class="section-title-accent"><i class="fa-brands fa-tiktok text-gold"></i> TikTok JO BAND</h3>
@@ -618,6 +625,8 @@ window.addEventListener('error', function(e) {
     <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center;">
     <img id="lightbox-img" src="" style="max-width:95%; max-height:90vh; object-fit:contain;">
     <button onclick="document.getElementById('lightbox').style.display='none'" style="position:absolute; top:15px; right:20px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;">&times;</button>
+    <script src="youtube-gallery.js"></script>
+    <script src="https://apis.google.com/js/platform.js"></script>
     </div>
 
 <!-- ================= CONSOLE ALICE INTERACTIVE ================= -->
