@@ -1,3 +1,30 @@
+import { initializeApp, cert, getApps } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+
+function getFirebaseApp() {
+    if (getApps().length) return getApps()[0];
+    return initializeApp({
+        credential: cert({
+            projectId:   process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey:  process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+        })
+    });
+}
+
+function logUnansweredQuestion(message, source) {
+    try {
+        var db = getFirestore(getFirebaseApp());
+        db.collection('alice_unanswered').add({
+            message: String(message).slice(0, 500),
+            answeredBy: source,
+            createdAt: new Date().toISOString()
+        }).catch(function() {});
+    } catch (e) {
+        // Silencieux : le log ne doit jamais bloquer la réponse à l'utilisateur
+    }
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -148,12 +175,14 @@ Sois concise (max 3 phrases) sauf si on demande des détails.`;
                     setTimeout(function() { reject(new Error('timeout')); }, 8000);
                 })
             ]);
+            logUnansweredQuestion(message, apis[i].name);
             return res.status(200).json({ reply: result, source: apis[i].name });
         } catch (e) {
             continue;
         }
     }
 
+    logUnansweredQuestion(message, 'fallback');
     return res.status(200).json({
         reply: "Je suis momentanément indisponible. Contactez JO BAND directement sur WhatsApp au +228 70 00 25 39 !",
         source: 'fallback'
