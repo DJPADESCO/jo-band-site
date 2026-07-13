@@ -63,7 +63,6 @@ body.alice-page {
     flex-direction:  column !important;
     overflow:        hidden !important;
     z-index:         100000 !important;
-    backdrop-filter: blur(10px) !important;
 }
 
 /* ── EN-TÊTE ── */
