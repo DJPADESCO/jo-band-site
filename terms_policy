@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Conditions d'utilisation - JO BAND</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+<h1>Conditions d'utilisation</h1>
+<a href="index.html">← Retour au site</a>
+</header>
+
+
+<main class="legal-page">
+
+<p><strong>Dernière mise à jour :</strong> 13 juillet 2026</p>
+
+<h2>1. Objet</h2>
+
+<p>
+Ce site présente les activités, événements et contenus du collectif artistique JO BAND.
+</p>
+
+<h2>2. Utilisation du site</h2>
+
+<p>
+Les visiteurs doivent utiliser le site de manière responsable et respecter les contenus publiés.
+</p>
+
+<h2>3. Propriété des contenus</h2>
+
+<p>
+Les logos, textes, images, vidéos et créations de JO BAND restent la propriété
+du collectif ou de leurs propriétaires respectifs.
+</p>
+
+<h2>4. Témoignages et commentaires</h2>
+
+<p>
+JO BAND peut modérer ou supprimer les contenus ne respectant pas les règles
+de respect et de sécurité.
+</p>
+
+<h2>5. Services externes</h2>
+
+<p>
+Le site peut utiliser des services externes comme YouTube, Firebase,
+Cloudinary ou d'autres plateformes nécessaires à son fonctionnement.
+</p>
+
+<h2>6. Contact</h2>
+
+<p>
+Email : votre-email@example.com
+</p>
+
+</main>
+
+</body>
+</html>
