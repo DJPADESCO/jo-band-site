@@ -1,57 +1,165 @@
-const APP_VERSION = '2026.07.13.25'; // Changez ce numéro pour forcer la mise à jour
+const APP_VERSION = '2026.07.13.26';
 const CACHE_NAME = `joband-cache-v-${APP_VERSION}`;
 
 const ASSETS = [
   '/',
   '/index.html',
   '/style.css',
+  '/alice.css',
   '/script.js',
+  '/alice.js',
+  '/youtube-gallery.js',
   '/manifest.json',
   '/privacy_policy.html',
   '/terms_of_use.html',
-  '/images/logo.jpg'
+  '/alice-data.json',
+  '/images/logo.jpg',
+  '/images/logo.png'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(ASSETS);
-    }).then(() => self.skipWaiting())
-  );
-});
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys => {
+/* INSTALLATION */
+self.addEventListener('install', event => {
+
+  event.waitUntil(
+
+    caches.open(CACHE_NAME)
+    .then(cache => {
+
       return Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
+        ASSETS.map(file => {
+
+          return fetch(file)
+          .then(response => {
+
+            if(response.ok){
+              return cache.put(file,response);
+            }
+
+          })
+          .catch(() => {
+            console.warn('Cache ignoré :', file);
+          });
+
         })
       );
-    }).then(() => self.clients.claim())
+
+    })
+    .then(() => {
+
+      if(self.skipWaiting){
+        return self.skipWaiting();
+      }
+
+    })
+
   );
+
 });
 
-// Stratégie corrigée et sécurisée pour l'iPhone 7
-self.addEventListener('fetch', e => {
-  // On ne gère en cache QUE les requêtes de notre propre site
-  if (e.request.method !== 'GET' || !e.request.url.startsWith(self.location.origin)) {
-    return; // Laisse passer le réseau normal pour les API/Firestore sans bloquer
+
+/* ACTIVATION */
+self.addEventListener('activate', event => {
+
+  event.waitUntil(
+
+    caches.keys()
+    .then(keys => {
+
+      return Promise.all(
+
+        keys.map(key => {
+
+          if(key !== CACHE_NAME){
+
+            return caches.delete(key);
+
+          }
+
+        })
+
+      );
+
+    })
+
+    .then(() => {
+
+      if(self.clients && self.clients.claim){
+
+        return self.clients.claim();
+
+      }
+
+    })
+
+  );
+
+});
+
+
+/* REQUETES */
+self.addEventListener('fetch', event => {
+
+
+  const request = event.request;
+
+
+  if(
+    request.method !== 'GET' ||
+    !request.url.startsWith(self.location.origin)
+  ){
+
+    return;
+
   }
 
-  e.respondWith(
-    fetch(e.request).then(response => {
-      // On vérifie que la réponse du réseau est valide avant de la mettre en cache
-      if (response && response.status === 200) {
-        const resClone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(e.request, resClone));
+
+  event.respondWith(
+
+
+    fetch(request)
+
+    .then(response => {
+
+
+      if(response && response.status === 200){
+
+        const clone = response.clone();
+
+
+        caches.open(CACHE_NAME)
+        .then(cache => {
+
+          cache.put(request,clone);
+
+        });
+
       }
+
+
       return response;
-    }).catch(() => {
-      // Si le réseau est coupé (hors-ligne), on cherche dans le cache
-      return caches.match(e.request);
+
+
     })
+
+
+    .catch(() => {
+
+
+      return caches.match(request)
+      .then(cached => {
+
+
+        return cached || caches.match('/index.html');
+
+
+      });
+
+
+    })
+
+
   );
+
+
 });
