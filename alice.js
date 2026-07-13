@@ -67,7 +67,7 @@ var AliceBot = (function () {
         }
     }
 
-    /* ── VOIX EDGE TTS PAR PHRASES ── */
+    /* ── VOIX EDGE TTS PAR PHRASES (AVEC PRÉCHARGEMENT) ── */
     function speakText(text) {
         var cleanText = safeText(text)
             .replace(/\*/g, '')
@@ -75,15 +75,13 @@ var AliceBot = (function () {
 
         var widget  = byId('alice-widget');
         var phrases = cleanText.match(/[^.!?]+[.!?]*/g) || [cleanText];
-        var index   = 0;
+        phrases = phrases.map(function(p) { return p.trim(); }).filter(function(p) { return p.length > 0; });
+        if (!phrases.length) { setIdle(widget); return; }
 
-        function jouerPhrase() {
-            if (index >= phrases.length) { setIdle(widget); return; }
-            var phrase = phrases[index].trim();
-            index++;
-            if (!phrase) { jouerPhrase(); return; }
+        var index = 0;
 
-            fetch('/api/tts', {
+        function fetchPhraseAudio(phrase) {
+            return fetch('/api/tts', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ texte: phrase, langue: 'fr' })
@@ -92,22 +90,42 @@ var AliceBot = (function () {
                 if (!r.ok) throw new Error('TTS error');
                 return r.blob();
             })
-            .then(function(blob) {
-                var url   = URL.createObjectURL(blob);
-                var audio = new Audio(url);
-                audio.onplay  = function() { setSpeaking(widget); };
-                audio.onended = function() { URL.revokeObjectURL(url); jouerPhrase(); };
-                audio.onerror = function() { URL.revokeObjectURL(url); jouerPhrase(); };
-                var p = audio.play();
-                if (p !== undefined) {
-                    p.catch(function() { setIdle(widget); });
-                }
-            })
-            .catch(function() { setIdle(widget); });
+            .then(function(blob) { return URL.createObjectURL(blob); });
         }
 
-        jouerPhrase();
-    }
+        function playPhrase(url) {
+            var audio = new Audio(url);
+            index++;
+
+            // On lance déjà le téléchargement de la phrase suivante, pendant que celle-ci joue
+            var nextAudioPromise = (index < phrases.length)
+                ? fetchPhraseAudio(phrases[index])
+                : null;
+
+            audio.onplay = function() { setSpeaking(widget); };
+            audio.onended = function() {
+                URL.revokeObjectURL(url);
+                if (nextAudioPromise) {
+                    nextAudioPromise.then(playPhrase).catch(function() { setIdle(widget); });
+                } else {
+                    setIdle(widget);
+                }
+            };
+            audio.onerror = function() {
+                URL.revokeObjectURL(url);
+                setIdle(widget);
+            };
+
+            var p = audio.play();
+            if (p !== undefined) {
+                p.catch(function() { setIdle(widget); });
+            }
+        }
+
+        fetchPhraseAudio(phrases[0])
+            .then(playPhrase)
+            .catch(function() { setIdle(widget); });
+                                 }
 
     /* ── BULLE ── */
     function updateBubble(text) {
