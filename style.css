@@ -1166,14 +1166,58 @@ header h1 {
     color: #e0e6ed;
 }
 
-/* Styles pour tous les liens cliquables (Emails, WhatsApp, Téléphone) */
-.legal-page a {
-    color: #e5b323; /* Liens en jaune or pour qu'ils ressortent */
+/* ==========================================================================
+   PAGE LÉGALE - CONTACTS
+   ========================================================================== */
+
+.legal-page a{
+    color: var(--gold, #d4af37);
+    text-decoration: none;
+    font-weight: 600;
+    transition: .25s;
+    word-break: break-word;
+}
+
+.legal-page a:hover{
+    color: #ffd95a;
     text-decoration: underline;
-    font-weight: bold;
 }
 
-.legal-page a:hover {
-    color: #ffffff; /* Le lien devient blanc au survol */
+.legal-page p{
+    line-height: 1.8;
 }
 
+.legal-page h2{
+    margin-top: 35px;
+}
+
+.legal-page strong{
+    color: var(--gold, #d4af37);
+}
+
+/* Bloc contact */
+.legal-contact-box{
+    margin-top:20px;
+    padding:18px;
+    border-radius:12px;
+    background:rgba(212,175,55,.06);
+    border:1px solid rgba(212,175,55,.18);
+}
+
+.legal-contact-box h3{
+    color:var(--gold,#d4af37);
+    margin-bottom:12px;
+}
+
+.legal-contact-box a{
+    display:inline-block;
+    margin:6px 0;
+    padding:10px 14px;
+    border-radius:8px;
+    background:rgba(255,255,255,.05);
+}
+
+.legal-contact-box a:hover{
+    background:rgba(212,175,55,.15);
+    transform:translateX(4px);
+}
