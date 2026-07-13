@@ -946,3 +946,36 @@ select option { background: var(--navy-blue); }
 /* ======================================================== */
 /* FIN : GALERIE YOUTUBE + BOUTON ABONNEMENT                */
 /* ======================================================== */
+
+/* ==========================================================================
+   FOOTER - LIENS LÉGAUX (CONFIDENTIALITÉ / CONDITIONS)
+   ========================================================================== */
+
+.footer-legal-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px auto;
+    font-size: 0.85rem;
+}
+
+.footer-legal-links a {
+    text-decoration: none;
+    opacity: 0.85;
+    transition: 0.3s ease;
+}
+
+.footer-legal-links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.footer-legal-links span {
+    opacity: 0.5;
+}
+
+/* ==========================================================================
+   FIN FOOTER - LIENS LÉGAUX (CONFIDENTIALITÉ / CONDITIONS)
+   ========================================================================== */
