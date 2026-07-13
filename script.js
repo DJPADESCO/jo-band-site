@@ -790,16 +790,14 @@ document.addEventListener('click', e => {
 function initNotifications() {
     const VAPID_KEY = 'BEmflxm0W984vE7ZPJ9ADXn2ZfJhUyFVn1pY7lq9d02L1rpgjofPZrcBdaV-s6gARn1_MdnpTM1ZJCrZKWE3p1E';
 
-    if (!firebase.apps.length) {
     firebase.initializeApp({
-        apiKey: 'AIzaSyDol8OdWq6YoBY5XMyuPYue25mQnOoIOYE',
-        authDomain: 'jo-band-notifications-aea69.firebaseapp.com',
-        projectId: 'jo-band-notifications-aea69',
-        storageBucket: 'jo-band-notifications-aea69.firebasestorage.app',
-        messagingSenderId: '942336247693',
-        appId: '1:942336247693:web:4a0f5915907c911d671fc4'
-    });
-    }
+    apiKey:            'AIzaSyDol8OdWq6YoBY5XMyuPYue25mQnOoIOYE',
+    authDomain:        'jo-band-notifications-aea69.firebaseapp.com',
+    projectId:         'jo-band-notifications-aea69',
+    storageBucket:     'jo-band-notifications-aea69.firebasestorage.app',
+    messagingSenderId: '942336247693',
+    appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
+});
 
     // Demander permission automatiquement
     Notification.requestPermission().then(permission => {
