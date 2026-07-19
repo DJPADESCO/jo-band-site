@@ -130,14 +130,59 @@
     var btnLogout  = document.getElementById('btn-logout');
     var statusMsg  = document.getElementById('login-status');
 
+    var totpView     = document.getElementById('totp-view');
+    var btnVerifyTotp = document.getElementById('btn-verify-totp');
+    var totpStatus    = document.getElementById('totp-status');
+    var totpVerified  = sessionStorage.getItem('jb_totp_verified') === 'true';
+
     firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
+        if (user && totpVerified) {
             loginView.style.display = 'none';
+            totpView.classList.remove('visible');
             adminView.classList.add('visible');
+        } else if (user && !totpVerified) {
+            loginView.style.display = 'none';
+            totpView.classList.add('visible');
+            adminView.classList.remove('visible');
         } else {
             loginView.style.display = 'block';
+            totpView.classList.remove('visible');
             adminView.classList.remove('visible');
         }
+    });
+
+    btnVerifyTotp.addEventListener('click', function () {
+        var code = document.getElementById('totp-code').value.trim();
+        if (!code) return;
+
+        btnVerifyTotp.disabled = true;
+        btnVerifyTotp.textContent = 'Vérification...';
+
+        fetch('/api/verify-totp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: code })
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    sessionStorage.setItem('jb_totp_verified', 'true');
+                    totpVerified = true;
+                    totpView.classList.remove('visible');
+                    adminView.classList.add('visible');
+                } else {
+                    totpStatus.textContent = result.error || 'Code incorrect.';
+                    totpStatus.className = 'status-msg error';
+                }
+            })
+            .catch(function () {
+                totpStatus.textContent = 'Erreur de connexion, réessayez.';
+                totpStatus.className = 'status-msg error';
+            })
+            .finally(function () {
+                btnVerifyTotp.disabled = false;
+                btnVerifyTotp.textContent = 'Vérifier';
+            });
     });
 
     btnLogin.addEventListener('click', function () {
@@ -166,6 +211,7 @@
     });
 
     btnLogout.addEventListener('click', function () {
+        sessionStorage.removeItem('jb_totp_verified');
         firebase.auth().signOut();
     });
 </script>
