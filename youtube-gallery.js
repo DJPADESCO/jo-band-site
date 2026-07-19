@@ -48,7 +48,7 @@ function initYouTubeGallery() {
                     return;
                 }
 
-                var items = data.items.slice(0, 10);
+                var items = data.items.slice(0, 4);
 
                 grid.innerHTML = items.map(function (item) {
                     var videoId = extractVideoId(item.link);
