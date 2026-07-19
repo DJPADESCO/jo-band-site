@@ -280,13 +280,20 @@
                 headers: { 'Authorization': 'Bearer ' + idToken }
             })
                 .then(function (r) { return r.json(); })
+                .catch(function (err) {
+                    return { success: false, error: 'Erreur réseau: ' + err.message };
+                })
                 .then(function (result) {
-                    if (!result.success || !result.data.length) {
+                    if (!result.success) {
+                        container.innerHTML = '<p style="color:#ff4444; font-size:0.85rem;">Erreur: ' + (result.error || 'inconnue') + '</p>';
+                        return;
+                    }
+                    if (!result.data || !result.data.length) {
                         container.innerHTML = '<p style="color:#8892b0; font-size:0.85rem;">' +
                             (status === 'approved' ? 'Aucun témoignage approuvé.' : 'Aucun témoignage en attente.') +
                             '</p>';
                         return;
-                    }
+                }
 
                     container.innerHTML = result.data.map(function (t) {
                         var approveBtn = status === 'pending'
