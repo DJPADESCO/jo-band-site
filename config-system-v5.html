@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>404 - Page non trouvée</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, sans-serif;
+        background: #0a1128;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .login-box {
+        background: #112240;
+        border: 1px solid rgba(212,175,55,0.2);
+        border-radius: 14px;
+        padding: 30px 24px;
+        width: 100%;
+        max-width: 360px;
+    }
+    .login-box h1 {
+        color: #d4af37;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .field { margin-bottom: 16px; }
+    .field label {
+        display: block;
+        font-size: 0.82rem;
+        color: #8892b0;
+        margin-bottom: 6px;
+    }
+    .field input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(212,175,55,0.25);
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        font-size: 0.95rem;
+    }
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background: #d4af37;
+        color: #0a1128;
+        font-weight: bold;
+        font-size: 0.95rem;
+        cursor: pointer;
+        margin-top: 6px;
+    }
+    .btn-login:disabled { opacity: 0.6; }
+    .status-msg {
+        margin-top: 14px;
+        font-size: 0.85rem;
+        text-align: center;
+        min-height: 1.2em;
+    }
+    .status-msg.error   { color: #ff4444; }
+    .status-msg.success { color: #25D366; }
+    .admin-panel { display: none; text-align: center; }
+    .admin-panel.visible { display: block; }
+</style>
+</head>
+<body>
+
+<div class="login-box">
+    <div id="login-view">
+        <h1>🔒 Accès restreint</h1>
+        <div class="field">
+            <label for="admin-email">Email</label>
+            <input type="email" id="admin-email" autocomplete="username">
+        </div>
+        <div class="field">
+            <label for="admin-password">Mot de passe</label>
+            <input type="password" id="admin-password" autocomplete="current-password">
+        </div>
+        <button id="btn-login" class="btn-login">Se connecter</button>
+        <p id="login-status" class="status-msg"></p>
+    </div>
+
+    <div id="admin-view" class="admin-panel">
+        <h1>✅ Connexion réussie</h1>
+        <p style="color:#8892b0; font-size:0.85rem; margin-bottom:16px;">
+            Étape 1 validée. Les fonctionnalités de gestion seront ajoutées ici prochainement.
+        </p>
+        <button id="btn-logout" class="btn-login" style="background:transparent; border:1px solid #d4af37; color:#d4af37;">
+            Se déconnecter
+        </button>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script>
+    firebase.initializeApp({
+        apiKey:            'AIzaSyDol8OdWq6YoBY5XMyuPYue25mQnOoIOYE',
+        authDomain:        'jo-band-notifications-aea69.firebaseapp.com',
+        projectId:         'jo-band-notifications-aea69',
+        storageBucket:     'jo-band-notifications-aea69.firebasestorage.app',
+        messagingSenderId: '942336XXXXXX',
+        appId:             '1:942336XXXXXX:web:XXXXXXXX'
+    });
+
+    var loginView  = document.getElementById('login-view');
+    var adminView  = document.getElementById('admin-view');
+    var btnLogin   = document.getElementById('btn-login');
+    var btnLogout  = document.getElementById('btn-logout');
+    var statusMsg  = document.getElementById('login-status');
+
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            loginView.style.display = 'none';
+            adminView.classList.add('visible');
+        } else {
+            loginView.style.display = 'block';
+            adminView.classList.remove('visible');
+        }
+    });
+
+    btnLogin.addEventListener('click', function () {
+        var email    = document.getElementById('admin-email').value.trim();
+        var password = document.getElementById('admin-password').value;
+
+        if (!email || !password) {
+            statusMsg.textContent = 'Merci de remplir tous les champs.';
+            statusMsg.className = 'status-msg error';
+            return;
+        }
+
+        btnLogin.disabled = true;
+        btnLogin.textContent = 'Connexion...';
+        statusMsg.textContent = '';
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .catch(function (error) {
+                statusMsg.textContent = 'Identifiants incorrects.';
+                statusMsg.className = 'status-msg error';
+            })
+            .finally(function () {
+                btnLogin.disabled = false;
+                btnLogin.textContent = 'Se connecter';
+            });
+    });
+
+    btnLogout.addEventListener('click', function () {
+        firebase.auth().signOut();
+    });
+</script>
+
+</body>
+</html>
