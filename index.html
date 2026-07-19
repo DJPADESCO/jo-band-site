@@ -392,15 +392,31 @@ window.addEventListener('error', function(e) {
                 <div class="g-ytsubscribe" data-channelid="UCxj3ygXxMVzbKmq4ctSCN5Q" data-layout="full" data-count="default"></div>
             </div>
 
-            <h3 class="section-title-accent"><i class="fa-brands fa-youtube text-gold"></i> <span data-i18n="yt-more-title">Toutes nos vidéos</span></h3>
+            <h3 class="section-title-accent"><i class="fa-brands fa-youtube text-gold"></i> <span data-i18n="yt-more-title">Nos dernières vidéos</span></h3>
             <div id="yt-gallery-grid" class="yt-gallery-grid">
                 <p class="testi-msg">Chargement des vidéos...</p>
             </div>
+            <a href="https://youtube.com/@jobandofficiel" target="_blank" class="btn-platform-cta yt-cta">
+                <i class="fa-brands fa-youtube"></i> Voir toutes nos vidéos sur YouTube
+            </a>
             <div class="tiktok-section">
                 <h3 class="section-title-accent"><i class="fa-brands fa-tiktok text-gold"></i> TikTok JO BAND</h3>
                 <p class="section-subtitle" data-i18n="tiktok-desc">Retrouvez nos sketchs viraux sur notre page TikTok officielle.</p>
                 <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-tiktok-profile"><i class="fa-brands fa-tiktok"></i> <span data-i18n="tiktok-btn">Voir tous nos TikToks</span></a>
             </div>
+
+            <div class="video-main-card">
+                <div id="tiktok-main-embed" class="tiktok-main-embed">
+                    <p class="testi-msg">Chargement du TikTok...</p>
+                </div>
+            </div>
+            <h3 class="section-title-accent"><i class="fa-brands fa-tiktok text-gold"></i> <span data-i18n="tt-more-title">Nos derniers TikToks</span></h3>
+            <div id="tiktok-gallery-grid" class="yt-gallery-grid">
+                <p class="testi-msg">Chargement des vidéos...</p>
+            </div>
+            <a href="https://www.tiktok.com/@jobandofficiel" target="_blank" class="btn-platform-cta tt-cta">
+                <i class="fa-brands fa-tiktok"></i> Suivre JO BAND sur TikTok
+            </a>
             <div class="packages-section">
                 <h2 class="title-gold" data-i18n="packages-title">Nos Formules Prestations</h2>
                 <div class="packages-grid">
@@ -650,6 +666,7 @@ Envoyer la demande
     <img id="lightbox-img" src="" style="max-width:95%; max-height:90vh; object-fit:contain;">
     <button onclick="document.getElementById('lightbox').style.display='none'" style="position:absolute; top:15px; right:20px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;">&times;</button>
     <script src="youtube-gallery.js"></script>
+    <script src="tiktok-gallery.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
     </div>
 
