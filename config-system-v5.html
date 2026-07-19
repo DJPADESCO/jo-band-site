@@ -229,7 +229,8 @@
                     totpVerified = true;
                     totpView.classList.remove('visible');
                     adminView.classList.add('visible');
-                    loadPendingTestimonials();
+                    loadTestimonials('pending');
+                    loadTestimonials('approved');
                 } else {
                     totpStatus.textContent = result.error || 'Code incorrect.';
                     totpStatus.className = 'status-msg error';
