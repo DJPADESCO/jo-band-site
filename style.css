@@ -1246,12 +1246,7 @@ header h1 {
     color: #fff;
     border: 1px solid rgba(212,175,55,0.3);
 }
-.tiktok-main-embed {
-    display: flex;
-    justify-content: center;
-    min-height: 200px;
-    align-items: center;
-}
+
 /* ======================================================== */
 /* FIN : BOUTONS CTA PLATEFORMES + EMBED TIKTOK             */
 /* ======================================================== */
