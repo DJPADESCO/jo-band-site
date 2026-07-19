@@ -70,6 +70,52 @@
     .status-msg.success { color: #25D366; }
     .admin-panel { display: none; text-align: center; }
     .admin-panel.visible { display: block; }
+    .admin-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid rgba(212,175,55,0.15);
+    }
+    .admin-tab-btn {
+        background: none;
+        border: none;
+        color: #8892b0;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+    }
+    .admin-tab-btn.active {
+        color: #d4af37;
+        border-bottom-color: #d4af37;
+        font-weight: bold;
+    }
+    .admin-tab-content { display: none; }
+    .admin-tab-content.active { display: block; }
+    .admin-section-title {
+        color: #d4af37;
+        font-size: 0.95rem;
+        margin: 16px 0 10px;
+        text-align: left;
+    }
+    .admin-item-card {
+        background: rgba(255,255,255,0.04);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+    .admin-item-text { font-size: 0.88rem; margin-bottom: 6px; }
+    .admin-item-meta { font-size: 0.78rem; color: #d4af37; margin-bottom: 10px; }
+    .admin-btn-approve, .admin-btn-delete {
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        margin-right: 8px;
+        cursor: pointer;
+    }
+    .admin-btn-approve { background: #25D366; color: #fff; }
+    .admin-btn-delete  { background: #ff4444; color: #fff; }
 </style>
 </head>
 <body>
@@ -104,11 +150,20 @@
     <div id="admin-view" class="admin-panel">
         <h1>⚙️ Panneau Admin JO BAND</h1>
 
-        <h3 style="color:#d4af37; font-size:0.95rem; margin:20px 0 10px; text-align:left;">
-            📝 Témoignages en attente
-        </h3>
-        <div id="admin-testi-list" style="text-align:left;">
-            <p style="color:#8892b0; font-size:0.85rem;">Chargement...</p>
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" data-tab="tab-testimonials">Témoignages</button>
+        </div>
+
+        <div id="tab-testimonials" class="admin-tab-content active">
+            <h3 class="admin-section-title">📝 En attente</h3>
+            <div id="admin-testi-pending" style="text-align:left;">
+                <p style="color:#8892b0; font-size:0.85rem;">Chargement...</p>
+            </div>
+
+            <h3 class="admin-section-title">✅ Déjà approuvés</h3>
+            <div id="admin-testi-approved" style="text-align:left;">
+                <p style="color:#8892b0; font-size:0.85rem;">Chargement...</p>
+            </div>
         </div>
 
         <button id="btn-logout" class="btn-login" style="background:transparent; border:1px solid #d4af37; color:#d4af37; margin-top:20px;">
@@ -215,43 +270,57 @@
             });
     });
 
-    function loadPendingTestimonials() {
-        var list = document.getElementById('admin-testi-list');
+    function loadTestimonials(status) {
+        var containerId = status === 'approved' ? 'admin-testi-approved' : 'admin-testi-pending';
+        var container = document.getElementById(containerId);
+
         firebase.auth().currentUser.getIdToken().then(function (idToken) {
-            fetch('/api/admin-testimonials', {
+            fetch('/api/admin-testimonials?status=' + status, {
                 headers: { 'Authorization': 'Bearer ' + idToken }
             })
                 .then(function (r) { return r.json(); })
                 .then(function (result) {
                     if (!result.success || !result.data.length) {
-                        list.innerHTML = '<p style="color:#8892b0; font-size:0.85rem;">Aucun témoignage en attente.</p>';
+                        container.innerHTML = '<p style="color:#8892b0; font-size:0.85rem;">' +
+                            (status === 'approved' ? 'Aucun témoignage approuvé.' : 'Aucun témoignage en attente.') +
+                            '</p>';
                         return;
                     }
-                    list.innerHTML = result.data.map(function (t) {
+
+                    container.innerHTML = result.data.map(function (t) {
+                        var approveBtn = status === 'pending'
+                            ? '<button class="admin-btn-approve" data-id="' + t.id + '">Approuver</button>'
+                            : '';
                         return '' +
-                            '<div style="background:rgba(255,255,255,0.04); border-radius:8px; padding:12px; margin-bottom:10px;">' +
-                                '<p style="font-size:0.88rem; margin-bottom:6px;">' + t.message + '</p>' +
-                                '<p style="font-size:0.78rem; color:#d4af37; margin-bottom:10px;">— ' + t.name + ' (' + t.rating + '⭐)</p>' +
-                                '<button class="btn-approve" data-id="' + t.id + '" style="background:#25D366; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:0.78rem; margin-right:8px;">Approuver</button>' +
-                                '<button class="btn-reject" data-id="' + t.id + '" style="background:#ff4444; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:0.78rem;">Rejeter</button>' +
+                            '<div class="admin-item-card">' +
+                                '<p class="admin-item-text">' + t.message + '</p>' +
+                                '<p class="admin-item-meta">— ' + t.name + ' (' + t.rating + '⭐)</p>' +
+                                approveBtn +
+                                '<button class="admin-btn-delete" data-id="' + t.id + '">Supprimer</button>' +
                             '</div>';
                     }).join('');
 
-                    document.querySelectorAll('.btn-approve').forEach(function (btn) {
+                    container.querySelectorAll('.admin-btn-approve').forEach(function (btn) {
                         btn.addEventListener('click', function () {
-                            updateTestimonial(btn.getAttribute('data-id'), 'approve');
+                            var id = btn.getAttribute('data-id');
+                            if (confirm('Voulez-vous approuver ce témoignage ? Il deviendra visible publiquement sur le site.')) {
+                                updateTestimonial(id, 'approve', status);
+                            }
                         });
                     });
-                    document.querySelectorAll('.btn-reject').forEach(function (btn) {
+                    container.querySelectorAll('.admin-btn-delete').forEach(function (btn) {
                         btn.addEventListener('click', function () {
-                            updateTestimonial(btn.getAttribute('data-id'), 'reject');
+                            var id = btn.getAttribute('data-id');
+                            if (confirm('Voulez-vous vraiment supprimer ce témoignage définitivement ?')) {
+                                updateTestimonial(id, 'delete', status);
+                            }
                         });
                     });
                 });
         });
     }
 
-    function updateTestimonial(id, action) {
+    function updateTestimonial(id, action, status) {
         firebase.auth().currentUser.getIdToken().then(function (idToken) {
             fetch('/api/admin-testimonials', {
                 method: 'POST',
@@ -261,11 +330,20 @@
                 },
                 body: JSON.stringify({ id: id, action: action })
             }).then(function () {
-                loadPendingTestimonials();
+                loadTestimonials('pending');
+                loadTestimonials('approved');
             });
         });
     }
 
+    document.querySelectorAll('.admin-tab-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.admin-tab-btn').forEach(function (b) { b.classList.remove('active'); });
+            document.querySelectorAll('.admin-tab-content').forEach(function (c) { c.classList.remove('active'); });
+            btn.classList.add('active');
+            document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+        });
+    });
     btnLogout.addEventListener('click', function () {
         sessionStorage.removeItem('jb_totp_verified');
         firebase.auth().signOut();
