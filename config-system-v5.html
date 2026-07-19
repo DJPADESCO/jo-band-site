@@ -89,6 +89,18 @@
         <p id="login-status" class="status-msg"></p>
     </div>
 
+    <div id="totp-view" class="admin-panel">
+        <h1>🔐 Code de vérification</h1>
+        <p style="color:#8892b0; font-size:0.85rem; margin-bottom:16px;">
+            Ouvrez Google Authenticator et entrez le code à 6 chiffres.
+        </p>
+        <div class="field">
+            <input type="text" id="totp-code" maxlength="6" placeholder="123456" style="text-align:center; font-size:1.3rem; letter-spacing:4px;">
+        </div>
+        <button id="btn-verify-totp" class="btn-login">Vérifier</button>
+        <p id="totp-status" class="status-msg"></p>
+    </div>
+
     <div id="admin-view" class="admin-panel">
         <h1>✅ Connexion réussie</h1>
         <p style="color:#8892b0; font-size:0.85rem; margin-bottom:16px;">
