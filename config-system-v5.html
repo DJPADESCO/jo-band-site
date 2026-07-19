@@ -102,15 +102,19 @@
     </div>
 
     <div id="admin-view" class="admin-panel">
-        <h1>✅ Connexion réussie</h1>
-        <p style="color:#8892b0; font-size:0.85rem; margin-bottom:16px;">
-            Étape 1 validée. Les fonctionnalités de gestion seront ajoutées ici prochainement.
-        </p>
-        <button id="btn-logout" class="btn-login" style="background:transparent; border:1px solid #d4af37; color:#d4af37;">
+        <h1>⚙️ Panneau Admin JO BAND</h1>
+
+        <h3 style="color:#d4af37; font-size:0.95rem; margin:20px 0 10px; text-align:left;">
+            📝 Témoignages en attente
+        </h3>
+        <div id="admin-testi-list" style="text-align:left;">
+            <p style="color:#8892b0; font-size:0.85rem;">Chargement...</p>
+        </div>
+
+        <button id="btn-logout" class="btn-login" style="background:transparent; border:1px solid #d4af37; color:#d4af37; margin-top:20px;">
             Se déconnecter
         </button>
     </div>
-</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
@@ -170,6 +174,7 @@
                     totpVerified = true;
                     totpView.classList.remove('visible');
                     adminView.classList.add('visible');
+                    loadPendingTestimonials();
                 } else {
                     totpStatus.textContent = result.error || 'Code incorrect.';
                     totpStatus.className = 'status-msg error';
@@ -209,6 +214,57 @@
                 btnLogin.textContent = 'Se connecter';
             });
     });
+
+    function loadPendingTestimonials() {
+        var list = document.getElementById('admin-testi-list');
+        firebase.auth().currentUser.getIdToken().then(function (idToken) {
+            fetch('/api/admin-testimonials', {
+                headers: { 'Authorization': 'Bearer ' + idToken }
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (result) {
+                    if (!result.success || !result.data.length) {
+                        list.innerHTML = '<p style="color:#8892b0; font-size:0.85rem;">Aucun témoignage en attente.</p>';
+                        return;
+                    }
+                    list.innerHTML = result.data.map(function (t) {
+                        return '' +
+                            '<div style="background:rgba(255,255,255,0.04); border-radius:8px; padding:12px; margin-bottom:10px;">' +
+                                '<p style="font-size:0.88rem; margin-bottom:6px;">' + t.message + '</p>' +
+                                '<p style="font-size:0.78rem; color:#d4af37; margin-bottom:10px;">— ' + t.name + ' (' + t.rating + '⭐)</p>' +
+                                '<button class="btn-approve" data-id="' + t.id + '" style="background:#25D366; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:0.78rem; margin-right:8px;">Approuver</button>' +
+                                '<button class="btn-reject" data-id="' + t.id + '" style="background:#ff4444; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:0.78rem;">Rejeter</button>' +
+                            '</div>';
+                    }).join('');
+
+                    document.querySelectorAll('.btn-approve').forEach(function (btn) {
+                        btn.addEventListener('click', function () {
+                            updateTestimonial(btn.getAttribute('data-id'), 'approve');
+                        });
+                    });
+                    document.querySelectorAll('.btn-reject').forEach(function (btn) {
+                        btn.addEventListener('click', function () {
+                            updateTestimonial(btn.getAttribute('data-id'), 'reject');
+                        });
+                    });
+                });
+        });
+    }
+
+    function updateTestimonial(id, action) {
+        firebase.auth().currentUser.getIdToken().then(function (idToken) {
+            fetch('/api/admin-testimonials', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + idToken
+                },
+                body: JSON.stringify({ id: id, action: action })
+            }).then(function () {
+                loadPendingTestimonials();
+            });
+        });
+    }
 
     btnLogout.addEventListener('click', function () {
         sessionStorage.removeItem('jb_totp_verified');
