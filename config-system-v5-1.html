@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>404 - Page non trouvée</title>
+<link rel="stylesheet" href="config-system-v5.css">
+</head>
+<body>
+
+<div class="login-box">
+    <div id="login-view">
+        <h1>🔒 Accès restreint</h1>
+        <div class="field">
+            <label for="admin-email">Email</label>
+            <input type="email" id="admin-email" autocomplete="username">
+        </div>
+        <div class="field">
+            <label for="admin-password">Mot de passe</label>
+            <input type="password" id="admin-password" autocomplete="current-password">
+        </div>
+        <button id="btn-login" class="btn-login">Se connecter</button>
+        <p id="login-status" class="status-msg"></p>
+    </div>
+
+    <div id="totp-view" class="admin-panel">
+        <h1>🔐 Code de vérification</h1>
+        <p class="admin-subtext">
+            Ouvrez Google Authenticator et entrez le code à 6 chiffres.
+        </p>
+        <div class="field">
+            <input type="text" id="totp-code" maxlength="6" placeholder="123456" class="totp-input">
+        </div>
+        <button id="btn-verify-totp" class="btn-login">Vérifier</button>
+        <p id="totp-status" class="status-msg"></p>
+    </div>
+
+    <div id="admin-view" class="admin-panel">
+        <h1>⚙️ Panneau Admin JO BAND</h1>
+
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" data-tab="tab-testimonials">Témoignages</button>
+        </div>
+
+        <div id="tab-testimonials" class="admin-tab-content active">
+            <h3 class="admin-section-title">📝 En attente</h3>
+            <div id="admin-testi-pending" class="admin-list">
+                <p class="admin-subtext">Chargement...</p>
+            </div>
+
+            <h3 class="admin-section-title">✅ Déjà approuvés</h3>
+            <div id="admin-testi-approved" class="admin-list">
+                <p class="admin-subtext">Chargement...</p>
+            </div>
+        </div>
+
+        <button id="btn-logout" class="btn-login btn-logout">
+            Se déconnecter
+        </button>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="config-system-v5.js"></script>
+
+</body>
+</html>
