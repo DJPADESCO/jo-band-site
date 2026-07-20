@@ -8,8 +8,8 @@ firebase.initializeApp({
     authDomain:        'jo-band-notifications-aea69.firebaseapp.com',
     projectId:         'jo-band-notifications-aea69',
     storageBucket:     'jo-band-notifications-aea69.firebasestorage.app',
-    messagingSenderId: 'REMPLACER_PAR_LA_VRAIE_VALEUR',
-    appId:             'REMPLACER_PAR_LA_VRAIE_VALEUR'
+    messagingSenderId: '942336247693',
+    appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
 });
 
 var loginView  = document.getElementById('login-view');
