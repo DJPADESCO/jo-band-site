@@ -1,6 +1,6 @@
 /* ==========================================
    PANNEAU ADMIN JO BAND — LOGIQUE COMPLETE
-   Connexion + 2FA + gestion des témoignages
+   Connexion + 2FA + tiroir de navigation + témoignages
 ========================================== */
 
 firebase.initializeApp({
@@ -12,32 +12,35 @@ firebase.initializeApp({
     appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
 });
 
-var loginView  = document.getElementById('login-view');
-var adminView  = document.getElementById('admin-view');
-var totpView   = document.getElementById('totp-view');
-var btnLogin   = document.getElementById('btn-login');
-var btnLogout  = document.getElementById('btn-logout');
-var statusMsg  = document.getElementById('login-status');
+var authWrapper = document.getElementById('auth-wrapper');
+var loginView   = document.getElementById('login-view');
+var totpView    = document.getElementById('totp-view');
+var dashboard   = document.getElementById('dashboard');
+
+var btnLogin      = document.getElementById('btn-login');
 var btnVerifyTotp = document.getElementById('btn-verify-totp');
+var btnLogout     = document.getElementById('btn-logout');
+var statusMsg     = document.getElementById('login-status');
 var totpStatus    = document.getElementById('totp-status');
 var totpVerified  = sessionStorage.getItem('jb_totp_verified') === 'true';
 
 /* ── ETAT DE CONNEXION ── */
 firebase.auth().onAuthStateChanged(function (user) {
     if (user && totpVerified) {
-        loginView.style.display = 'none';
-        totpView.classList.remove('visible');
-        adminView.classList.add('visible');
+        authWrapper.classList.remove('visible');
+        dashboard.classList.add('visible');
         loadTestimonials('pending');
         loadTestimonials('approved');
     } else if (user && !totpVerified) {
-        loginView.style.display = 'none';
+        authWrapper.classList.add('visible');
+        loginView.classList.remove('visible');
         totpView.classList.add('visible');
-        adminView.classList.remove('visible');
+        dashboard.classList.remove('visible');
     } else {
-        loginView.style.display = 'block';
+        authWrapper.classList.add('visible');
+        loginView.classList.add('visible');
         totpView.classList.remove('visible');
-        adminView.classList.remove('visible');
+        dashboard.classList.remove('visible');
     }
 });
 
@@ -85,8 +88,8 @@ btnVerifyTotp.addEventListener('click', function () {
             if (result.success) {
                 sessionStorage.setItem('jb_totp_verified', 'true');
                 totpVerified = true;
-                totpView.classList.remove('visible');
-                adminView.classList.add('visible');
+                authWrapper.classList.remove('visible');
+                dashboard.classList.add('visible');
                 loadTestimonials('pending');
                 loadTestimonials('approved');
             } else {
@@ -110,13 +113,36 @@ btnLogout.addEventListener('click', function () {
     firebase.auth().signOut();
 });
 
-/* ── ONGLETS ── */
-document.querySelectorAll('.admin-tab-btn').forEach(function (btn) {
+/* ── TIROIR DE NAVIGATION (hamburger) ── */
+var btnOpenDrawer = document.getElementById('btn-open-drawer');
+var sideDrawer    = document.getElementById('side-drawer');
+var drawerBackdrop = document.getElementById('drawer-backdrop');
+
+function openDrawer() {
+    sideDrawer.classList.add('open');
+    drawerBackdrop.classList.add('visible');
+}
+function closeDrawer() {
+    sideDrawer.classList.remove('open');
+    drawerBackdrop.classList.remove('visible');
+}
+
+btnOpenDrawer.addEventListener('click', openDrawer);
+drawerBackdrop.addEventListener('click', closeDrawer);
+
+/* ── NAVIGATION ENTRE ONGLETS ── */
+var pageTitle = document.getElementById('page-title');
+
+document.querySelectorAll('.nav-item').forEach(function (btn) {
     btn.addEventListener('click', function () {
-        document.querySelectorAll('.admin-tab-btn').forEach(function (b) { b.classList.remove('active'); });
-        document.querySelectorAll('.admin-tab-content').forEach(function (c) { c.classList.remove('active'); });
+        document.querySelectorAll('.nav-item').forEach(function (b) { b.classList.remove('active'); });
+        document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+
         btn.classList.add('active');
         document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+        pageTitle.textContent = btn.textContent.trim();
+
+        closeDrawer();
     });
 });
 
@@ -135,11 +161,11 @@ function loadTestimonials(status) {
             })
             .then(function (result) {
                 if (!result.success) {
-                    container.innerHTML = '<p style="color:#ff4444; font-size:0.85rem;">Erreur: ' + (result.error || 'inconnue') + '</p>';
+                    container.innerHTML = '<p style="color:#e0344c; font-size:0.85rem;">Erreur: ' + (result.error || 'inconnue') + '</p>';
                     return;
                 }
                 if (!result.data || !result.data.length) {
-                    container.innerHTML = '<p class="admin-subtext">' +
+                    container.innerHTML = '<p class="subtext">' +
                         (status === 'approved' ? 'Aucun témoignage approuvé.' : 'Aucun témoignage en attente.') +
                         '</p>';
                     return;
