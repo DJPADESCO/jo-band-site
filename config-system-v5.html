@@ -5,60 +5,83 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <title>404 - Page non trouvée</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="config-system-v5.css">
 </head>
 <body>
 
-<div class="login-box">
-    <div id="login-view">
-        <h1>🔒 Accès restreint</h1>
-        <div class="field">
-            <label for="admin-email">Email</label>
-            <input type="email" id="admin-email" autocomplete="username">
-        </div>
-        <div class="field">
-            <label for="admin-password">Mot de passe</label>
-            <input type="password" id="admin-password" autocomplete="current-password">
-        </div>
-        <button id="btn-login" class="btn-login">Se connecter</button>
-        <p id="login-status" class="status-msg"></p>
-    </div>
-
-    <div id="totp-view" class="admin-panel">
-        <h1>🔐 Code de vérification</h1>
-        <p class="admin-subtext">
-            Ouvrez Google Authenticator et entrez le code à 6 chiffres.
-        </p>
-        <div class="field">
-            <input type="text" id="totp-code" maxlength="6" placeholder="123456" class="totp-input">
-        </div>
-        <button id="btn-verify-totp" class="btn-login">Vérifier</button>
-        <p id="totp-status" class="status-msg"></p>
-    </div>
-
-    <div id="admin-view" class="admin-panel">
-        <h1>⚙️ Panneau Admin JO BAND</h1>
-
-        <div class="admin-tabs">
-            <button class="admin-tab-btn active" data-tab="tab-testimonials">Témoignages</button>
-        </div>
-
-        <div id="tab-testimonials" class="admin-tab-content active">
-            <h3 class="admin-section-title">📝 En attente</h3>
-            <div id="admin-testi-pending" class="admin-list">
-                <p class="admin-subtext">Chargement...</p>
+<div id="auth-wrapper" class="hidden-panel visible">
+    <div class="login-box">
+        <div id="login-view" class="hidden-panel visible">
+            <h1><i class="fa-solid fa-lock"></i> Accès restreint</h1>
+            <div class="field">
+                <label for="admin-email">Email</label>
+                <input type="email" id="admin-email" autocomplete="username">
             </div>
-
-            <h3 class="admin-section-title">✅ Déjà approuvés</h3>
-            <div id="admin-testi-approved" class="admin-list">
-                <p class="admin-subtext">Chargement...</p>
+            <div class="field">
+                <label for="admin-password">Mot de passe</label>
+                <input type="password" id="admin-password" autocomplete="current-password">
             </div>
+            <button id="btn-login" class="btn-primary">Se connecter</button>
+            <p id="login-status" class="status-msg"></p>
         </div>
 
-        <button id="btn-logout" class="btn-login btn-logout">
-            Se déconnecter
+        <div id="totp-view" class="hidden-panel">
+            <h1><i class="fa-solid fa-shield-halved"></i> Vérification</h1>
+            <p class="subtext">Entrez le code à 6 chiffres de Google Authenticator.</p>
+            <div class="field">
+                <input type="text" id="totp-code" maxlength="6" placeholder="123456" class="totp-input">
+            </div>
+            <button id="btn-verify-totp" class="btn-primary">Vérifier</button>
+            <p id="totp-status" class="status-msg"></p>
+        </div>
+    </div>
+</div>
+
+<div id="dashboard" class="hidden-panel">
+
+    <button id="btn-open-drawer" class="hamburger-btn" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div id="drawer-backdrop" class="drawer-backdrop"></div>
+
+    <aside id="side-drawer" class="side-drawer">
+        <div class="drawer-header">
+            <span class="drawer-title">JO BAND</span>
+            <span class="drawer-subtitle">Panneau Admin</span>
+        </div>
+        <nav class="drawer-nav">
+            <button class="nav-item active" data-tab="tab-testimonials">
+                <i class="fa-regular fa-comment-dots"></i> Témoignages
+            </button>
+        </nav>
+        <button id="btn-logout" class="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
         </button>
-    </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <h1 id="page-title">Témoignages</h1>
+        </header>
+
+        <div id="tab-testimonials" class="tab-panel active">
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-regular fa-clock"></i> En attente</h2>
+                <div id="admin-testi-pending" class="item-list">
+                    <p class="subtext">Chargement...</p>
+                </div>
+            </section>
+
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-check"></i> Approuvés</h2>
+                <div id="admin-testi-approved" class="item-list">
+                    <p class="subtext">Chargement...</p>
+                </div>
+            </section>
+        </div>
+    </main>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
