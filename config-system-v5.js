@@ -227,18 +227,17 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
 });
 
 /* ── GESTION DES TEMOIGNAGES ── */
-function loadTestimonials(status) {
 
-   function escapeHtml(value) {
-
+function escapeHtml(value) {
     return String(value ?? '')
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
 
-   }
+function loadTestimonials(status) {
 
     var containerId = status === 'approved'
         ? 'admin-testi-approved'
@@ -253,86 +252,123 @@ function loadTestimonials(status) {
     var user = firebase.auth().currentUser;
 
     if (!user) {
-
         container.innerHTML =
             '<p class="subtext">Session expirée. Veuillez vous reconnecter.</p>';
-
         return;
     }
-.then(function (r) {
 
-    if (!r.ok) {
-        throw new Error('Erreur HTTP ' + r.status);
-    }
-
-    return r.json();
-
-})
     user.getIdToken().then(function (idToken) {
+
         fetch('/api/admin-testimonials?status=' + status, {
-            headers: { 'Authorization': 'Bearer ' + idToken }
-        })
-            
-            .catch(function (err) {
-                return { success: false, error: 'Erreur réseau: ' + err.message };
-            })
-            .then(function (result) {
-                if (!result.success) {
-                    container.innerHTML = '<p style="color:#e0344c; font-size:0.85rem;">Erreur: ' + (result.error || 'inconnue') + '</p>';
-                    return;
-                }
-                if (!result.data || !result.data.length) {
-                    container.innerHTML = '<p class="subtext">' +
-                        (status === 'approved' ? 'Aucun témoignage approuvé.' : 'Aucun témoignage en attente.') +
-                        '</p>';
-                    return;
-                }
-
-                container.innerHTML = result.data.map(function (t) {
-                    var approveBtn ='<p class="admin-item-text">' + escapeHtml(t.message) + '</p>' + status === 'pending'
-                        ? '<button class="admin-btn-approve" data-id="' + t.id + '">Approuver</button>'
-                        : '';
-                    return '' +
-                        '<div class="admin-item-card">' +
-                            
-                            '<p class="admin-item-meta">— ' + escapeHtml(t.name) + ' (' + Number(t.rating || 0) + '⭐)</p>' +
-                            approveBtn +
-                            '<button class="admin-btn-delete" data-id="' + t.id + '">Supprimer</button>' +
-                        '</div>';
-                }).join('');
-
-                container.querySelectorAll('.admin-btn-approve').forEach(function (btn) {
-                    btn.addEventListener('click', function () {
-                        var id = btn.getAttribute('data-id');
-                        if (confirm('Voulez-vous approuver ce témoignage ? Il deviendra visible publiquement sur le site.')) {
-                            updateTestimonial(id, 'approve');
-                        }
-                    });
-                });
-                container.querySelectorAll('.admin-btn-delete').forEach(function (btn) {
-                    btn.addEventListener('click', function () {
-                        var id = btn.getAttribute('data-id');
-                        if (confirm('Voulez-vous vraiment supprimer ce témoignage définitivement ?')) {
-                            updateTestimonial(id, 'delete');
-                        }
-                    });
-                });
-            });
-    });
-}
-
-function updateTestimonial(id, action) {
-    firebase.auth().currentUser.getIdToken().then(function (idToken) {
-        fetch('/api/admin-testimonials', {
-            method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + idToken
-            },
-            body: JSON.stringify({ id: id, action: action })
-        }).then(function () {
-            loadTestimonials('pending');
-            loadTestimonials('approved');
+            }
+        })
+
+        .then(function (response) {
+
+            if (!response.ok) {
+                throw new Error('Erreur HTTP ' + response.status);
+            }
+
+            return response.json();
+
+        })
+
+        .then(function (result) {
+
+            if (!result.success) {
+                container.innerHTML =
+                    '<p style="color:#e0344c;font-size:0.85rem;">Erreur : ' +
+                    escapeHtml(result.error || 'Inconnue') +
+                    '</p>';
+                return;
+            }
+
+            if (!result.data || result.data.length === 0) {
+
+                container.innerHTML =
+                    '<p class="subtext">' +
+                    (status === 'approved'
+                        ? 'Aucun témoignage approuvé.'
+                        : 'Aucun témoignage en attente.') +
+                    '</p>';
+
+                return;
+            }
+
+            container.innerHTML = result.data.map(function (t) {
+
+                var approveBtn = '';
+
+                if (status === 'pending') {
+                    approveBtn =
+                        '<button class="admin-btn-approve" data-id="' +
+                        t.id +
+                        '">Approuver</button>';
+                }
+
+                return (
+                    '<div class="admin-item-card">' +
+                        '<p class="admin-item-text">' +
+                            escapeHtml(t.message) +
+                        '</p>' +
+
+                        '<p class="admin-item-meta">— ' +
+                            escapeHtml(t.name) +
+                            ' (' +
+                            Number(t.rating || 0) +
+                            '⭐)</p>' +
+
+                        approveBtn +
+
+                        '<button class="admin-btn-delete" data-id="' +
+                            t.id +
+                            '">Supprimer</button>' +
+                    '</div>'
+                );
+
+            }).join('');
+
+            container.querySelectorAll('.admin-btn-approve').forEach(function (btn) {
+
+                btn.addEventListener('click', function () {
+
+                    var id = btn.dataset.id;
+
+                    if (confirm('Voulez-vous approuver ce témoignage ?')) {
+                        updateTestimonial(id, 'approve');
+                    }
+
+                });
+
+            });
+
+            container.querySelectorAll('.admin-btn-delete').forEach(function (btn) {
+
+                btn.addEventListener('click', function () {
+
+                    var id = btn.dataset.id;
+
+                    if (confirm('Voulez-vous supprimer définitivement ce témoignage ?')) {
+                        updateTestimonial(id, 'delete');
+                    }
+
+                });
+
+            });
+
+        })
+
+        .catch(function (err) {
+
+            container.innerHTML =
+                '<p style="color:#e0344c;font-size:0.85rem;">' +
+                escapeHtml(err.message) +
+                '</p>';
+
         });
+
     });
+
 }
