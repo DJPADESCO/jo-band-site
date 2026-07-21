@@ -59,16 +59,26 @@ btnLogin.addEventListener('click', function () {
     btnLogin.textContent = 'Connexion...';
     statusMsg.textContent = '';
 
+    var loginTimeout = setTimeout(function () {
+        statusMsg.textContent = 'Ça prend trop de temps, réessayez.';
+        statusMsg.className = 'status-msg error';
+        btnLogin.disabled = false;
+        btnLogin.textContent = 'Se connecter';
+    }, 15000);
+
     firebase.auth().signInWithEmailAndPassword(email, password)
-        .catch(function () {
-            statusMsg.textContent = 'Identifiants incorrects.';
+        .then(function () {
+            clearTimeout(loginTimeout);
+        })
+        .catch(function (error) {
+            clearTimeout(loginTimeout);
+            statusMsg.textContent = 'Erreur: ' + error.code + ' - ' + error.message;
             statusMsg.className = 'status-msg error';
         })
         .finally(function () {
             btnLogin.disabled = false;
             btnLogin.textContent = 'Se connecter';
         });
-});
 
 /* ── ETAPE 2 : CODE GOOGLE AUTHENTICATOR ── */
 btnVerifyTotp.addEventListener('click', function () {
