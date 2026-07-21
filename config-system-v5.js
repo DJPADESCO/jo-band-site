@@ -3,14 +3,16 @@
    Connexion + 2FA + tiroir de navigation + témoignages
 ========================================== */
 
-firebase.initializeApp({
-    apiKey:            'AIzaSyDol8OdWq6YoBY5XMyuPYue25mQnOoIOYE',
-    authDomain:        'jo-band-notifications-aea69.firebaseapp.com',
-    projectId:         'jo-band-notifications-aea69',
-    storageBucket:     'jo-band-notifications-aea69.firebasestorage.app',
-    messagingSenderId: '942336247693',
-    appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
-});
+if (!firebase.apps.length) {
+    firebase.initializeApp({
+        apiKey:            'AIzaSyDol8OdWq6YoBY5XMyuPYue25mQnOoIOYE',
+        authDomain:        'jo-band-notifications-aea69.firebaseapp.com',
+        projectId:         'jo-band-notifications-aea69',
+        storageBucket:     'jo-band-notifications-aea69.firebasestorage.app',
+        messagingSenderId: '942336247693',
+        appId:             '1:942336247693:web:4a0f5915907c911d671fc4'
+    });
+}
 
 var authWrapper = document.getElementById('auth-wrapper');
 var loginView   = document.getElementById('login-view');
@@ -67,59 +69,122 @@ btnLogin.addEventListener('click', function () {
     }, 15000);
 
     firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(function () {
-            clearTimeout(loginTimeout);
-        })
-                .catch(function (error) {
-            clearTimeout(loginTimeout);
-            statusMsg.textContent = 'Erreur: ' + error.code + ' - ' + error.message;
-            statusMsg.className = 'status-msg error';
-        })
-        .finally(function () {
-            btnLogin.disabled = false;
-            btnLogin.textContent = 'Se connecter';
-        });
-}); // <--- AJOUTE CETTE LIGNE ICI POUR FERMER L'ÉTAPE 1
+    .then(function () {
+        clearTimeout(loginTimeout);
+    })
+    .catch(function (error) {
+
+        clearTimeout(loginTimeout);
+
+        var message = 'Connexion impossible.';
+
+        switch (error.code) {
+
+            case 'auth/user-not-found':
+                message = 'Aucun compte ne correspond à cet email.';
+                break;
+
+            case 'auth/wrong-password':
+                message = 'Mot de passe incorrect.';
+                break;
+
+            case 'auth/invalid-email':
+                message = 'Adresse email invalide.';
+                break;
+
+            case 'auth/too-many-requests':
+                message = 'Trop de tentatives. Réessayez plus tard.';
+                break;
+
+            case 'auth/network-request-failed':
+                message = 'Connexion Internet indisponible.';
+                break;
+        }
+
+        statusMsg.textContent = message;
+        statusMsg.className = 'status-msg error';
+
+    })
+    .finally(function () {
+
+        btnLogin.disabled = false;
+        btnLogin.textContent = 'Se connecter';
+
+    });
+});
 
 /* ── ETAPE 2 : CODE GOOGLE AUTHENTICATOR ── */
 btnVerifyTotp.addEventListener('click', function () {
-   
 
-/* ── ETAPE 2 : CODE GOOGLE AUTHENTICATOR ── */
-btnVerifyTotp.addEventListener('click', function () {
     var code = document.getElementById('totp-code').value.trim();
-    if (!code) return;
+
+    if (!/^\d{6}$/.test(code)) {
+        totpStatus.textContent = 'Le code doit contenir 6 chiffres.';
+        totpStatus.className = 'status-msg error';
+        return;
+    }
 
     btnVerifyTotp.disabled = true;
     btnVerifyTotp.textContent = 'Vérification...';
 
     fetch('/api/verify-totp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: code })
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            token: code
+        })
     })
-        .then(function (r) { return r.json(); })
-        .then(function (result) {
-            if (result.success) {
-                sessionStorage.setItem('jb_totp_verified', 'true');
-                totpVerified = true;
-                authWrapper.classList.remove('visible');
-                dashboard.classList.add('visible');
-                loadTestimonials('pending');
-                loadTestimonials('approved');
-            } else {
-                totpStatus.textContent = result.error || 'Code incorrect.';
-                totpStatus.className = 'status-msg error';
-            }
-        })
-        .catch(function () {
-            totpStatus.textContent = 'Erreur de connexion, réessayez.';
+    .then(function (r) {
+
+        if (!r.ok) {
+            throw new Error('Erreur HTTP ' + r.status);
+        }
+
+        return r.json();
+
+    })
+    .then(function (result) {
+
+        if (result.success) {
+
+            sessionStorage.setItem('jb_totp_verified', 'true');
+
+            totpVerified = true;
+
+            authWrapper.classList.remove('visible');
+
+            dashboard.classList.add('visible');
+
+            loadTestimonials('pending');
+
+            loadTestimonials('approved');
+
+        } else {
+
+            totpStatus.textContent = result.error || 'Code incorrect.';
+
             totpStatus.className = 'status-msg error';
-        })
-        .finally(function () {
-            btnVerifyTotp.disabled = false;
-            btnVerifyTotp.textContent = 'Vérifier';
-        });
+
+        }
+
+    })
+    .catch(function () {
+
+        totpStatus.textContent = 'Erreur de connexion.';
+
+        totpStatus.className = 'status-msg error';
+
+    })
+    .finally(function () {
+
+        btnVerifyTotp.disabled = false;
+
+        btnVerifyTotp.textContent = 'Vérifier';
+
+    });
+
 });
 
 /* ── DECONNEXION ── */
@@ -163,14 +228,51 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
 
 /* ── GESTION DES TEMOIGNAGES ── */
 function loadTestimonials(status) {
-    var containerId = status === 'approved' ? 'admin-testi-approved' : 'admin-testi-pending';
+
+   function escapeHtml(value) {
+
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+   }
+
+    var containerId = status === 'approved'
+        ? 'admin-testi-approved'
+        : 'admin-testi-pending';
+
     var container = document.getElementById(containerId);
 
-    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+    if (!container) {
+        return;
+    }
+
+    var user = firebase.auth().currentUser;
+
+    if (!user) {
+
+        container.innerHTML =
+            '<p class="subtext">Session expirée. Veuillez vous reconnecter.</p>';
+
+        return;
+    }
+.then(function (r) {
+
+    if (!r.ok) {
+        throw new Error('Erreur HTTP ' + r.status);
+    }
+
+    return r.json();
+
+})
+    user.getIdToken().then(function (idToken) {
         fetch('/api/admin-testimonials?status=' + status, {
             headers: { 'Authorization': 'Bearer ' + idToken }
         })
-            .then(function (r) { return r.json(); })
+            
             .catch(function (err) {
                 return { success: false, error: 'Erreur réseau: ' + err.message };
             })
@@ -187,13 +289,13 @@ function loadTestimonials(status) {
                 }
 
                 container.innerHTML = result.data.map(function (t) {
-                    var approveBtn = status === 'pending'
+                    var approveBtn ='<p class="admin-item-text">' + escapeHtml(t.message) + '</p>' + status === 'pending'
                         ? '<button class="admin-btn-approve" data-id="' + t.id + '">Approuver</button>'
                         : '';
                     return '' +
                         '<div class="admin-item-card">' +
-                            '<p class="admin-item-text">' + t.message + '</p>' +
-                            '<p class="admin-item-meta">— ' + t.name + ' (' + t.rating + '⭐)</p>' +
+                            
+                            '<p class="admin-item-meta">— ' + escapeHtml(t.name) + ' (' + Number(t.rating || 0) + '⭐)</p>' +
                             approveBtn +
                             '<button class="admin-btn-delete" data-id="' + t.id + '">Supprimer</button>' +
                         '</div>';
