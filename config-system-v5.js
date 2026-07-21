@@ -70,7 +70,7 @@ btnLogin.addEventListener('click', function () {
         .then(function () {
             clearTimeout(loginTimeout);
         })
-        .catch(function (error) {
+                .catch(function (error) {
             clearTimeout(loginTimeout);
             statusMsg.textContent = 'Erreur: ' + error.code + ' - ' + error.message;
             statusMsg.className = 'status-msg error';
@@ -79,6 +79,11 @@ btnLogin.addEventListener('click', function () {
             btnLogin.disabled = false;
             btnLogin.textContent = 'Se connecter';
         });
+}); // <--- AJOUTE CETTE LIGNE ICI POUR FERMER L'ÉTAPE 1
+
+/* ── ETAPE 2 : CODE GOOGLE AUTHENTICATOR ── */
+btnVerifyTotp.addEventListener('click', function () {
+   
 
 /* ── ETAPE 2 : CODE GOOGLE AUTHENTICATOR ── */
 btnVerifyTotp.addEventListener('click', function () {
