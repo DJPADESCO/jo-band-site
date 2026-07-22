@@ -170,13 +170,16 @@ btnVerifyTotp.addEventListener('click', function () {
         }
 
     })
-    .catch(function () {
+    .catch(function (error) {
 
-        totpStatus.textContent = 'Erreur de connexion.';
+    console.error(error);
 
-        totpStatus.className = 'status-msg error';
+    totpStatus.textContent =
+        'Erreur : ' + error.message;
 
-    })
+    totpStatus.className = 'status-msg error';
+
+})
     .finally(function () {
 
         btnVerifyTotp.disabled = false;
