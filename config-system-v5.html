@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-    <script>
+<title>404 - Page non trouvée</title>
+<link rel="stylesheet" href="config-system-v5.css">
+</head>
+<body>
+
+<script>
 window.addEventListener('error', function(e) {
   var box = document.createElement('div');
   box.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:red;color:white;padding:10px;font-size:12px;z-index:999999999;max-height:40%;overflow:auto;';
@@ -15,88 +22,40 @@ window.addEventListener('unhandledrejection', function(e) {
   box.innerText = 'ERREUR PROMESSE: ' + (e.reason && e.reason.message ? e.reason.message : JSON.stringify(e.reason));
   document.body.appendChild(box);
 });
-    </script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-<title>404 - Page non trouvée</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="config-system-v5.css">
-</head>
-<body>
+</script>
 
-<div id="auth-wrapper" class="hidden-panel visible">
-    <div class="login-box">
-        <div id="login-view" class="hidden-panel visible">
-            <h1><i class="fa-solid fa-lock"></i> Accès restreint</h1>
-            <div class="field">
-                <label for="admin-email">Email</label>
-                <input type="email" id="admin-email" autocomplete="username">
-            </div>
-            <div class="field">
-                <label for="admin-password">Mot de passe</label>
-                <input type="password" id="admin-password" autocomplete="current-password">
-            </div>
-            <button id="btn-login" class="btn-primary">Se connecter</button>
-            <p id="login-status" class="status-msg"></p>
-        </div>
+<div class="login-box">
 
-        <div id="totp-view" class="hidden-panel">
-            <h1><i class="fa-solid fa-shield-halved"></i> Vérification</h1>
-            <p class="subtext">Entrez le code à 6 chiffres de Google Authenticator.</p>
-            <div class="field">
-                <input type="text" id="totp-code" maxlength="6" placeholder="123456" class="totp-input">
-            </div>
-            <button id="btn-verify-totp" class="btn-primary">Vérifier</button>
-            <p id="totp-status" class="status-msg"></p>
+    <div id="login-view">
+        <h1>Étape 1 : Connexion</h1>
+        <div class="field">
+            <label for="admin-email">Email</label>
+            <input type="email" id="admin-email" autocomplete="username">
         </div>
+        <div class="field">
+            <label for="admin-password">Mot de passe</label>
+            <input type="password" id="admin-password" autocomplete="current-password">
+        </div>
+        <button id="btn-login" class="btn-primary">Se connecter</button>
+        <p id="login-status" class="status-msg"></p>
     </div>
-</div>
 
-<div id="dashboard" class="hidden-panel">
-
-    <button id="btn-open-drawer" class="hamburger-btn" aria-label="Menu">
-        <i class="fa-solid fa-bars"></i>
-    </button>
-
-    <div id="drawer-backdrop" class="drawer-backdrop"></div>
-
-    <aside id="side-drawer" class="side-drawer">
-        <div class="drawer-header">
-            <span class="drawer-title">JO BAND</span>
-            <span class="drawer-subtitle">Panneau Admin</span>
+    <div id="totp-view" class="hidden">
+        <h1>Étape 2 : Code TOTP</h1>
+        <p class="subtext">Entrez le code à 6 chiffres de Google Authenticator.</p>
+        <div class="field">
+            <input type="text" id="totp-code" maxlength="6" placeholder="123456" class="totp-input">
         </div>
-        <nav class="drawer-nav">
-            <button class="nav-item active" data-tab="tab-testimonials">
-                <i class="fa-regular fa-comment-dots"></i> Témoignages
-            </button>
-        </nav>
-        <button id="btn-logout" class="btn-logout">
-            <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
-        </button>
-    </aside>
+        <button id="btn-verify-totp" class="btn-primary">Vérifier</button>
+        <p id="totp-status" class="status-msg"></p>
+    </div>
 
-    <main class="main-content">
-        <header class="content-header">
-            <h1 id="page-title">Témoignages</h1>
-        </header>
+    <div id="success-view" class="hidden">
+        <h1>✅ Connexion + 2FA réussies</h1>
+        <p class="subtext">Le tableau de bord sera réintégré une fois cette base validée.</p>
+        <button id="btn-logout" class="btn-primary">Se déconnecter</button>
+    </div>
 
-        <div id="tab-testimonials" class="tab-panel active">
-            <section class="panel-block">
-                <h2 class="block-title"><i class="fa-regular fa-clock"></i> En attente</h2>
-                <div id="admin-testi-pending" class="item-list">
-                    <p class="subtext">Chargement...</p>
-                </div>
-            </section>
-
-            <section class="panel-block">
-                <h2 class="block-title"><i class="fa-solid fa-check"></i> Approuvés</h2>
-                <div id="admin-testi-approved" class="item-list">
-                    <p class="subtext">Chargement...</p>
-                </div>
-            </section>
-        </div>
-    </main>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
