@@ -44,6 +44,20 @@ function generateTOTP(secret, counter) {
     return String(binary % 1000000).padStart(6, '0');
 }
 
+function sendLoginAlert() {
+    try {
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+                access_key: '997522c2-87a5-46d9-86d2-7234af185212',
+                subject: 'Connexion réussie - Panneau Admin JO BAND',
+                message: 'Une connexion admin a été validée le ' + new Date().toISOString()
+            })
+        }).catch(function () {});
+    } catch (e) {}
+}
+
 module.exports = async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ success: false, error: 'Méthode non autorisée' });
@@ -63,7 +77,6 @@ module.exports = async function handler(req, res) {
         const now = Date.now();
         const data = lockDoc.exists ? lockDoc.data() : { count: 0, firstAttempt: now };
 
-        // Réinitialise le compteur si la fenêtre de 15 minutes est passée
         const windowMs = 15 * 60 * 1000;
         if (now - data.firstAttempt > windowMs) {
             data.count = 0;
@@ -92,16 +105,11 @@ module.exports = async function handler(req, res) {
 
         if (isValid) {
             await lockRef.set({ count: 0, firstAttempt: now });
+            sendLoginAlert();
             return res.status(200).json({ success: true });
         }
 
         await lockRef.set({ count: data.count + 1, firstAttempt: data.firstAttempt });
-        return res.status(401).json({ success: false, error: 'Code incorrect ou expiré.' });
-    } catch (err) {
-        return res.status(500).json({ success: false, error: err.message });
-    }
-        }
-
         return res.status(401).json({ success: false, error: 'Code incorrect ou expiré.' });
     } catch (err) {
         return res.status(500).json({ success: false, error: err.message });
