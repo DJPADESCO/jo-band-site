@@ -18,6 +18,11 @@ var btnLogout     = document.getElementById('btn-logout');
 var statusMsg     = document.getElementById('login-status');
 var totpStatus    = document.getElementById('totp-status');
 var totpVerified  = sessionStorage.getItem('jb_totp_verified') === 'true';
+function escapeHTML(str) {
+    var div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+}
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user && totpVerified) {
@@ -186,8 +191,8 @@ function loadTestimonials(status) {
                         : '';
                     return '' +
                         '<div class="admin-item-card">' +
-                            '<p class="admin-item-text">' + t.message + '</p>' +
-                            '<p class="admin-item-meta">— ' + t.name + ' (' + t.rating + '⭐)</p>' +
+                            '<p class="admin-item-text">' + escapeHTML(t.message) + '</p>' +
+                            '<p class="admin-item-meta">— ' + escapeHTML(t.name) + ' (' + escapeHTML(t.rating) + '⭐)</p>' +
                             approveBtn +
                             '<button class="admin-btn-delete" data-id="' + t.id + '">Supprimer</button>' +
                         '</div>';
