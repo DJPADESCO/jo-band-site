@@ -57,15 +57,49 @@ module.exports = async function handler(req, res) {
             return res.status(400).json({ success: false, error: 'Code manquant.' });
         }
 
+        const db = getFirestore(getApp());
+        const lockRef = db.collection('security').doc('totp_attempts');
+        const lockDoc = await lockRef.get();
+        const now = Date.now();
+        const data = lockDoc.exists ? lockDoc.data() : { count: 0, firstAttempt: now };
+
+        // Réinitialise le compteur si la fenêtre de 15 minutes est passée
+        const windowMs = 15 * 60 * 1000;
+        if (now - data.firstAttempt > windowMs) {
+            data.count = 0;
+            data.firstAttempt = now;
+        }
+
+        if (data.count >= 5) {
+            const remainingMin = Math.ceil((windowMs - (now - data.firstAttempt)) / 60000);
+            return res.status(429).json({
+                success: false,
+                error: 'Trop de tentatives. Réessayez dans ' + remainingMin + ' minute(s).'
+            });
+        }
+
         const cleanToken = String(token).replace(/\s/g, '');
         const currentCounter = Math.floor(Date.now() / 1000 / 30);
 
-        // On tolère le compteur actuel + celui d'avant/après (dérive d'horloge)
+        let isValid = false;
         for (let i = -1; i <= 1; i++) {
             const expected = generateTOTP(secret, currentCounter + i);
             if (expected === cleanToken) {
-                return res.status(200).json({ success: true });
+                isValid = true;
+                break;
             }
+        }
+
+        if (isValid) {
+            await lockRef.set({ count: 0, firstAttempt: now });
+            return res.status(200).json({ success: true });
+        }
+
+        await lockRef.set({ count: data.count + 1, firstAttempt: data.firstAttempt });
+        return res.status(401).json({ success: false, error: 'Code incorrect ou expiré.' });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
+    }
         }
 
         return res.status(401).json({ success: false, error: 'Code incorrect ou expiré.' });
