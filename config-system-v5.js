@@ -94,7 +94,7 @@ btnVerifyTotp.addEventListener('click', function () {
         btnVerifyTotp.textContent = 'Vérifier';
     }, 15000);
 
-    fetch('/api/verify-totp', {
+    fetch('/api/verify-totp-v2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: code })
