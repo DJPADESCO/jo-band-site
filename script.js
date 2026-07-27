@@ -361,7 +361,7 @@ function buildMembersGrid() {
     if (!grid) return;
 
     try {
-        fetch('/api/members')
+        fetch('/api/admin-members')
             .then(r => r.json())
             .then(result => {
                 if (!result.success || !result.data || !result.data.length) {
