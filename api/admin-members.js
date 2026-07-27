@@ -26,23 +26,34 @@ async function verifyAdmin(req) {
 }
 
 module.exports = async function handler(req, res) {
-  const isAdmin = await verifyAdmin(req);
-  if (!isAdmin) {
-    return res.status(401).json({ success: false, error: 'Non autorisé.' });
-  }
-
+  res.setHeader('Access-Control-Allow-Origin', '*');
   const db = getFirestore(getApp());
 
   if (req.method === 'GET') {
+    const isAdmin = await verifyAdmin(req);
     try {
-      const snapshot = await db.collection('members').get();
+      let snapshot;
+      if (isAdmin) {
+        snapshot = await db.collection('members').get();
+      } else {
+        snapshot = await db.collection('members').where('active', '==', true).get();
+      }
       const items = snapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
         .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      if (!isAdmin) {
+        res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+      }
       return res.status(200).json({ success: true, data: items });
     } catch (err) {
       return res.status(500).json({ success: false, error: err.message });
     }
+  }
+
+  const isAdmin = await verifyAdmin(req);
+  if (!isAdmin) {
+    return res.status(401).json({ success: false, error: 'Non autorisé.' });
   }
 
   if (req.method === 'POST') {
