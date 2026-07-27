@@ -16,21 +16,7 @@ let galleryLoaded         = false;
 /* ==========================================================================
    2. DONNÉES DU COLLECTIF (MEMBRES & PUNCHLINES)
    ========================================================================== */
-const members = [
-    { name: "DJ PADESCO",   id: "padesco",   role: "DJ / Humoriste" },
-    { name: "JOEL",         id: "joel",      role: "Management / Humoriste" },
-    { name: "LE FONDATEUR", id: "fondateur", role: "Fondateur" },
-    { name: "NANA SIKA",    id: "nanasika",  role: "Humoriste & Vidéaste" },
-    { name: "GEDEON",       id: "gedeon",    role: "Humoriste & Danseur" },
-    { name: "JEAN",         id: "jean",      role: "Artiste Chanteur" },
-    { name: "THE GACHA",    id: "gacha",     role: "Humoriste / Artiste Chanteur" },
-    { name: "AROLE",        id: "arole",     role: "Cameraman" },
-    { name: "L&H",          id: "lh",        role: "Cameraman" },
-    { name: "DK POPI",      id: "dkpopi",    role: "Humoriste" },
-    { name: "ESTHER",       id: "esther",    role: "Humoriste" },
-    { name: "PRISCA",       id: "prisca",    role: "Humoriste" },
-    { name: "MAKAFUI",      id: "makafui",   role: "Humoriste" }
-];
+let members = [];
 
 const quotes = {
     fr: [
@@ -370,32 +356,58 @@ function initGalleryFilters() {
    7. GESTION DU COLLECTIF & MODALES
    ========================================================================== */
 function buildMembersGrid() {
+function buildMembersGrid() {
     const grid = document.getElementById('container-membres');
     if (!grid) return;
 
-    grid.innerHTML = members.map(m => `
-        <div class="member-card" data-id="${m.id}" data-name="${m.name}" data-role="${m.role}">
-            <img src="images/${m.id}.jpg" alt="${m.name}" class="member-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-            <div class="member-fallback-bg" style="display:none;"><i class="fa-solid fa-user"></i></div>
-            <h3>${m.name}</h3>
-            <p>${m.role}</p>
-        </div>
-    `).join('');
+    try {
+        fetch('/api/members')
+            .then(r => r.json())
+            .then(result => {
+                if (!result.success || !result.data || !result.data.length) {
+                    grid.innerHTML = '<p class="testi-msg">Aucun membre à afficher pour le moment.</p>';
+                    return;
+                }
 
-    grid.addEventListener('click', e => {
-        const card = e.target.closest('.member-card');
-        if (!card) return;
-        openModal(card.dataset.id, card.dataset.name, card.dataset.role);
-    });
+                members = result.data;
+
+                grid.innerHTML = members.map(m => {
+                    const imgSrc = m.imageUrl || '';
+                    const imgTag = imgSrc
+                        ? `<img src="${imgSrc}" alt="${sanitize(m.name)}" class="member-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">`
+                        : `<img src="" alt="${sanitize(m.name)}" class="member-img" style="display:none;">`;
+                    return `
+                        <div class="member-card" data-id="${m.id}" data-name="${sanitize(m.name)}" data-role="${sanitize(m.role)}" data-image="${imgSrc}">
+                            ${imgTag}
+                            <div class="member-fallback-bg" style="display:${imgSrc ? 'none' : 'flex'};"><i class="fa-solid fa-user"></i></div>
+                            <h3>${sanitize(m.name)}</h3>
+                            <p>${sanitize(m.role)}</p>
+                        </div>
+                    `;
+                }).join('');
+
+                grid.addEventListener('click', e => {
+                    const card = e.target.closest('.member-card');
+                    if (!card) return;
+                    openModal(card.dataset.id, card.dataset.name, card.dataset.role, card.dataset.image);
+                });
+            })
+            .catch(() => {
+                grid.innerHTML = '<p class="testi-msg">Impossible de charger les membres pour le moment.</p>';
+            });
+    } catch (e) {
+        grid.innerHTML = '<p class="testi-msg">Impossible de charger les membres pour le moment.</p>';
+    }
+                       }
 }
 
-function openModal(id, name, role) {
+function openModal(id, name, role, imageUrl) {
     const modal = document.getElementById('modal-member');
     const img = document.getElementById('modal-img');
     const fallback = document.getElementById('modal-fallback');
     if (!modal || !img || !fallback) return;
 
-    img.src = `images/${id}.jpg`;
+    img.src = imageUrl || '';
     img.alt = name;
     img.style.display = 'block';
     fallback.style.display = 'none';
