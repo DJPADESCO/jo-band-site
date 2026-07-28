@@ -214,3 +214,49 @@ body {
     .side-drawer { transform: translateX(0); box-shadow: none; }
     .main-content { margin-left: 260px; padding-top: 30px; max-width: 800px; }
 }
+
+.form-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,18,30,0.55);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.form-overlay.hidden { display: none; }
+
+.form-modal {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    width: 100%;
+    max-width: 420px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.member-thumb {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.admin-btn-edit {
+    border: none;
+    padding: 8px 15px;
+    border-radius: 7px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-right: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    background: #eef0fd;
+    color: #5b5ee0;
+}
+.admin-btn-edit:hover { background: #5b5ee0; color: #fff; }
+
