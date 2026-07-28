@@ -1,4 +1,4 @@
-const APP_VERSION = '2026.07.28.0';
+const APP_VERSION = '2026.07.28.1';
 const CACHE_NAME = `joband-cache-v-${APP_VERSION}`;
 
 const ASSETS = [
