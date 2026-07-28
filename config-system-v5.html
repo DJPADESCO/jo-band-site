@@ -55,6 +55,9 @@
             <button class="nav-item active" data-tab="tab-testimonials">
                 <i class="fa-regular fa-comment-dots"></i> Témoignages
             </button>
+            <button class="nav-item" data-tab="tab-members">
+                <i class="fa-solid fa-users"></i> Collectif
+            </button>
         </nav>
         <button id="btn-logout" class="btn-logout">
             <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
@@ -80,6 +83,57 @@
                     <p class="subtext">Chargement...</p>
                 </div>
             </section>
+        </div>
+
+        <div id="tab-members" class="tab-panel">
+            <section class="panel-block">
+                <button id="btn-add-member" class="btn-primary" style="margin-bottom:16px;">
+                    <i class="fa-solid fa-plus"></i> Ajouter un membre
+                </button>
+                <div id="admin-members-list" class="item-list">
+                    <p class="subtext">Chargement...</p>
+                </div>
+            </section>
+        </div>
+
+        <div id="member-form-overlay" class="form-overlay hidden">
+            <div class="form-modal">
+                <h2 id="member-form-title" class="block-title">Nouveau membre</h2>
+
+                <input type="hidden" id="member-id">
+
+                <div class="field">
+                    <label>Nom</label>
+                    <input type="text" id="member-name">
+                </div>
+                <div class="field">
+                    <label>Rôle</label>
+                    <input type="text" id="member-role">
+                </div>
+                <div class="field">
+                    <label>Description (optionnel)</label>
+                    <input type="text" id="member-description">
+                </div>
+                <div class="field">
+                    <label>Photo</label>
+                    <input type="file" id="member-photo-file" accept="image/*">
+                    <input type="hidden" id="member-image-url">
+                    <p id="member-photo-status" class="subtext" style="margin:6px 0 0;"></p>
+                    <img id="member-photo-preview" src="" style="display:none; max-width:100px; border-radius:8px; margin-top:8px;">
+                </div>
+                <div class="field">
+                    <label>Ordre d'affichage (0 = premier)</label>
+                    <input type="number" id="member-order" value="0">
+                </div>
+                <div class="field" style="display:flex; align-items:center; gap:10px;">
+                    <input type="checkbox" id="member-active" checked style="width:auto;">
+                    <label style="margin:0;">Membre actif (visible sur le site)</label>
+                </div>
+
+                <button id="btn-save-member" class="btn-primary">Enregistrer</button>
+                <button id="btn-cancel-member" class="btn-logout" style="margin-top:8px;">Annuler</button>
+                <p id="member-form-status" class="status-msg"></p>
+            </div>
         </div>
     </main>
 </div>
