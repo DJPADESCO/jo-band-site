@@ -424,6 +424,38 @@ function closeModal() {
     if (modal) modal.style.display = 'none';
 }
 
+/* ── CONTENU CONTACT (numéros WhatsApp + réseaux sociaux) ── */
+function loadContactContent() {
+    fetch('/api/admin-members?resource=content&section=contact')
+        .then(r => r.json())
+        .then(result => {
+            if (!result.success || !result.data) return;
+            const d = result.data;
+
+            function toWaLink(tel) {
+                return tel ? 'https://wa.me/' + tel.replace(/[^0-9]/g, '') : '';
+            }
+
+            const line1 = document.getElementById('wa-line1');
+            if (line1 && d.tel1) {
+                line1.href = toWaLink(d.tel1);
+                line1.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Ligne 1 (' + sanitize(d.tel1) + ')';
+            }
+            const line2 = document.getElementById('wa-line2');
+            if (line2 && d.tel2) {
+                line2.href = toWaLink(d.tel2);
+                line2.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Ligne 2 (' + sanitize(d.tel2) + ')';
+            }
+            const yt = document.getElementById('social-youtube');
+            if (yt && d.youtube) yt.href = d.youtube;
+            const tk = document.getElementById('social-tiktok');
+            if (tk && d.tiktok) tk.href = d.tiktok;
+            const waCh = document.getElementById('social-wa-channel');
+            if (waCh && d.waChannel) waCh.href = d.waChannel;
+        })
+        .catch(() => {});
+}
+
 /* ==========================================================================
    8. FORMULAIRES & FEDAPAY
    ========================================================================== */
