@@ -158,11 +158,11 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
         pageTitle.textContent = btn.textContent.trim();
 
         
-        if (btn.getAttribute('data-tab') === 'tab-members') {
-            loadMembers();
-        }
         if (btn.getAttribute('data-tab') === 'tab-contact') {
             loadContact();
+        }
+        if (btn.getAttribute('data-tab') === 'tab-formules') {
+            loadFormules();
         }
 
         closeDrawer();
@@ -440,6 +440,186 @@ btnSaveContact.addEventListener('click', function () {
             .finally(function () {
                 btnSaveContact.disabled = false;
                 btnSaveContact.textContent = 'Enregistrer';
+            });
+    });
+});
+
+/* ── GESTION DES FORMULES (PRESTATIONS) ── */
+var btnSaveFormules    = document.getElementById('btn-save-formules');
+var formulesFormStatus = document.getElementById('formules-form-status');
+
+function createFeatureRow(frVal, enVal) {
+    var row = document.createElement('div');
+    row.className = 'feature-row';
+    row.style.cssText = 'display:flex; gap:8px; align-items:center; margin-bottom:8px;';
+
+    var inputFr = document.createElement('input');
+    inputFr.type = 'text';
+    inputFr.className = 'feature-fr';
+    inputFr.placeholder = 'FR';
+    inputFr.style.flex = '1';
+    inputFr.value = frVal || '';
+
+    var inputEn = document.createElement('input');
+    inputEn.type = 'text';
+    inputEn.className = 'feature-en';
+    inputEn.placeholder = 'EN';
+    inputEn.style.flex = '1';
+    inputEn.value = enVal || '';
+
+    var btnRemove = document.createElement('button');
+    btnRemove.type = 'button';
+    btnRemove.className = 'btn-logout';
+    btnRemove.style.padding = '6px 10px';
+    btnRemove.innerHTML = '&times;';
+    btnRemove.addEventListener('click', function () {
+        row.remove();
+    });
+
+    row.appendChild(inputFr);
+    row.appendChild(inputEn);
+    row.appendChild(btnRemove);
+    return row;
+}
+
+function fillFeaturesList(containerId, featuresFr, featuresEn) {
+    var container = document.getElementById(containerId);
+    container.innerHTML = '';
+    var count = Math.max(
+        featuresFr ? featuresFr.length : 0,
+        featuresEn ? featuresEn.length : 0,
+        1
+    );
+    for (var i = 0; i < count; i++) {
+        var fr = featuresFr && featuresFr[i] ? featuresFr[i] : '';
+        var en = featuresEn && featuresEn[i] ? featuresEn[i] : '';
+        container.appendChild(createFeatureRow(fr, en));
+    }
+}
+
+function collectFeatures(containerId) {
+    var container = document.getElementById(containerId);
+    var rows = container.querySelectorAll('.feature-row');
+    var fr = [];
+    var en = [];
+    rows.forEach(function (row) {
+        var frVal = row.querySelector('.feature-fr').value.trim();
+        var enVal = row.querySelector('.feature-en').value.trim();
+        if (frVal || enVal) {
+            fr.push(frVal);
+            en.push(enVal);
+        }
+    });
+    return { fr: fr, en: en };
+}
+
+document.getElementById('btn-add-feature-standard').addEventListener('click', function () {
+    document.getElementById('pkg-standard-features-list').appendChild(createFeatureRow('', ''));
+});
+document.getElementById('btn-add-feature-premium').addEventListener('click', function () {
+    document.getElementById('pkg-premium-features-list').appendChild(createFeatureRow('', ''));
+});
+
+function loadFormules() {
+    formulesFormStatus.textContent = '';
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=content&section=formules', {
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (!result.success) {
+                    formulesFormStatus.textContent = 'Erreur: ' + (result.error || 'inconnue');
+                    formulesFormStatus.className = 'status-msg error';
+                    return;
+                }
+                var d = result.data || {};
+                var std = d.standard || {};
+                var prem = d.premium || {};
+
+                document.getElementById('pkg-standard-badge-fr').value = std.badge_fr || '';
+                document.getElementById('pkg-standard-badge-en').value = std.badge_en || '';
+                document.getElementById('pkg-standard-title-fr').value = std.title_fr || '';
+                document.getElementById('pkg-standard-title-en').value = std.title_en || '';
+                document.getElementById('pkg-standard-desc-fr').value  = std.desc_fr  || '';
+                document.getElementById('pkg-standard-desc-en').value  = std.desc_en  || '';
+                document.getElementById('pkg-standard-price').value    = std.price    || '';
+                fillFeaturesList('pkg-standard-features-list', std.features_fr, std.features_en);
+
+                document.getElementById('pkg-premium-badge-fr').value = prem.badge_fr || '';
+                document.getElementById('pkg-premium-badge-en').value = prem.badge_en || '';
+                document.getElementById('pkg-premium-title-fr').value = prem.title_fr || '';
+                document.getElementById('pkg-premium-title-en').value = prem.title_en || '';
+                document.getElementById('pkg-premium-desc-fr').value  = prem.desc_fr  || '';
+                document.getElementById('pkg-premium-desc-en').value  = prem.desc_en  || '';
+                document.getElementById('pkg-premium-price').value    = prem.price    || '';
+                fillFeaturesList('pkg-premium-features-list', prem.features_fr, prem.features_en);
+            })
+            .catch(function (err) {
+                formulesFormStatus.textContent = 'Erreur réseau: ' + err.message;
+                formulesFormStatus.className = 'status-msg error';
+            });
+    });
+}
+
+btnSaveFormules.addEventListener('click', function () {
+    var stdFeatures  = collectFeatures('pkg-standard-features-list');
+    var premFeatures = collectFeatures('pkg-premium-features-list');
+
+    var payload = {
+        standard: {
+            badge_fr: document.getElementById('pkg-standard-badge-fr').value.trim(),
+            badge_en: document.getElementById('pkg-standard-badge-en').value.trim(),
+            title_fr: document.getElementById('pkg-standard-title-fr').value.trim(),
+            title_en: document.getElementById('pkg-standard-title-en').value.trim(),
+            desc_fr:  document.getElementById('pkg-standard-desc-fr').value.trim(),
+            desc_en:  document.getElementById('pkg-standard-desc-en').value.trim(),
+            price:    document.getElementById('pkg-standard-price').value.trim(),
+            features_fr: stdFeatures.fr,
+            features_en: stdFeatures.en
+        },
+        premium: {
+            badge_fr: document.getElementById('pkg-premium-badge-fr').value.trim(),
+            badge_en: document.getElementById('pkg-premium-badge-en').value.trim(),
+            title_fr: document.getElementById('pkg-premium-title-fr').value.trim(),
+            title_en: document.getElementById('pkg-premium-title-en').value.trim(),
+            desc_fr:  document.getElementById('pkg-premium-desc-fr').value.trim(),
+            desc_en:  document.getElementById('pkg-premium-desc-en').value.trim(),
+            price:    document.getElementById('pkg-premium-price').value.trim(),
+            features_fr: premFeatures.fr,
+            features_en: premFeatures.en
+        }
+    };
+
+    btnSaveFormules.disabled = true;
+    btnSaveFormules.textContent = 'Enregistrement...';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=content&section=formules', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    formulesFormStatus.textContent = '✅ Enregistré';
+                    formulesFormStatus.className = 'status-msg success';
+                } else {
+                    formulesFormStatus.textContent = result.error || 'Erreur.';
+                    formulesFormStatus.className = 'status-msg error';
+                }
+            })
+            .catch(function (err) {
+                formulesFormStatus.textContent = 'Erreur: ' + err.message;
+                formulesFormStatus.className = 'status-msg error';
+            })
+            .finally(function () {
+                btnSaveFormules.disabled = false;
+                btnSaveFormules.textContent = 'Enregistrer';
             });
     });
 });
