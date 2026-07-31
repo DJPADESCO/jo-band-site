@@ -456,6 +456,68 @@ function loadContactContent() {
         .catch(() => {});
 }
 
+/* ── CONTENU FORMULES (FR/EN + prix) ── */
+let formulesContentCache = null;
+
+function getCurrentLang() {
+    const activeBtn = document.querySelector('.lang-btn.active');
+    return activeBtn ? activeBtn.getAttribute('data-lang') : 'fr';
+}
+
+function renderFormulesContent(lang) {
+    if (!formulesContentCache) return;
+    const d = formulesContentCache;
+
+    function applyPackage(key, prefix) {
+        const pkg = d[key];
+        if (!pkg) return;
+
+        const badgeEl = document.getElementById(prefix + '-badge');
+        const titleEl = document.getElementById(prefix + '-title');
+        const descEl  = document.getElementById(prefix + '-desc');
+        const priceEl = document.getElementById(prefix + '-price');
+        const featEl  = document.getElementById(prefix + '-features');
+
+        const badge = lang === 'en' ? pkg.badge_en : pkg.badge_fr;
+        const title = lang === 'en' ? pkg.title_en : pkg.title_fr;
+        const desc  = lang === 'en' ? pkg.desc_en  : pkg.desc_fr;
+        const features = lang === 'en' ? pkg.features_en : pkg.features_fr;
+
+        if (badgeEl && badge) badgeEl.textContent = badge;
+        if (titleEl && title) titleEl.textContent = title;
+        if (descEl && desc)   descEl.textContent = desc;
+
+        if (priceEl) {
+            if (pkg.price) {
+                priceEl.textContent = sanitize(pkg.price);
+                priceEl.style.display = 'block';
+            } else {
+                priceEl.style.display = 'none';
+            }
+        }
+
+        if (featEl && features && features.length) {
+            featEl.innerHTML = features.map(f =>
+                `<li><i class="fa-solid fa-check text-gold"></i> <span>${sanitize(f)}</span></li>`
+            ).join('');
+        }
+    }
+
+    applyPackage('standard', 'pkg-standard');
+    applyPackage('premium', 'pkg-premium');
+}
+
+function loadFormulesContent() {
+    fetch('/api/admin-members?resource=content&section=formules')
+        .then(r => r.json())
+        .then(result => {
+            if (!result.success || !result.data) return;
+            formulesContentCache = result.data;
+            renderFormulesContent(getCurrentLang());
+        })
+        .catch(() => {});
+    }
+
 /* ==========================================================================
    8. FORMULAIRES & FEDAPAY
    ========================================================================== */
@@ -748,6 +810,7 @@ function initEventCountdown() {
     setDailyQuote(currentLang);
     buildMembersGrid();
     loadContactContent();
+    loadFormulesContent();
     initGalleryFilters();
 
     // Modale membres
@@ -780,6 +843,7 @@ function initEventCountdown() {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             applyLanguage(btn.getAttribute('data-lang'));
+            renderFormulesContent(btn.getAttribute('data-lang'));
         });
     });
 
