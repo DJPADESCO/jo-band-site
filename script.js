@@ -715,6 +715,7 @@ function initEventCountdown() {
     startCounters();
     setDailyQuote(currentLang);
     buildMembersGrid();
+    loadContactContent();
     initGalleryFilters();
 
     // Modale membres
