@@ -58,6 +58,9 @@
             <button class="nav-item" data-tab="tab-members">
                 <i class="fa-solid fa-users"></i> Collectif
             </button>
+            <button class="nav-item" data-tab="tab-contact">
+                <i class="fa-solid fa-phone"></i> Contact
+            </button>
         </nav>
         <button id="btn-logout" class="btn-logout">
             <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
@@ -96,6 +99,38 @@
             </section>
         </div>
 
+        <div id="tab-contact" class="tab-panel">
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-brands fa-whatsapp"></i> Numéros WhatsApp</h2>
+                <div class="field">
+                    <label>Ligne 1</label>
+                    <input type="text" id="contact-tel1" placeholder="+228 97 66 80 21">
+                </div>
+                <div class="field">
+                    <label>Ligne 2</label>
+                    <input type="text" id="contact-tel2" placeholder="+228 70 00 25 39">
+                </div>
+            </section>
+
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-share-nodes"></i> Réseaux sociaux</h2>
+                <div class="field">
+                    <label>Lien YouTube</label>
+                    <input type="text" id="contact-youtube" placeholder="https://www.youtube.com/@jobandofficiel">
+                </div>
+                <div class="field">
+                    <label>Lien TikTok</label>
+                    <input type="text" id="contact-tiktok" placeholder="https://www.tiktok.com/@jobandofficiel">
+                </div>
+                <div class="field">
+                    <label>Lien Chaîne WhatsApp</label>
+                    <input type="text" id="contact-wa-channel" placeholder="https://whatsapp.com/channel/...">
+                </div>
+            </section>
+
+            <button id="btn-save-contact" class="btn-primary">Enregistrer</button>
+            <p id="contact-form-status" class="status-msg"></p>
+                        </div>
         <div id="member-form-overlay" class="form-overlay hidden">
             <div class="form-modal">
                 <h2 id="member-form-title" class="block-title">Nouveau membre</h2>
