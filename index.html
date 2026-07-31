@@ -416,19 +416,21 @@ window.addEventListener('error', function(e) {
                 <h2 class="title-gold" data-i18n="packages-title">Nos Formules Prestations</h2>
                 <div class="packages-grid">
                     <div class="package-card">
-                        <div class="package-badge" data-i18n="badge-standard">Populaire</div>
-                        <h3 data-i18n="pack1-title">Formule Standard</h3>
-                        <p class="package-desc" data-i18n="pack1-desc">Ambiance explosive pour vos soirées, mariages et anniversaires.</p>
-                        <ul class="package-features">
+                        <div class="package-badge" data-i18n="badge-standard" id="pkg-standard-badge">Populaire</div>
+                        <h3 data-i18n="pack1-title" id="pkg-standard-title">Formule Standard</h3>
+                        <p class="package-desc" data-i18n="pack1-desc" id="pkg-standard-desc">Ambiance explosive pour vos soirées, mariages et anniversaires.</p>
+                        <p class="package-price" id="pkg-standard-price" style="display:none;"></p>
+                        <ul class="package-features" id="pkg-standard-features">
                             <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="pack1-feat1">Show Humour sur scène</span></li>
                             <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="pack1-feat2">Animation DJ PADESCO & DJ ZÉKA</span></li>
                         </ul>
                     </div>
                     <div class="package-card premium">
-                        <div class="package-badge gold" data-i18n="badge-vip">Grand Standing</div>
-                        <h3 data-i18n="pack2-title">Formule Premium VIP</h3>
-                        <p class="package-desc" data-i18n="pack2-desc">Le show complet clé en main avec couverture média totale.</p>
-                        <ul class="package-features">
+                        <div class="package-badge gold" data-i18n="badge-vip" id="pkg-premium-badge">Grand Standing</div>
+                        <h3 data-i18n="pack2-title" id="pkg-premium-title">Formule Premium VIP</h3>
+                        <p class="package-desc" data-i18n="pack2-desc" id="pkg-premium-desc">Le show complet clé en main avec couverture média totale.</p>
+                        <p class="package-price" id="pkg-premium-price" style="display:none;"></p>
+                        <ul class="package-features" id="pkg-premium-features">
                             <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="pack2-feat1">Show Humour complet</span></li>
                             <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="pack2-feat2">Animation DJ Premium non-stop</span></li>
                             <li><i class="fa-solid fa-check text-gold"></i> <span data-i18n="pack2-feat3">Captation vidéo par Arole &amp; L&amp;H</span></li>
@@ -436,8 +438,7 @@ window.addEventListener('error', function(e) {
                     </div>
                 </div>
             </div>
-        </section>
-
+                          </section>
         <!-- ONGLET GALERIE (connecté à Google Sheets) -->
         <section id="tab-galerie" class="tab-content">
             <h2 class="title-gold" data-i18n="gallery-title">Galerie & Médias</h2>
