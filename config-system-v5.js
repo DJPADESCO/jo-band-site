@@ -158,14 +158,14 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
         pageTitle.textContent = btn.textContent.trim();
 
         
+        closeDrawer();
+
         if (btn.getAttribute('data-tab') === 'tab-contact') {
             loadContact();
         }
         if (btn.getAttribute('data-tab') === 'tab-formules') {
             loadFormules();
-        }
-
-        closeDrawer();
+    }
     });
 });
 
