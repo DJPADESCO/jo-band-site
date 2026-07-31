@@ -356,7 +356,6 @@ function initGalleryFilters() {
    7. GESTION DU COLLECTIF & MODALES
    ========================================================================== */
 function buildMembersGrid() {
-function buildMembersGrid() {
     const grid = document.getElementById('container-membres');
     if (!grid) return;
 
