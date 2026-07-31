@@ -157,8 +157,12 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
         document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
         pageTitle.textContent = btn.textContent.trim();
 
+        
         if (btn.getAttribute('data-tab') === 'tab-members') {
             loadMembers();
+        }
+        if (btn.getAttribute('data-tab') === 'tab-contact') {
+            loadContact();
         }
 
         closeDrawer();
@@ -366,6 +370,79 @@ function deleteMember(id) {
         });
     });
                   }
+
+/* ── GESTION DU CONTENU CONTACT ── */
+var btnSaveContact    = document.getElementById('btn-save-contact');
+var contactFormStatus = document.getElementById('contact-form-status');
+
+function loadContact() {
+    contactFormStatus.textContent = '';
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=content&section=contact', {
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (!result.success) {
+                    contactFormStatus.textContent = 'Erreur: ' + (result.error || 'inconnue');
+                    contactFormStatus.className = 'status-msg error';
+                    return;
+                }
+                var d = result.data || {};
+                document.getElementById('contact-tel1').value = d.tel1 || '';
+                document.getElementById('contact-tel2').value = d.tel2 || '';
+                document.getElementById('contact-youtube').value = d.youtube || '';
+                document.getElementById('contact-tiktok').value = d.tiktok || '';
+                document.getElementById('contact-wa-channel').value = d.waChannel || '';
+            })
+            .catch(function (err) {
+                contactFormStatus.textContent = 'Erreur réseau: ' + err.message;
+                contactFormStatus.className = 'status-msg error';
+            });
+    });
+}
+
+btnSaveContact.addEventListener('click', function () {
+    var payload = {
+        tel1: document.getElementById('contact-tel1').value.trim(),
+        tel2: document.getElementById('contact-tel2').value.trim(),
+        youtube: document.getElementById('contact-youtube').value.trim(),
+        tiktok: document.getElementById('contact-tiktok').value.trim(),
+        waChannel: document.getElementById('contact-wa-channel').value.trim()
+    };
+
+    btnSaveContact.disabled = true;
+    btnSaveContact.textContent = 'Enregistrement...';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=content&section=contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    contactFormStatus.textContent = '✅ Enregistré';
+                    contactFormStatus.className = 'status-msg success';
+                } else {
+                    contactFormStatus.textContent = result.error || 'Erreur.';
+                    contactFormStatus.className = 'status-msg error';
+                }
+            })
+            .catch(function (err) {
+                contactFormStatus.textContent = 'Erreur: ' + err.message;
+                contactFormStatus.className = 'status-msg error';
+            })
+            .finally(function () {
+                btnSaveContact.disabled = false;
+                btnSaveContact.textContent = 'Enregistrer';
+            });
+    });
+});
 
 function loadTestimonials(status) {
     var containerId = status === 'approved' ? 'admin-testi-approved' : 'admin-testi-pending';
