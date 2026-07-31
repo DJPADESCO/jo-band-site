@@ -25,9 +25,50 @@ async function verifyAdmin(req) {
   }
 }
 
+const ALLOWED_SECTIONS = ['contact', 'formules', 'general'];
+
+async function handleSiteContent(req, res, db) {
+  const section = req.query.section;
+
+  if (!ALLOWED_SECTIONS.includes(section)) {
+    return res.status(400).json({ success: false, error: 'Section invalide.' });
+  }
+
+  if (req.method === 'GET') {
+    try {
+      const doc = await db.collection('site_content').doc(section).get();
+      res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+      return res.status(200).json({ success: true, data: doc.exists ? doc.data() : {} });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  const isAdmin = await verifyAdmin(req);
+  if (!isAdmin) {
+    return res.status(401).json({ success: false, error: 'Non autorisé.' });
+  }
+
+  if (req.method === 'POST') {
+    try {
+      const data = req.body && typeof req.body === 'object' ? req.body : {};
+      await db.collection('site_content').doc(section).set(data, { merge: true });
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  return res.status(405).json({ success: false, error: 'Méthode non autorisée' });
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const db = getFirestore(getApp());
+
+  if (req.query.resource === 'content') {
+    return handleSiteContent(req, res, db);
+  }
 
   if (req.method === 'GET') {
     const isAdmin = await verifyAdmin(req);
