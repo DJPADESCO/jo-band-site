@@ -397,8 +397,8 @@ function buildMembersGrid() {
     } catch (e) {
         grid.innerHTML = '<p class="testi-msg">Impossible de charger les membres pour le moment.</p>';
     }
-                       }
 }
+                  
 
 function openModal(id, name, role, imageUrl) {
     const modal = document.getElementById('modal-member');
