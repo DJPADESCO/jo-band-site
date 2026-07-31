@@ -61,6 +61,9 @@
             <button class="nav-item" data-tab="tab-contact">
                 <i class="fa-solid fa-phone"></i> Contact
             </button>
+            <button class="nav-item" data-tab="tab-formules">
+                <i class="fa-solid fa-tags"></i> Formules
+            </button>
         </nav>
         <button id="btn-logout" class="btn-logout">
             <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
@@ -165,10 +168,92 @@
                     <label style="margin:0;">Membre actif (visible sur le site)</label>
                 </div>
 
-                <button id="btn-save-member" class="btn-primary">Enregistrer</button>
-                <button id="btn-cancel-member" class="btn-logout" style="margin-top:8px;">Annuler</button>
-                <p id="member-form-status" class="status-msg"></p>
-            </div>
+                <button id="btn-save-contact" class="btn-primary">Enregistrer</button>
+            <p id="contact-form-status" class="status-msg"></p>
+        </div>
+
+        <div id="tab-formules" class="tab-panel">
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-star"></i> Formule Standard</h2>
+                <div class="field">
+                    <label>Badge (FR)</label>
+                    <input type="text" id="pkg-standard-badge-fr" placeholder="Populaire">
+                </div>
+                <div class="field">
+                    <label>Badge (EN)</label>
+                    <input type="text" id="pkg-standard-badge-en" placeholder="Popular">
+                </div>
+                <div class="field">
+                    <label>Titre (FR)</label>
+                    <input type="text" id="pkg-standard-title-fr" placeholder="Formule Standard">
+                </div>
+                <div class="field">
+                    <label>Titre (EN)</label>
+                    <input type="text" id="pkg-standard-title-en" placeholder="Standard Package">
+                </div>
+                <div class="field">
+                    <label>Description (FR)</label>
+                    <input type="text" id="pkg-standard-desc-fr">
+                </div>
+                <div class="field">
+                    <label>Description (EN)</label>
+                    <input type="text" id="pkg-standard-desc-en">
+                </div>
+                <div class="field">
+                    <label>Prix (identique pour les deux langues)</label>
+                    <input type="text" id="pkg-standard-price" placeholder="Ex: 50 000 FCFA">
+                </div>
+                <div class="field">
+                    <label>Prestations incluses</label>
+                    <div id="pkg-standard-features-list"></div>
+                    <button type="button" id="btn-add-feature-standard" class="btn-primary" style="margin-top:8px;">
+                        <i class="fa-solid fa-plus"></i> Ajouter une prestation
+                    </button>
+                </div>
+            </section>
+
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-crown"></i> Formule Premium VIP</h2>
+                <div class="field">
+                    <label>Badge (FR)</label>
+                    <input type="text" id="pkg-premium-badge-fr" placeholder="Grand Standing">
+                </div>
+                <div class="field">
+                    <label>Badge (EN)</label>
+                    <input type="text" id="pkg-premium-badge-en" placeholder="Grand Standing">
+                </div>
+                <div class="field">
+                    <label>Titre (FR)</label>
+                    <input type="text" id="pkg-premium-title-fr" placeholder="Formule Premium VIP">
+                </div>
+                <div class="field">
+                    <label>Titre (EN)</label>
+                    <input type="text" id="pkg-premium-title-en" placeholder="Premium VIP Package">
+                </div>
+                <div class="field">
+                    <label>Description (FR)</label>
+                    <input type="text" id="pkg-premium-desc-fr">
+                </div>
+                <div class="field">
+                    <label>Description (EN)</label>
+                    <input type="text" id="pkg-premium-desc-en">
+                </div>
+                <div class="field">
+                    <label>Prix (identique pour les deux langues)</label>
+                    <input type="text" id="pkg-premium-price" placeholder="Ex: 150 000 FCFA">
+                </div>
+                <div class="field">
+                    <label>Prestations incluses</label>
+                    <div id="pkg-premium-features-list"></div>
+                    <button type="button" id="btn-add-feature-premium" class="btn-primary" style="margin-top:8px;">
+                        <i class="fa-solid fa-plus"></i> Ajouter une prestation
+                    </button>
+                </div>
+            </section>
+
+            <button id="btn-save-formules" class="btn-primary">Enregistrer</button>
+            <p id="formules-form-status" class="status-msg"></p>
+                        </div>
         </div>
     </main>
 </div>
