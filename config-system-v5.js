@@ -165,7 +165,12 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
         }
         if (btn.getAttribute('data-tab') === 'tab-formules') {
             loadFormules();
-    }
+        }
+        if (btn.getAttribute('data-tab') === 'tab-videos') {
+            loadVideos();
+        }
+
+        closeDrawer();
     });
 });
 
@@ -620,6 +625,196 @@ btnSaveFormules.addEventListener('click', function () {
             .finally(function () {
                 btnSaveFormules.disabled = false;
                 btnSaveFormules.textContent = 'Enregistrer';
+            });
+    });
+});
+
+/* ── GESTION DE LA GALERIE (ORDRE, MISE EN AVANT, VISIBILITÉ, UPLOAD, SUPPRESSION) ── */
+var galleryUploadFile   = document.getElementById('gallery-upload-file');
+var galleryUploadStatus = document.getElementById('gallery-upload-status');
+var btnSaveGalleryOrder = document.getElementById('btn-save-gallery-order');
+var galleryOrderStatus  = document.getElementById('gallery-order-status');
+var adminGalleryList    = document.getElementById('admin-gallery-list');
+var galleryItemsCache   = [];
+
+function loadVideos() {
+    adminGalleryList.innerHTML = '<p class="subtext">Chargement...</p>';
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/videos', {
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (!result.success || !result.data) {
+                    adminGalleryList.innerHTML = '<p style="color:#e0344c; font-size:0.85rem;">Erreur de chargement.</p>';
+                    return;
+                }
+                galleryItemsCache = result.data;
+                renderGalleryAdminList();
+            })
+            .catch(function (err) {
+                adminGalleryList.innerHTML = '<p style="color:#e0344c; font-size:0.85rem;">Erreur réseau: ' + err.message + '</p>';
+            });
+    });
+}
+
+function renderGalleryAdminList() {
+    if (!galleryItemsCache.length) {
+        adminGalleryList.innerHTML = '<p class="subtext">Aucun média pour le moment.</p>';
+        return;
+    }
+
+    adminGalleryList.innerHTML = galleryItemsCache.map(function (item, index) {
+        var thumb = item.resource_type === 'video'
+            ? '<video src="' + item.secure_url + '" class="member-thumb" muted></video>'
+            : (item.resource_type === 'raw'
+                ? '<i class="fa-solid fa-file-pdf" style="font-size:1.6rem;"></i>'
+                : '<img src="' + item.secure_url + '" class="member-thumb">');
+
+        return '' +
+            '<div class="admin-item-card" data-index="' + index + '">' +
+                '<p class="admin-item-text">' + thumb + '<strong>' + escapeHTML(item.display_name || item.public_id) + '</strong></p>' +
+                '<div class="field">' +
+                    '<label>Ordre</label>' +
+                    '<input type="number" class="gallery-order-input" value="' + (item.order || 0) + '">' +
+                '</div>' +
+                '<div class="field" style="display:flex; align-items:center; gap:10px;">' +
+                    '<input type="checkbox" class="gallery-featured-input" style="width:auto;" ' + (item.featured ? 'checked' : '') + '>' +
+                    '<label style="margin:0;">Mis en avant (accueil)</label>' +
+                '</div>' +
+                '<div class="field" style="display:flex; align-items:center; gap:10px;">' +
+                    '<input type="checkbox" class="gallery-hidden-input" style="width:auto;" ' + (item.hidden ? 'checked' : '') + '>' +
+                    '<label style="margin:0;">Masqué (invisible sur le site)</label>' +
+                '</div>' +
+                '<button class="admin-btn-delete" data-index="' + index + '">Supprimer définitivement</button>' +
+            '</div>';
+    }).join('');
+
+    adminGalleryList.querySelectorAll('.admin-btn-delete').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var idx = Number(btn.getAttribute('data-index'));
+            var item = galleryItemsCache[idx];
+            if (!item) return;
+            if (confirm('Supprimer définitivement "' + (item.display_name || item.public_id) + '" ? Cette action est irréversible.')) {
+                deleteGalleryItem(item);
+            }
+        });
+    });
+}
+
+function deleteGalleryItem(item) {
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/videos', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify({ publicId: item.public_id, resourceType: item.resource_type })
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    loadVideos();
+                } else {
+                    alert('Erreur: ' + (result.error || 'inconnue'));
+                }
+            })
+            .catch(function (err) {
+                alert('Erreur réseau: ' + err.message);
+            });
+    });
+}
+
+btnSaveGalleryOrder.addEventListener('click', function () {
+    var rows = adminGalleryList.querySelectorAll('.admin-item-card');
+    var items = [];
+
+    rows.forEach(function (row) {
+        var idx = Number(row.getAttribute('data-index'));
+        var source = galleryItemsCache[idx];
+        if (!source) return;
+        items.push({
+            publicId: source.public_id,
+            order:    row.querySelector('.gallery-order-input').value,
+            featured: row.querySelector('.gallery-featured-input').checked,
+            hidden:   row.querySelector('.gallery-hidden-input').checked
+        });
+    });
+
+    btnSaveGalleryOrder.disabled = true;
+    btnSaveGalleryOrder.textContent = 'Enregistrement...';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/videos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify({ items: items })
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    galleryOrderStatus.textContent = '✅ Enregistré';
+                    galleryOrderStatus.className = 'status-msg success';
+                    loadVideos();
+                } else {
+                    galleryOrderStatus.textContent = result.error || 'Erreur.';
+                    galleryOrderStatus.className = 'status-msg error';
+                }
+            })
+            .catch(function (err) {
+                galleryOrderStatus.textContent = 'Erreur: ' + err.message;
+                galleryOrderStatus.className = 'status-msg error';
+            })
+            .finally(function () {
+                btnSaveGalleryOrder.disabled = false;
+                btnSaveGalleryOrder.textContent = 'Enregistrer les modifications';
+            });
+    });
+});
+
+galleryUploadFile.addEventListener('change', function () {
+    var file = galleryUploadFile.files[0];
+    if (!file) return;
+
+    galleryUploadStatus.textContent = 'Envoi en cours...';
+
+    var resourceType = 'image';
+    if (file.type.indexOf('video/') === 0) resourceType = 'video';
+    else if (file.type === 'application/pdf') resourceType = 'raw';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/upload-signature?target=gallery', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (sig) {
+                if (!sig.success) throw new Error(sig.error || 'Signature refusée');
+
+                var formData = new FormData();
+                formData.append('file', file);
+                formData.append('api_key', sig.apiKey);
+                formData.append('timestamp', sig.timestamp);
+                formData.append('signature', sig.signature);
+                formData.append('folder', sig.folder);
+
+                return fetch('https://api.cloudinary.com/v1_1/' + sig.cloudName + '/' + resourceType + '/upload', {
+                    method: 'POST',
+                    body: formData
+                }).then(function (r) { return r.json(); });
+            })
+            .then(function (result) {
+                if (!result.secure_url) throw new Error('Échec upload');
+                galleryUploadStatus.textContent = '✅ Média envoyé';
+                galleryUploadFile.value = '';
+                loadVideos();
+            })
+            .catch(function (err) {
+                galleryUploadStatus.textContent = 'Erreur: ' + err.message;
             });
     });
 });
