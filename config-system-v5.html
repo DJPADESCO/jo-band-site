@@ -64,6 +64,9 @@
             <button class="nav-item" data-tab="tab-formules">
                 <i class="fa-solid fa-tags"></i> Formules
             </button>
+            <button class="nav-item" data-tab="tab-videos">
+                <i class="fa-solid fa-photo-film"></i> Vidéos
+            </button>
         </nav>
         <button id="btn-logout" class="btn-logout">
             <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
@@ -216,6 +219,25 @@
 
             <button id="btn-save-formules" class="btn-primary">Enregistrer</button>
             <p id="formules-form-status" class="status-msg"></p>
+        </div>
+
+        <div id="tab-videos" class="tab-panel">
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-upload"></i> Ajouter un média</h2>
+                <div class="field">
+                    <input type="file" id="gallery-upload-file" accept="image/*,video/mp4,application/pdf">
+                    <p id="gallery-upload-status" class="subtext" style="margin:6px 0 0;"></p>
+                </div>
+            </section>
+
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-list-ol"></i> Galerie (ordre, mise en avant, visibilité)</h2>
+                <div id="admin-gallery-list" class="item-list">
+                    <p class="subtext">Chargement...</p>
+                </div>
+                <button id="btn-save-gallery-order" class="btn-primary" style="margin-top:14px;">Enregistrer les modifications</button>
+                <p id="gallery-order-status" class="status-msg"></p>
+            </section>
         </div>
 
         <div id="member-form-overlay" class="form-overlay hidden">
