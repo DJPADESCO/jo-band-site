@@ -65,6 +65,12 @@ async function fetchCloudinaryFiles() {
   }));
 }
 
+function detectDefaultCategory(f) {
+  if (f.resource_type === 'video' || f.format === 'mp4') return 'video';
+  if (f.format === 'pdf' || f.resource_type === 'raw') return 'document';
+  return 'photo';
+}
+
 async function mergeWithMeta(fichiers, db) {
   const metaSnap = await db.collection('gallery_meta').get();
   const metaMap = {};
@@ -76,7 +82,8 @@ async function mergeWithMeta(fichiers, db) {
       ...f,
       order:    Number.isFinite(meta.order) ? meta.order : 0,
       featured: meta.featured === true,
-      hidden:   meta.hidden === true
+      hidden:   meta.hidden === true,
+      category: meta.category || detectDefaultCategory(f)
     };
   });
 }
