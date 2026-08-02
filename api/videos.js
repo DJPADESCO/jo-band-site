@@ -54,7 +54,7 @@ async function fetchCloudinaryFiles() {
     ...raw.resources
   ]
   // Exclut les fichiers exemples de Cloudinary
-  .filter(f => !f.public_id.startsWith('cld-') && !f.public_id.startsWith('samples/'))
+  .filter(f => !f.public_id.startsWith('cld-') && !f.public_id.startsWith('samples/') && !f.public_id.startsWith('jo-band-members/'))
   .map(f => ({
     public_id:     f.public_id,
     secure_url:    f.secure_url,
