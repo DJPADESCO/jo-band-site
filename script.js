@@ -257,12 +257,7 @@ function loadGallery() {
             if (!result.success || !result.data) throw new Error('Erreur Cloudinary');
 
             allMediaItems = result.data.map(file => {
-                let type = 'photo';
-                if (file.resource_type === 'video' || file.format === 'mp4') {
-                    type = 'video';
-                } else if (file.format === 'pdf' || file.resource_type === 'raw') {
-                    type = 'document';
-                }
+                const type = file.category || 'photo';
 
                 const titrePropre =
                     file.display_name ||
