@@ -544,8 +544,6 @@ function loadGeneralContent() {
         })
         .catch(() => {});
 }
-        .catch(() => {});
-    }
 
 /* ==========================================================================
    8. FORMULAIRES & FEDAPAY
