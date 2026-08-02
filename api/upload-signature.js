@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
   try {
     const timestamp = Math.round(Date.now() / 1000);
     const target = (req.query && req.query.target) || 'members';
-    const folder = target === 'gallery' ? 'jo-band-gallery' : 'jo-band-members';
+    const folder = target === 'gallery' ? 'jo-band-gallery' : (target === 'general' ? 'jo-band-general' : 'jo-band-members');
 
     const signature = cloudinary.utils.api_sign_request(
       { timestamp, folder },
