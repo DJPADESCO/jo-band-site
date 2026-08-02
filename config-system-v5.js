@@ -678,6 +678,15 @@ function renderGalleryAdminList() {
                     '<label>Ordre</label>' +
                     '<input type="number" class="gallery-order-input" value="' + (item.order || 0) + '">' +
                 '</div>' +
+                '<div class="field">' +
+                    '<label>Catégorie</label>' +
+                    '<select class="gallery-category-input">' +
+                        '<option value="photo"' + (item.category === 'photo' ? ' selected' : '') + '>Photo</option>' +
+                        '<option value="video"' + (item.category === 'video' ? ' selected' : '') + '>Vidéo</option>' +
+                        '<option value="document"' + (item.category === 'document' ? ' selected' : '') + '>Document</option>' +
+                        '<option value="affiche"' + (item.category === 'affiche' ? ' selected' : '') + '>Affiche</option>' +
+                    '</select>' +
+                '</div>' +
                 '<div class="field" style="display:flex; align-items:center; gap:10px;">' +
                     '<input type="checkbox" class="gallery-featured-input" style="width:auto;" ' + (item.featured ? 'checked' : '') + '>' +
                     '<label style="margin:0;">Mis en avant (accueil)</label>' +
@@ -738,7 +747,8 @@ btnSaveGalleryOrder.addEventListener('click', function () {
             publicId: source.public_id,
             order:    row.querySelector('.gallery-order-input').value,
             featured: row.querySelector('.gallery-featured-input').checked,
-            hidden:   row.querySelector('.gallery-hidden-input').checked
+            hidden:   row.querySelector('.gallery-hidden-input').checked,
+            category: row.querySelector('.gallery-category-input').value
         });
     });
 
