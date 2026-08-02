@@ -527,6 +527,15 @@ function loadGeneralContent() {
                 });
             }
 
+            if (d.colors) {
+                const root = document.documentElement.style;
+                if (d.colors.gold)      root.setProperty('--gold', d.colors.gold);
+                if (d.colors.navy)      root.setProperty('--navy', d.colors.navy);
+                if (d.colors.navyLight) root.setProperty('--navy-light', d.colors.navyLight);
+                if (d.colors.navyBlue)  root.setProperty('--navy-blue', d.colors.navyBlue);
+                if (d.colors.textMain)  root.setProperty('--text-main', d.colors.textMain);
+            }
+
             const footerTitleEl = document.getElementById('footer-newsletter-title');
             if (footerTitleEl && d.footerTitle) footerTitleEl.textContent = d.footerTitle;
 
