@@ -142,7 +142,8 @@ module.exports = async function handler(req, res) {
         batch.set(ref, {
           order:    Number.isFinite(Number(item.order)) ? Number(item.order) : 0,
           featured: item.featured === true,
-          hidden:   item.hidden === true
+          hidden:   item.hidden === true,
+          category: ['photo', 'video', 'document', 'affiche'].includes(item.category) ? item.category : 'photo'
         }, { merge: true });
       });
 
