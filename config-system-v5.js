@@ -157,9 +157,11 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
         document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
         pageTitle.textContent = btn.textContent.trim();
 
-        
         closeDrawer();
 
+        if (btn.getAttribute('data-tab') === 'tab-members') {
+            loadMembers();
+        }
         if (btn.getAttribute('data-tab') === 'tab-contact') {
             loadContact();
         }
