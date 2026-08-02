@@ -511,6 +511,31 @@ function loadFormulesContent() {
             renderFormulesContent(getCurrentLang());
         })
         .catch(() => {});
+}
+
+/* ── CONTENU GÉNÉRAL (LOGO, FOOTER) ── */
+function loadGeneralContent() {
+    fetch('/api/admin-members?resource=content&section=general')
+        .then(r => r.json())
+        .then(result => {
+            if (!result.success || !result.data) return;
+            const d = result.data;
+
+            if (d.logoUrl) {
+                document.querySelectorAll('.header-logo').forEach(img => {
+                    img.src = d.logoUrl;
+                });
+            }
+
+            const footerTitleEl = document.getElementById('footer-newsletter-title');
+            if (footerTitleEl && d.footerTitle) footerTitleEl.textContent = d.footerTitle;
+
+            const copyrightEl = document.getElementById('footer-copyright');
+            if (copyrightEl && d.copyrightText) copyrightEl.innerHTML = '&copy; ' + sanitize(d.copyrightText);
+        })
+        .catch(() => {});
+}
+        .catch(() => {});
     }
 
 /* ==========================================================================
