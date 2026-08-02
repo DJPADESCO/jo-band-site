@@ -831,6 +831,7 @@ function initEventCountdown() {
     buildMembersGrid();
     loadContactContent();
     loadFormulesContent();
+    loadGeneralContent();
     initGalleryFilters();
 
     // Modale membres
