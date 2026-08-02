@@ -169,8 +169,6 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
         if (btn.getAttribute('data-tab') === 'tab-videos') {
             loadVideos();
         }
-
-        closeDrawer();
     });
 });
 
