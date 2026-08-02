@@ -67,6 +67,9 @@
             <button class="nav-item" data-tab="tab-videos">
                 <i class="fa-solid fa-photo-film"></i> Vidéos
             </button>
+            <button class="nav-item" data-tab="tab-general">
+                <i class="fa-solid fa-gear"></i> Général
+            </button>
         </nav>
         <button id="btn-logout" class="btn-logout">
             <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
@@ -236,8 +239,33 @@
                     <p class="subtext">Chargement...</p>
                 </div>
                 <button id="btn-save-gallery-order" class="btn-primary" style="margin-top:14px;">Enregistrer les modifications</button>
-                <p id="gallery-order-status" class="status-msg"></p>
+            <p id="gallery-order-status" class="status-msg"></p>
+        </div>
+
+        <div id="tab-general" class="tab-panel">
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-image"></i> Logo</h2>
+                <div class="field">
+                    <input type="file" id="general-logo-file" accept="image/*">
+                    <p id="general-logo-status" class="subtext" style="margin:6px 0 0;"></p>
+                    <img id="general-logo-preview" src="" style="display:none; max-width:100px; border-radius:8px; margin-top:8px;">
+                </div>
             </section>
+
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-shoe-prints"></i> Pied de page</h2>
+                <div class="field">
+                    <label>Titre newsletter</label>
+                    <input type="text" id="general-footer-title" placeholder="Restez informés des prochains shows JO BAND">
+                </div>
+                <div class="field">
+                    <label>Texte copyright</label>
+                    <input type="text" id="general-copyright" placeholder="© 2026 JO BAND. Fait au Togo.">
+                </div>
+            </section>
+
+            <button id="btn-save-general" class="btn-primary">Enregistrer</button>
+            <p id="general-form-status" class="status-msg"></p>
         </div>
 
         <div id="member-form-overlay" class="form-overlay hidden">
