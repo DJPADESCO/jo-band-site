@@ -858,6 +858,13 @@ function loadGeneral() {
                 document.getElementById('general-footer-title').value = d.footerTitle || '';
                 document.getElementById('general-copyright').value = d.copyrightText || '';
 
+                var colors = d.colors || {};
+                if (colors.gold)      document.getElementById('general-color-gold').value = colors.gold;
+                if (colors.navy)      document.getElementById('general-color-navy').value = colors.navy;
+                if (colors.navyLight) document.getElementById('general-color-navy-light').value = colors.navyLight;
+                if (colors.navyBlue)  document.getElementById('general-color-navy-blue').value = colors.navyBlue;
+                if (colors.textMain)  document.getElementById('general-color-text').value = colors.textMain;
+
                 if (currentLogoUrl) {
                     generalLogoPreview.src = currentLogoUrl;
                     generalLogoPreview.style.display = 'block';
@@ -916,7 +923,14 @@ btnSaveGeneral.addEventListener('click', function () {
     var payload = {
         logoUrl:       currentLogoUrl,
         footerTitle:   document.getElementById('general-footer-title').value.trim(),
-        copyrightText: document.getElementById('general-copyright').value.trim()
+        copyrightText: document.getElementById('general-copyright').value.trim(),
+        colors: {
+            gold:      document.getElementById('general-color-gold').value,
+            navy:      document.getElementById('general-color-navy').value,
+            navyLight: document.getElementById('general-color-navy-light').value,
+            navyBlue:  document.getElementById('general-color-navy-blue').value,
+            textMain:  document.getElementById('general-color-text').value
+        }
     };
 
     btnSaveGeneral.disabled = true;
