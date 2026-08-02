@@ -171,6 +171,9 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
         if (btn.getAttribute('data-tab') === 'tab-videos') {
             loadVideos();
         }
+        if (btn.getAttribute('data-tab') === 'tab-general') {
+            loadGeneral();
+        }
     });
 });
 
@@ -825,6 +828,126 @@ galleryUploadFile.addEventListener('change', function () {
             })
             .catch(function (err) {
                 galleryUploadStatus.textContent = 'Erreur: ' + err.message;
+            });
+    });
+});
+
+/* ── GESTION GÉNÉRALE (LOGO, FOOTER) ── */
+var generalLogoFile    = document.getElementById('general-logo-file');
+var generalLogoStatus  = document.getElementById('general-logo-status');
+var generalLogoPreview = document.getElementById('general-logo-preview');
+var btnSaveGeneral     = document.getElementById('btn-save-general');
+var generalFormStatus  = document.getElementById('general-form-status');
+var currentLogoUrl     = '';
+
+function loadGeneral() {
+    generalFormStatus.textContent = '';
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=content&section=general', {
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (!result.success) {
+                    generalFormStatus.textContent = 'Erreur: ' + (result.error || 'inconnue');
+                    generalFormStatus.className = 'status-msg error';
+                    return;
+                }
+                var d = result.data || {};
+                currentLogoUrl = d.logoUrl || '';
+                document.getElementById('general-footer-title').value = d.footerTitle || '';
+                document.getElementById('general-copyright').value = d.copyrightText || '';
+
+                if (currentLogoUrl) {
+                    generalLogoPreview.src = currentLogoUrl;
+                    generalLogoPreview.style.display = 'block';
+                } else {
+                    generalLogoPreview.style.display = 'none';
+                }
+            })
+            .catch(function (err) {
+                generalFormStatus.textContent = 'Erreur réseau: ' + err.message;
+                generalFormStatus.className = 'status-msg error';
+            });
+    });
+}
+
+generalLogoFile.addEventListener('change', function () {
+    var file = generalLogoFile.files[0];
+    if (!file) return;
+
+    generalLogoStatus.textContent = 'Envoi de l\'image...';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/upload-signature?target=general', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (sig) {
+                if (!sig.success) throw new Error(sig.error || 'Signature refusée');
+
+                var formData = new FormData();
+                formData.append('file', file);
+                formData.append('api_key', sig.apiKey);
+                formData.append('timestamp', sig.timestamp);
+                formData.append('signature', sig.signature);
+                formData.append('folder', sig.folder);
+
+                return fetch('https://api.cloudinary.com/v1_1/' + sig.cloudName + '/image/upload', {
+                    method: 'POST',
+                    body: formData
+                }).then(function (r) { return r.json(); });
+            })
+            .then(function (result) {
+                if (!result.secure_url) throw new Error('Échec upload');
+                currentLogoUrl = result.secure_url;
+                generalLogoPreview.src = currentLogoUrl;
+                generalLogoPreview.style.display = 'block';
+                generalLogoStatus.textContent = '✅ Image envoyée (n\'oublie pas Enregistrer)';
+            })
+            .catch(function (err) {
+                generalLogoStatus.textContent = 'Erreur: ' + err.message;
+            });
+    });
+});
+
+btnSaveGeneral.addEventListener('click', function () {
+    var payload = {
+        logoUrl:       currentLogoUrl,
+        footerTitle:   document.getElementById('general-footer-title').value.trim(),
+        copyrightText: document.getElementById('general-copyright').value.trim()
+    };
+
+    btnSaveGeneral.disabled = true;
+    btnSaveGeneral.textContent = 'Enregistrement...';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=content&section=general', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    generalFormStatus.textContent = '✅ Enregistré';
+                    generalFormStatus.className = 'status-msg success';
+                } else {
+                    generalFormStatus.textContent = result.error || 'Erreur.';
+                    generalFormStatus.className = 'status-msg error';
+                }
+            })
+            .catch(function (err) {
+                generalFormStatus.textContent = 'Erreur: ' + err.message;
+                generalFormStatus.className = 'status-msg error';
+            })
+            .finally(function () {
+                btnSaveGeneral.disabled = false;
+                btnSaveGeneral.textContent = 'Enregistrer';
             });
     });
 });
