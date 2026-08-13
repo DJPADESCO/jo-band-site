@@ -2,15 +2,6 @@
 <html lang="fr">
 <head>
 
-  <script>
-window.addEventListener('error', function(e) {
-  var box = document.createElement('div');
-  box.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:red;color:white;padding:10px;font-size:12px;z-index:999999999;max-height:40%;overflow:auto;';
-  box.innerText = 'ERREUR JS: ' + e.message + ' | Ligne: ' + e.lineno;
-  document.body.appendChild(box);
-});
-  </script>
-  
 <script>
 (function(){
   var ua = navigator.userAgent || '';
@@ -30,12 +21,7 @@ window.addEventListener('error', function(e) {
     if (!btn) return;
     btn.addEventListener('click', function(){
       var temp = document.createElement('textarea');
-      temp.value = url;
-      document.body.appendChild(temp);
-      temp.select();
-      try { document.execCommand('copy'); } catch(e) {}
-      document.body.removeChild(temp);
-      if (msg) msg.style.display = 'block';
+      temp.value = url;.display = 'block';
     });
   });
 })();
