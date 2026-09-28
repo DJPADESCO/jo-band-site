@@ -27,6 +27,78 @@ async function verifyAdmin(req) {
 
 const ALLOWED_SECTIONS = ['contact', 'formules', 'general'];
 
+async function handleSponsors(req, res, db) {
+  if (req.method === 'GET') {
+    const isAdminGet = await verifyAdmin(req);
+    try {
+      let snapshot;
+      if (isAdminGet) {
+        snapshot = await db.collection('sponsors').get();
+      } else {
+        snapshot = await db.collection('sponsors').where('active', '==', true).get();
+      }
+      const items = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      if (!isAdminGet) {
+        res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+      }
+      return res.status(200).json({ success: true, data: items });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  const isAdmin = await verifyAdmin(req);
+  if (!isAdmin) {
+    return res.status(401).json({ success: false, error: 'Non autorisé.' });
+  }
+
+  if (req.method === 'POST') {
+    try {
+      const { id, name, logoUrl, link, order, active } = req.body;
+
+      if (!name) {
+        return res.status(400).json({ success: false, error: 'Nom requis.' });
+      }
+
+      const data = {
+        name:    String(name).slice(0, 80),
+        logoUrl: logoUrl ? String(logoUrl).slice(0, 400) : '',
+        link:    link ? String(link).slice(0, 400) : '',
+        order:   Number.isFinite(Number(order)) ? Number(order) : 0,
+        active:  active !== false
+      };
+
+      if (id) {
+        await db.collection('sponsors').doc(id).update(data);
+      } else {
+        await db.collection('sponsors').add(data);
+      }
+
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  if (req.method === 'DELETE') {
+    try {
+      const { id } = req.body;
+      if (!id) {
+        return res.status(400).json({ success: false, error: 'ID requis.' });
+      }
+      await db.collection('sponsors').doc(id).delete();
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  return res.status(405).json({ success: false, error: 'Méthode non autorisée' });
+}
+
 async function handleSiteContent(req, res, db) {
   const section = req.query.section;
 
@@ -70,6 +142,9 @@ module.exports = async function handler(req, res) {
     return handleSiteContent(req, res, db);
   }
 
+  if (req.query.resource === 'sponsors') {
+    return handleSponsors(req, res, db);
+  }
   if (req.method === 'GET') {
     const isAdmin = await verifyAdmin(req);
     try {
