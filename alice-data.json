@@ -31,11 +31,7 @@
   },
   "__SECTION_FIN_CONTACTS": "----------------------------------------------------------------",
   "__SECTION_DEBUT_STATS": "----------------- BLOC DES STATISTIQUES -----------------",
-  "stats": {
-    "views": "500K+",
-    "members": 13,
-    "shows": "150+"
-  },
+  "stats": {},
   "__SECTION_FIN_STATS": "----------------------------------------------------------------",
   "__SECTION_DEBUT_MEMBERS": "----------------- BLOC DES MEMBRES -----------------",
   "members": [
