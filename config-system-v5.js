@@ -174,6 +174,10 @@ document.querySelectorAll('.nav-item').forEach(function (btn) {
         if (btn.getAttribute('data-tab') === 'tab-general') {
             loadGeneral();
         }
+        if (btn.getAttribute('data-tab') === 'tab-sponsors') {
+            loadSponsorBenefits();
+            loadSponsorsList();
+        }
     });
 });
 
@@ -965,6 +969,279 @@ btnSaveGeneral.addEventListener('click', function () {
             });
     });
 });
+
+/* ── GESTION DES AVANTAGES SPONSORS ── */
+var btnSaveSponsorBenefits = document.getElementById('btn-save-sponsor-benefits');
+var sponsorBenefitsStatus  = document.getElementById('sponsor-benefits-status');
+
+function loadSponsorBenefits() {
+    sponsorBenefitsStatus.textContent = '';
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=content&section=sponsors', {
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (!result.success) {
+                    sponsorBenefitsStatus.textContent = 'Erreur: ' + (result.error || 'inconnue');
+                    sponsorBenefitsStatus.className = 'status-msg error';
+                    return;
+                }
+                var d = result.data || {};
+                document.getElementById('sponsor-benefit1-title-input').value = d.benefit1Title || '';
+                document.getElementById('sponsor-benefit1-desc-input').value  = d.benefit1Desc  || '';
+                document.getElementById('sponsor-benefit2-title-input').value = d.benefit2Title || '';
+                document.getElementById('sponsor-benefit2-desc-input').value  = d.benefit2Desc  || '';
+                document.getElementById('sponsor-benefit3-title-input').value = d.benefit3Title || '';
+                document.getElementById('sponsor-benefit3-desc-input').value  = d.benefit3Desc  || '';
+                document.getElementById('sponsor-benefit4-title-input').value = d.benefit4Title || '';
+                document.getElementById('sponsor-benefit4-desc-input').value  = d.benefit4Desc  || '';
+            })
+            .catch(function (err) {
+                sponsorBenefitsStatus.textContent = 'Erreur réseau: ' + err.message;
+                sponsorBenefitsStatus.className = 'status-msg error';
+            });
+    });
+}
+
+btnSaveSponsorBenefits.addEventListener('click', function () {
+    var payload = {
+        benefit1Title: document.getElementById('sponsor-benefit1-title-input').value.trim(),
+        benefit1Desc:  document.getElementById('sponsor-benefit1-desc-input').value.trim(),
+        benefit2Title: document.getElementById('sponsor-benefit2-title-input').value.trim(),
+        benefit2Desc:  document.getElementById('sponsor-benefit2-desc-input').value.trim(),
+        benefit3Title: document.getElementById('sponsor-benefit3-title-input').value.trim(),
+        benefit3Desc:  document.getElementById('sponsor-benefit3-desc-input').value.trim(),
+        benefit4Title: document.getElementById('sponsor-benefit4-title-input').value.trim(),
+        benefit4Desc:  document.getElementById('sponsor-benefit4-desc-input').value.trim()
+    };
+
+    btnSaveSponsorBenefits.disabled = true;
+    btnSaveSponsorBenefits.textContent = 'Enregistrement...';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=content&section=sponsors', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    sponsorBenefitsStatus.textContent = '✅ Enregistré';
+                    sponsorBenefitsStatus.className = 'status-msg success';
+                } else {
+                    sponsorBenefitsStatus.textContent = result.error || 'Erreur.';
+                    sponsorBenefitsStatus.className = 'status-msg error';
+                }
+            })
+            .catch(function (err) {
+                sponsorBenefitsStatus.textContent = 'Erreur: ' + err.message;
+                sponsorBenefitsStatus.className = 'status-msg error';
+            })
+            .finally(function () {
+                btnSaveSponsorBenefits.disabled = false;
+                btnSaveSponsorBenefits.textContent = 'Enregistrer les avantages';
+            });
+    });
+});
+
+/* ── GESTION DES LOGOS SPONSORS ── */
+var sponsorFormOverlay = document.getElementById('sponsor-form-overlay');
+var btnAddSponsor      = document.getElementById('btn-add-sponsor');
+var btnSaveSponsor     = document.getElementById('btn-save-sponsor');
+var btnCancelSponsor   = document.getElementById('btn-cancel-sponsor');
+var sponsorFormStatus  = document.getElementById('sponsor-form-status');
+var sponsorLogoFile    = document.getElementById('sponsor-logo-file');
+var sponsorLogoStatus  = document.getElementById('sponsor-logo-status');
+var sponsorLogoPreview = document.getElementById('sponsor-logo-preview');
+var sponsorsCache      = [];
+
+function loadSponsorsList() {
+    var list = document.getElementById('admin-sponsors-list');
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=sponsors', {
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (!result.success) {
+                    list.innerHTML = '<p style="color:#e0344c; font-size:0.85rem;">Erreur: ' + (result.error || 'inconnue') + '</p>';
+                    return;
+                }
+                sponsorsCache = result.data || [];
+                if (!sponsorsCache.length) {
+                    list.innerHTML = '<p class="subtext">Aucun sponsor pour le moment.</p>';
+                    return;
+                }
+
+                list.innerHTML = sponsorsCache.map(function (s) {
+                    var thumb = s.logoUrl ? '<img src="' + s.logoUrl + '" class="member-thumb">' : '';
+                    var status = s.active ? '✅ Actif' : '⏸️ Inactif';
+                    return '' +
+                        '<div class="admin-item-card">' +
+                            '<p class="admin-item-text">' + thumb + '<strong>' + escapeHTML(s.name) + '</strong></p>' +
+                            '<p class="admin-item-meta">' + status + ' · Ordre: ' + (s.order || 0) + '</p>' +
+                            '<button class="admin-btn-edit" data-id="' + s.id + '">Modifier</button>' +
+                            '<button class="admin-btn-delete" data-id="' + s.id + '">Supprimer</button>' +
+                        '</div>';
+                }).join('');
+
+                list.querySelectorAll('.admin-btn-edit').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        var sponsor = sponsorsCache.find(function (s) { return s.id === btn.getAttribute('data-id'); });
+                        openSponsorForm(sponsor);
+                    });
+                });
+                list.querySelectorAll('.admin-btn-delete').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        var id = btn.getAttribute('data-id');
+                        if (confirm('Voulez-vous vraiment supprimer ce sponsor ?')) {
+                            deleteSponsor(id);
+                        }
+                    });
+                });
+            })
+            .catch(function (err) {
+                list.innerHTML = '<p style="color:#e0344c; font-size:0.85rem;">Erreur réseau: ' + err.message + '</p>';
+            });
+    });
+}
+
+function openSponsorForm(sponsor) {
+    document.getElementById('sponsor-form-title').textContent = sponsor ? 'Modifier le sponsor' : 'Nouveau sponsor';
+    document.getElementById('sponsor-id').value = sponsor ? sponsor.id : '';
+    document.getElementById('sponsor-name').value = sponsor ? sponsor.name : '';
+    document.getElementById('sponsor-link').value = sponsor ? (sponsor.link || '') : '';
+    document.getElementById('sponsor-logo-url').value = sponsor ? (sponsor.logoUrl || '') : '';
+    document.getElementById('sponsor-order').value = sponsor ? (sponsor.order || 0) : 0;
+    document.getElementById('sponsor-active').checked = sponsor ? sponsor.active !== false : true;
+    sponsorLogoStatus.textContent = '';
+    sponsorFormStatus.textContent = '';
+
+    if (sponsor && sponsor.logoUrl) {
+        sponsorLogoPreview.src = sponsor.logoUrl;
+        sponsorLogoPreview.style.display = 'block';
+    } else {
+        sponsorLogoPreview.style.display = 'none';
+    }
+
+    sponsorFormOverlay.classList.remove('hidden');
+}
+
+btnAddSponsor.addEventListener('click', function () {
+    openSponsorForm(null);
+});
+btnCancelSponsor.addEventListener('click', function () {
+    sponsorFormOverlay.classList.add('hidden');
+});
+
+sponsorLogoFile.addEventListener('change', function () {
+    var file = sponsorLogoFile.files[0];
+    if (!file) return;
+
+    sponsorLogoStatus.textContent = 'Envoi du logo...';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/upload-signature?target=sponsors', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + idToken }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (sig) {
+                if (!sig.success) throw new Error(sig.error || 'Signature refusée');
+
+                var formData = new FormData();
+                formData.append('file', file);
+                formData.append('api_key', sig.apiKey);
+                formData.append('timestamp', sig.timestamp);
+                formData.append('signature', sig.signature);
+                formData.append('folder', sig.folder);
+
+                return fetch('https://api.cloudinary.com/v1_1/' + sig.cloudName + '/image/upload', {
+                    method: 'POST',
+                    body: formData
+                }).then(function (r) { return r.json(); });
+            })
+            .then(function (result) {
+                if (!result.secure_url) throw new Error('Échec upload');
+                document.getElementById('sponsor-logo-url').value = result.secure_url;
+                sponsorLogoPreview.src = result.secure_url;
+                sponsorLogoPreview.style.display = 'block';
+                sponsorLogoStatus.textContent = '✅ Logo envoyé';
+            })
+            .catch(function (err) {
+                sponsorLogoStatus.textContent = 'Erreur: ' + err.message;
+            });
+    });
+});
+
+btnSaveSponsor.addEventListener('click', function () {
+    var payload = {
+        id: document.getElementById('sponsor-id').value || null,
+        name: document.getElementById('sponsor-name').value.trim(),
+        link: document.getElementById('sponsor-link').value.trim(),
+        logoUrl: document.getElementById('sponsor-logo-url').value,
+        order: document.getElementById('sponsor-order').value,
+        active: document.getElementById('sponsor-active').checked
+    };
+
+    if (!payload.name) {
+        sponsorFormStatus.textContent = 'Le nom est obligatoire.';
+        sponsorFormStatus.className = 'status-msg error';
+        return;
+    }
+
+    btnSaveSponsor.disabled = true;
+    btnSaveSponsor.textContent = 'Enregistrement...';
+
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=sponsors', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    sponsorFormOverlay.classList.add('hidden');
+                    loadSponsorsList();
+                } else {
+                    sponsorFormStatus.textContent = result.error || 'Erreur.';
+                    sponsorFormStatus.className = 'status-msg error';
+                }
+            })
+            .catch(function (err) {
+                sponsorFormStatus.textContent = 'Erreur: ' + err.message;
+                sponsorFormStatus.className = 'status-msg error';
+            })
+            .finally(function () {
+                btnSaveSponsor.disabled = false;
+                btnSaveSponsor.textContent = 'Enregistrer';
+            });
+    });
+});
+
+function deleteSponsor(id) {
+    firebase.auth().currentUser.getIdToken().then(function (idToken) {
+        fetch('/api/admin-members?resource=sponsors', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify({ id: id })
+        }).then(function () {
+            loadSponsorsList();
+        });
+    });
+}
 
 function loadTestimonials(status) {
     var containerId = status === 'approved' ? 'admin-testi-approved' : 'admin-testi-pending';
