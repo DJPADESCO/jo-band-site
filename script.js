@@ -513,6 +513,42 @@ function loadFormulesContent() {
         .catch(() => {});
 }
 
+/* ── CONTENU SPONSORS (AVANTAGES + LOGOS) ── */
+function loadSponsorsContent() {
+    fetch('/api/admin-members?resource=content&section=sponsors')
+        .then(r => r.json())
+        .then(result => {
+            if (!result.success || !result.data) return;
+            const d = result.data;
+
+            for (let i = 1; i <= 4; i++) {
+                const titleEl = document.getElementById('sponsor-benefit' + i + '-title');
+                const descEl  = document.getElementById('sponsor-benefit' + i + '-desc');
+                if (titleEl && d['benefit' + i + 'Title']) titleEl.textContent = d['benefit' + i + 'Title'];
+                if (descEl && d['benefit' + i + 'Desc'])   descEl.textContent  = d['benefit' + i + 'Desc'];
+            }
+        })
+        .catch(() => {});
+
+    fetch('/api/admin-members?resource=sponsors')
+        .then(r => r.json())
+        .then(result => {
+            if (!result.success || !result.data || !result.data.length) return;
+            const grid = document.getElementById('sponsors-grid');
+            if (!grid) return;
+
+            grid.innerHTML = result.data.map(s => {
+                const logo = s.logoUrl
+                    ? `<img src="${s.logoUrl}" alt="${sanitize(s.name)}" class="sponsor-logo-img">`
+                    : `<span>${sanitize(s.name)}</span>`;
+                return s.link
+                    ? `<a href="${s.link}" target="_blank" class="sponsor-logo-card">${logo}</a>`
+                    : `<div class="sponsor-logo-card">${logo}</div>`;
+            }).join('');
+        })
+        .catch(() => {});
+}
+
 /* ── CONTENU GÉNÉRAL (LOGO, FOOTER) ── */
 function loadGeneralContent() {
     fetch('/api/admin-members?resource=content&section=general')
@@ -839,6 +875,8 @@ function initEventCountdown() {
     loadContactContent();
     loadFormulesContent();
     loadGeneralContent();
+    loadSponsorsContent();
+    initGalleryFilters();
     initGalleryFilters();
 
     // Modale membres
