@@ -70,6 +70,9 @@
             <button class="nav-item" data-tab="tab-general">
                 <i class="fa-solid fa-gear"></i> Général
             </button>
+            <button class="nav-item" data-tab="tab-sponsors">
+                <i class="fa-solid fa-handshake"></i> Sponsors
+            </button>
         </nav>
         <button id="btn-logout" class="btn-logout">
             <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
@@ -294,6 +297,92 @@
             <button id="btn-save-general" class="btn-primary">Enregistrer</button>
             <p id="general-form-status" class="status-msg"></p>
         </div>
+
+        <div id="tab-sponsors" class="tab-panel">
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-star"></i> Les 4 avantages</h2>
+                <div class="field">
+                    <label>Avantage 1 — Titre</label>
+                    <input type="text" id="sponsor-benefit1-title-input">
+                </div>
+                <div class="field">
+                    <label>Avantage 1 — Description</label>
+                    <input type="text" id="sponsor-benefit1-desc-input">
+                </div>
+                <div class="field">
+                    <label>Avantage 2 — Titre</label>
+                    <input type="text" id="sponsor-benefit2-title-input">
+                </div>
+                <div class="field">
+                    <label>Avantage 2 — Description</label>
+                    <input type="text" id="sponsor-benefit2-desc-input">
+                </div>
+                <div class="field">
+                    <label>Avantage 3 — Titre</label>
+                    <input type="text" id="sponsor-benefit3-title-input">
+                </div>
+                <div class="field">
+                    <label>Avantage 3 — Description</label>
+                    <input type="text" id="sponsor-benefit3-desc-input">
+                </div>
+                <div class="field">
+                    <label>Avantage 4 — Titre</label>
+                    <input type="text" id="sponsor-benefit4-title-input">
+                </div>
+                <div class="field">
+                    <label>Avantage 4 — Description</label>
+                    <input type="text" id="sponsor-benefit4-desc-input">
+                </div>
+                <button id="btn-save-sponsor-benefits" class="btn-primary">Enregistrer les avantages</button>
+                <p id="sponsor-benefits-status" class="status-msg"></p>
+            </section>
+
+            <section class="panel-block">
+                <h2 class="block-title"><i class="fa-solid fa-building"></i> Logos partenaires</h2>
+                <button id="btn-add-sponsor" class="btn-primary" style="margin-bottom:16px;">
+                    <i class="fa-solid fa-plus"></i> Ajouter un sponsor
+                </button>
+                <div id="admin-sponsors-list" class="item-list">
+                    <p class="subtext">Chargement...</p>
+                </div>
+            </section>
+        </div>
+
+        <div id="sponsor-form-overlay" class="form-overlay hidden">
+            <div class="form-modal">
+                <h2 id="sponsor-form-title" class="block-title">Nouveau sponsor</h2>
+
+                <input type="hidden" id="sponsor-id">
+
+                <div class="field">
+                    <label>Nom du sponsor</label>
+                    <input type="text" id="sponsor-name">
+                </div>
+                <div class="field">
+                    <label>Lien (site web, optionnel)</label>
+                    <input type="text" id="sponsor-link" placeholder="https://...">
+                </div>
+                <div class="field">
+                    <label>Logo</label>
+                    <input type="file" id="sponsor-logo-file" accept="image/*">
+                    <input type="hidden" id="sponsor-logo-url">
+                    <p id="sponsor-logo-status" class="subtext" style="margin:6px 0 0;"></p>
+                    <img id="sponsor-logo-preview" src="" style="display:none; max-width:100px; border-radius:8px; margin-top:8px;">
+                </div>
+                <div class="field">
+                    <label>Ordre d'affichage (0 = premier)</label>
+                    <input type="number" id="sponsor-order" value="0">
+                </div>
+                <div class="field" style="display:flex; align-items:center; gap:10px;">
+                    <input type="checkbox" id="sponsor-active" checked style="width:auto;">
+                    <label style="margin:0;">Sponsor actif (visible sur le site)</label>
+                </div>
+
+                <button id="btn-save-sponsor" class="btn-primary">Enregistrer</button>
+                <button id="btn-cancel-sponsor" class="btn-logout" style="margin-top:8px;">Annuler</button>
+                <p id="sponsor-form-status" class="status-msg"></p>
+            </div>
+    </div>
 
         <div id="member-form-overlay" class="form-overlay hidden">
             <div class="form-modal">
