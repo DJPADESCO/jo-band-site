@@ -7,7 +7,7 @@
 body.alice-page {
     background:      radial-gradient(circle at center, #0f1c3f 0%, #050c1e 100%);
     min-height:      100vh;
-    font-family:     'Outfit', sans-serif;
+    font-family:     'Manrope', system-ui, sans-serif;
     display:         flex;
     align-items:     center;
     justify-content: center;
@@ -18,17 +18,17 @@ body.alice-page {
 /* ── BOUTON FLOTTANT ── */
 #alice-fab {
     position:        fixed !important;
-    bottom:          95px !important;
-    right:           20px !important;
+    bottom:          100px !important;
+    right:           16px !important;
     width:           60px !important;
     height:          60px !important;
     border-radius:   50% !important;
-    border:          2px solid #d4af37 !important;
-    background:      #0a192f !important;
+    border:          2px solid #e8be4f !important;
+    background:      #0c1222 !important;
     cursor:          pointer !important;
     z-index:         99999 !important;
     padding:         0 !important;
-    box-shadow:      0 4px 15px rgba(0,0,0,0.5), 0 0 15px rgba(212,175,55,0.3) !important;
+    box-shadow:      0 4px 15px rgba(0,0,0,0.5), 0 0 15px rgba(232,190,79,0.3) !important;
     display:         flex !important;
     align-items:     center !important;
     justify-content: center !important;
@@ -38,7 +38,7 @@ body.alice-page {
 
 #alice-fab:hover {
     transform:  scale(1.05) !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 20px rgba(212,175,55,0.5) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 20px rgba(232,190,79,0.5) !important;
 }
 
 #alice-fab-avatar {
@@ -55,9 +55,9 @@ body.alice-page {
     right:           20px !important;
     width:           380px !important;
     max-height:      560px !important;
-    background:      rgba(10, 25, 47, 0.98) !important;
-    border:          2px solid #d4af37 !important;
-    border-radius:   20px !important;
+    background:      rgba(12, 18, 34, 0.96) !important;
+    border:          1px solid rgba(232,190,79,0.45) !important;
+    border-radius:   26px !important;
     box-shadow:      0 15px 40px rgba(0,0,0,0.6) !important;
     display:         none;
     flex-direction:  column !important;
@@ -71,16 +71,16 @@ body.alice-page {
     justify-content: space-between !important;
     align-items:     center !important;
     padding:         14px 20px !important;
-    background:      #112240 !important;
-    border-bottom:   1px solid rgba(212,175,55,0.2) !important;
+    background:      #10182c !important;
+    border-bottom:   1px solid rgba(232,190,79,0.2) !important;
     flex-shrink:     0 !important;
 }
 
 .alice-stage-title {
-    font-family: 'Outfit', sans-serif !important;
+    font-family: 'Manrope', system-ui, sans-serif !important;
     font-size:   1.1rem !important;
     font-weight: 600 !important;
-    color:       #d4af37 !important;
+    color:       #e8be4f !important;
     display:     flex !important;
     align-items: center !important;
     gap:         10px !important;
@@ -121,7 +121,7 @@ body.alice-page {
     flex-shrink:     0 !important;
 }
 
-.alice-stage-close:hover { color: #d4af37 !important; }
+.alice-stage-close:hover { color: #e8be4f !important; }
 
 /* ── ZONE CENTRALE ── */
 .alice-stage-main {
@@ -131,7 +131,7 @@ body.alice-page {
     overflow:       hidden !important;
     padding:        14px !important;
     min-height:     0 !important;
-    background:     radial-gradient(circle at 50% 80%, rgba(212,175,55,0.04) 0%, transparent 70%) !important;
+    background:     radial-gradient(circle at 50% 80%, rgba(232,190,79,0.04) 0%, transparent 70%) !important;
 }
 
 /* ── BULLE DE RÉPONSE ── */
@@ -152,8 +152,8 @@ body.alice-page {
 /* ── ZONE DE SAISIE — TOUJOURS VISIBLE ── */
 .alice-stage-footer {
     padding:        10px 14px !important;
-    background:     #112240 !important;
-    border-top:     1px solid rgba(212,175,55,0.15) !important;
+    background:     #10182c !important;
+    border-top:     1px solid rgba(232,190,79,0.15) !important;
     flex-shrink:    0 !important;
     display:        flex !important;
     flex-direction: column !important;
@@ -163,8 +163,8 @@ body.alice-page {
 .alice-input-box {
     display:       flex !important;
     align-items:   center !important;
-    background:    #0a192f !important;
-    border:        1px solid rgba(212,175,55,0.3) !important;
+    background:    #0c1222 !important;
+    border:        1px solid rgba(232,190,79,0.3) !important;
     border-radius: 24px !important;
     padding:       4px 6px 4px 14px !important;
     gap:           4px !important;
@@ -221,8 +221,8 @@ body.alice-page {
     height:          34px !important;
     border:          none !important;
     border-radius:   50% !important;
-    background:      #d4af37 !important;
-    color:           #0a192f !important;
+    background:      #e8be4f !important;
+    color:           #0c1222 !important;
     cursor:          pointer !important;
     display:         flex !important;
     align-items:     center !important;
@@ -270,7 +270,7 @@ body.alice-page {
 }
 .img-fallback i {
     font-size: 2.5rem;
-    color:     rgba(212,175,55,0.3);
+    color:     rgba(232,190,79,0.3);
 }
 
 /* ======================================================== */
@@ -281,7 +281,7 @@ body.alice-page {
     bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--gold, #d4af37);
+    background: var(--gold, #e8be4f);
     color: var(--navy, #0a1128);
     font-size: 0.62rem;
     font-weight: bold;
@@ -292,3 +292,10 @@ body.alice-page {
 /* ======================================================== */
 /* FIN : LABEL TEXTE PRES DE L'ICONE ALICE                  */
 /* ======================================================== */
+
+
+/* ── ÉCRANS LARGES : la barre de navigation est en haut, ALICE descend dans le coin ── */
+@media (min-width: 960px) {
+    #alice-fab { bottom: 28px !important; right: 28px !important; }
+    .alice-live-container { bottom: 28px !important; right: 28px !important; }
+}

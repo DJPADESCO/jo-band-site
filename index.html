@@ -20,14 +20,22 @@
     var msg = document.getElementById('tiktok-copy-msg');
     if (!btn) return;
     btn.addEventListener('click', function(){
-      var temp = document.createElement('textarea');
-      temp.value = url;.display = 'block';
+      var done = function(){ if (msg) msg.style.display = 'block'; };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, function(){ fallbackCopy(); });
+      } else { fallbackCopy(); }
+      function fallbackCopy(){
+        var temp = document.createElement('textarea');
+        temp.value = url; document.body.appendChild(temp); temp.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(temp); done();
+      }
     });
   });
 })();
 </script>
     <meta charset="UTF-8">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="dark">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JO BAND | Application Officielle</title>
   <link rel="icon" type="image/png" href="images/logo.png">
@@ -42,7 +50,7 @@
   gtag('config', 'G-BQEYSNFFY8');
 </script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a192f">
+    <meta name="theme-color" content="#070b16">
 <!-- SEO & Partage Social -->
 <meta name="description" content="JO BAND - Le collectif artistique incontournable du Togo. Humour, DJ, chants et vidéos. Partout où ça bouge, Jo Band est là.">
   <script type="application/ld+json">
@@ -86,7 +94,8 @@
 
 <!-- YouTube -->
 <link rel="canonical" href="https://jo-band-site.vercel.app">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -103,7 +112,7 @@
 <div id="annonce-banner" style="display:none;">
     <span id="annonce-message"></span>
     <a id="annonce-lien" href="#" target="_blank"></a>
-    <button id="annonce-close">✕</button>
+    <button id="annonce-close" aria-label="Fermer l'annonce">✕</button>
 </div>
 <!-- ======================================================== -->
 <!-- FIN : BLOC DE LA BANNIERE AUTOMATIQUE D'ANNONCE          -->
@@ -121,28 +130,13 @@
 <!-- FIN : BANNIERE OUVERTURE NAVIGATEUR EXTERNE (TIKTOK)     -->
 <!-- ======================================================== -->
 
-<!-- BANNIÈRE ANNONCE -->
-<div id="annonce-banner" style="display:none;">
-    <span id="annonce-message"></span>
-    <a id="annonce-lien" href="#" target="_blank"></a>
-    <button id="annonce-close">✕</button>
-</div>
-
 <!-- SPLASH SCREEN -->
-<div id="splash-screen" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#060c18;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+<div id="splash-screen">
     <img src="images/logo.jpg" alt="JO BAND" class="header-logo" loading="eager" onerror="this.src='images/logo.png'">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#d4af37;letter-spacing:4px;margin-bottom:20px;">JO BAND</div>
-    <div style="width:200px;height:4px;background:#112240;border-radius:2px;overflow:hidden;">
-        <div style="width:40%;height:100%;background:#d4af37;border-radius:2px;animation:loadingMove 1.2s infinite ease-in-out;"></div>
-    </div>
-    <p style="color:#8892b0;font-size:0.85rem;margin-top:12px;font-family:'Outfit',sans-serif;">Partout où ça bouge...</p>
+    <div class="splash-title">JO BAND</div>
+    <div class="splash-bar"><i></i></div>
+    <p class="splash-tag">Partout où ça bouge…</p>
 </div>
-<style>
-@keyframes loadingMove {
-    0%   { margin-left: -40%; }
-    100% { margin-left: 100%; }
-}
-</style>
 
     <div class="background-logo-overlay"></div>
 
@@ -155,7 +149,7 @@
             </div>
         </div>
         <div class="header-controls">
-            <button id="theme-toggle" class="control-btn" aria-label="Theme">
+            <button id="theme-toggle" class="control-btn" aria-label="Changer de thème">
                 <i class="fa-solid fa-palette"></i>
             </button>
             <div class="lang-selector">
@@ -175,12 +169,23 @@
         <!-- ONGLET ACCUEIL -->
         <section id="tab-accueil" class="tab-content active">
             <div class="hero-section">
-                <h2 class="hero-main-title">JO BAND</h2>
+                <img class="hero-emblem" src="images/logo.jpg" alt="Logo JO BAND" width="380" height="380" onerror="this.style.display='none'">
+                <span class="hero-eyebrow">Collectif artistique · Lomé, Togo</span>
+                <h2 class="hero-main-title">JO <span>BAND</span></h2>
                 <p class="hero-desc" id="about-text" data-i18n="about-text">Le collectif artistique incontournable du Togo. Humour, prestations DJ, chants vibrants et productions vidéo de haute qualité : nous transformons chaque instant en un événement mémorable.</p>
+                <div class="hero-actions">
+                    <button type="button" class="btn-main" onclick="document.querySelector('.nav-item[data-tab=tab-contact]').click()"><i class="fa-solid fa-calendar-check"></i> Réserver le show</button>
+                    <button type="button" class="btn-ghost" onclick="document.querySelector('.nav-item[data-tab=tab-videos]').click()"><i class="fa-solid fa-play"></i> Voir les vidéos</button>
+                </div>
                 <div class="audio-controls-row">
                     <button id="btn-play" class="audio-action-btn" aria-label="Lire"><i class="fa-solid fa-volume-high"></i></button>
                     <button id="btn-pause" class="audio-action-btn" aria-label="Pause"><i class="fa-solid fa-pause"></i></button>
-                    <button id="btn-stop" class="audio-action-btn" aria-label="Arreter"><i class="fa-solid fa-stop"></i></button>
+                    <button id="btn-stop" class="audio-action-btn" aria-label="Arrêter"><i class="fa-solid fa-stop"></i></button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-card"><span class="stat-number" data-target="150">150+</span><span class="stat-label">Shows</span></div>
+                    <div class="stat-card"><span class="stat-number">500K+</span><span class="stat-label">Vues</span></div>
+                    <div class="stat-card"><span class="stat-number">Togo</span><span class="stat-label">Partout</span></div>
                 </div>
             </div>
 
@@ -621,7 +626,7 @@ Envoyer la demande
     </footer>
 <div id="burger-overlay" class="burger-overlay" style="display:none;"></div>
 <div id="burger-menu" class="burger-menu">
-    <button id="burger-close" class="burger-close">&times;</button>
+    <button id="burger-close" class="burger-close" aria-label="Fermer le menu">&times;</button>
     <div class="burger-menu-content">
         <h3 class="burger-menu-title">JO BAND</h3>
         <button class="burger-nav-item" data-tab="tab-sponsors">
@@ -637,13 +642,14 @@ Envoyer la demande
 </div>
 
     <script src="script.js"></script>
-    <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center;">
-    <img id="lightbox-img" src="" style="max-width:95%; max-height:90vh; object-fit:contain;">
-    <button onclick="document.getElementById('lightbox').style.display='none'" style="position:absolute; top:15px; right:20px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;">&times;</button>
+<div id="lightbox" role="dialog" aria-label="Photo en grand">
+    <img id="lightbox-img" src="" alt="">
+    <button type="button" class="lightbox-close" aria-label="Fermer" onclick="document.getElementById('lightbox').style.display='none'">&times;</button>
+</div>
+
     <script src="youtube-gallery.js"></script>
     <script src="tiktok-gallery.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
-    </div>
 
 <!-- ================= CONSOLE ALICE INTERACTIVE ================= -->
 <button id="alice-fab" aria-label="Parler à ALICE" onclick="document.getElementById('alice-widget').style.setProperty('display', 'flex', 'important'); this.style.setProperty('display', 'none', 'important');">
