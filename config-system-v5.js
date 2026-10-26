@@ -639,6 +639,7 @@ btnSaveFormules.addEventListener('click', function () {
 /* ── GESTION DE LA GALERIE (ORDRE, MISE EN AVANT, VISIBILITÉ, UPLOAD, SUPPRESSION) ── */
 var galleryUploadFile   = document.getElementById('gallery-upload-file');
 var galleryUploadStatus = document.getElementById('gallery-upload-status');
+var galleryUploadTitle  = document.getElementById('gallery-upload-title');
 var btnSaveGalleryOrder = document.getElementById('btn-save-gallery-order');
 var galleryOrderStatus  = document.getElementById('gallery-order-status');
 var adminGalleryList    = document.getElementById('admin-gallery-list');
@@ -665,44 +666,56 @@ function loadVideos() {
     });
 }
 
+function galleryDisplayName(item) {
+    return item.title || item.display_name || item.public_id.split('/').pop();
+}
+
 function renderGalleryAdminList() {
     if (!galleryItemsCache.length) {
-        adminGalleryList.innerHTML = '<p class="subtext">Aucun média pour le moment.</p>';
+        adminGalleryList.innerHTML = '<p class="empty-state">Aucun média dans la galerie. Choisissez un fichier ci-dessus pour ajouter le premier.</p>';
         return;
     }
 
     adminGalleryList.innerHTML = galleryItemsCache.map(function (item, index) {
         var thumb = item.resource_type === 'video'
-            ? '<video src="' + item.secure_url + '" class="member-thumb" muted></video>'
+            ? '<video src="' + item.secure_url + '#t=0.5" class="gallery-thumb" muted preload="metadata"></video>'
             : (item.resource_type === 'raw'
-                ? '<i class="fa-solid fa-file-pdf" style="font-size:1.6rem;"></i>'
-                : '<img src="' + item.secure_url + '" class="member-thumb">');
+                ? '<div class="gallery-thumb gallery-thumb-doc"><i class="fa-solid fa-file-pdf"></i></div>'
+                : '<img src="' + item.secure_url + '" class="gallery-thumb" loading="lazy" alt="">');
+
+        var flags = '';
+        if (!item.title) flags += '<span class="gallery-flag warn">Sans titre</span>';
+        if (item.hidden) flags += '<span class="gallery-flag muted">Masqué</span>';
+        if (item.featured) flags += '<span class="gallery-flag gold">À l\'accueil</span>';
 
         return '' +
-            '<div class="admin-item-card" data-index="' + index + '">' +
-                '<p class="admin-item-text">' + thumb + '<strong>' + escapeHTML(item.display_name || item.public_id) + '</strong></p>' +
-                '<div class="field">' +
-                    '<label>Ordre</label>' +
-                    '<input type="number" class="gallery-order-input" value="' + (item.order || 0) + '">' +
+            '<div class="admin-item-card gallery-card' + (item.hidden ? ' is-hidden' : '') + '" data-index="' + index + '">' +
+                '<div class="gallery-thumb-wrap">' + thumb + '</div>' +
+                '<div class="gallery-card-body">' +
+                    '<div class="gallery-flags">' + flags + '</div>' +
+                    '<div class="field">' +
+                        '<label>Titre affiché sur le site</label>' +
+                        '<input type="text" class="gallery-title-input" maxlength="120" value="' + escapeHTML(item.title || '') + '" placeholder="' + escapeHTML(item.display_name || item.public_id.split('/').pop()) + '">' +
+                    '</div>' +
+                    '<div class="gallery-row">' +
+                        '<div class="field">' +
+                            '<label>Catégorie</label>' +
+                            '<select class="gallery-category-input">' +
+                                '<option value="photo"' + (item.category === 'photo' ? ' selected' : '') + '>Photo</option>' +
+                                '<option value="video"' + (item.category === 'video' ? ' selected' : '') + '>Vidéo</option>' +
+                                '<option value="document"' + (item.category === 'document' ? ' selected' : '') + '>Document</option>' +
+                                '<option value="affiche"' + (item.category === 'affiche' ? ' selected' : '') + '>Affiche</option>' +
+                            '</select>' +
+                        '</div>' +
+                        '<div class="field gallery-order-field">' +
+                            '<label>Ordre</label>' +
+                            '<input type="number" class="gallery-order-input" value="' + (item.order || 0) + '">' +
+                        '</div>' +
+                    '</div>' +
+                    '<label class="toggle-row"><input type="checkbox" class="gallery-featured-input" ' + (item.featured ? 'checked' : '') + '><span>Mis en avant sur l\'accueil</span></label>' +
+                    '<label class="toggle-row"><input type="checkbox" class="gallery-hidden-input" ' + (item.hidden ? 'checked' : '') + '><span>Masqué (invisible sur le site)</span></label>' +
+                    '<button class="admin-btn-delete" data-index="' + index + '"><i class="fa-regular fa-trash-can"></i> Supprimer définitivement</button>' +
                 '</div>' +
-                '<div class="field">' +
-                    '<label>Catégorie</label>' +
-                    '<select class="gallery-category-input">' +
-                        '<option value="photo"' + (item.category === 'photo' ? ' selected' : '') + '>Photo</option>' +
-                        '<option value="video"' + (item.category === 'video' ? ' selected' : '') + '>Vidéo</option>' +
-                        '<option value="document"' + (item.category === 'document' ? ' selected' : '') + '>Document</option>' +
-                        '<option value="affiche"' + (item.category === 'affiche' ? ' selected' : '') + '>Affiche</option>' +
-                    '</select>' +
-                '</div>' +
-                '<div class="field" style="display:flex; align-items:center; gap:10px;">' +
-                    '<input type="checkbox" class="gallery-featured-input" style="width:auto;" ' + (item.featured ? 'checked' : '') + '>' +
-                    '<label style="margin:0;">Mis en avant (accueil)</label>' +
-                '</div>' +
-                '<div class="field" style="display:flex; align-items:center; gap:10px;">' +
-                    '<input type="checkbox" class="gallery-hidden-input" style="width:auto;" ' + (item.hidden ? 'checked' : '') + '>' +
-                    '<label style="margin:0;">Masqué (invisible sur le site)</label>' +
-                '</div>' +
-                '<button class="admin-btn-delete" data-index="' + index + '">Supprimer définitivement</button>' +
             '</div>';
     }).join('');
 
@@ -711,7 +724,7 @@ function renderGalleryAdminList() {
             var idx = Number(btn.getAttribute('data-index'));
             var item = galleryItemsCache[idx];
             if (!item) return;
-            if (confirm('Supprimer définitivement "' + (item.display_name || item.public_id) + '" ? Cette action est irréversible.')) {
+            if (confirm('Supprimer définitivement "' + galleryDisplayName(item) + '" ? Cette action est irréversible.')) {
                 deleteGalleryItem(item);
             }
         });
@@ -752,6 +765,7 @@ btnSaveGalleryOrder.addEventListener('click', function () {
         if (!source) return;
         items.push({
             publicId: source.public_id,
+            title:    row.querySelector('.gallery-title-input').value,
             order:    row.querySelector('.gallery-order-input').value,
             featured: row.querySelector('.gallery-featured-input').checked,
             hidden:   row.querySelector('.gallery-hidden-input').checked,
@@ -826,9 +840,21 @@ galleryUploadFile.addEventListener('change', function () {
             })
             .then(function (result) {
                 if (!result.secure_url) throw new Error('Échec upload');
-                galleryUploadStatus.textContent = '✅ Média envoyé';
-                galleryUploadFile.value = '';
-                loadVideos();
+                var titre = (galleryUploadTitle.value || '').trim();
+                var categorie = resourceType === 'video' ? 'video' : (resourceType === 'raw' ? 'document' : 'photo');
+                // Enregistre le titre choisi pour que le nom généré par l'appareil n'apparaisse pas sur le site
+                return firebase.auth().currentUser.getIdToken().then(function (token) {
+                    return fetch('/api/videos', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                        body: JSON.stringify({ items: [{ publicId: result.public_id, title: titre, order: 0, featured: false, hidden: false, category: categorie }] })
+                    });
+                }).then(function () {
+                    galleryUploadStatus.textContent = '✅ Média envoyé';
+                    galleryUploadFile.value = '';
+                    galleryUploadTitle.value = '';
+                    loadVideos();
+                });
             })
             .catch(function (err) {
                 galleryUploadStatus.textContent = 'Erreur: ' + err.message;

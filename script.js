@@ -260,6 +260,7 @@ function loadGallery() {
                 const type = file.category || 'photo';
 
                 const titrePropre =
+                    file.title ||
                     file.display_name ||
                     file.public_id.split('/').pop().replace(/[-_]/g, ' ').toUpperCase();
 

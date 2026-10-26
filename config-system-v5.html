@@ -230,19 +230,29 @@
         <div id="tab-videos" class="tab-panel">
             <section class="panel-block">
                 <h2 class="block-title"><i class="fa-solid fa-upload"></i> Ajouter un média</h2>
-                <div class="field">
-                    <input type="file" id="gallery-upload-file" accept="image/*,video/mp4,application/pdf">
-                    <p id="gallery-upload-status" class="subtext" style="margin:6px 0 0;"></p>
+                <div class="upload-box">
+                    <div class="field">
+                        <label for="gallery-upload-title">Titre affiché sur le site</label>
+                        <input type="text" id="gallery-upload-title" maxlength="120" placeholder="Ex : Concert de Lomé, scène principale">
+                    </div>
+                    <div class="field" style="margin-bottom:0;">
+                        <label for="gallery-upload-file">Fichier (photo, vidéo MP4 ou PDF)</label>
+                        <input type="file" id="gallery-upload-file" accept="image/*,video/mp4,application/pdf">
+                    </div>
+                    <p id="gallery-upload-status" class="subtext" style="margin:10px 0 0;">Saisissez le titre avant de choisir le fichier : l'envoi démarre dès la sélection.</p>
                 </div>
             </section>
 
             <section class="panel-block">
-                <h2 class="block-title"><i class="fa-solid fa-list-ol"></i> Galerie (ordre, mise en avant, visibilité)</h2>
-                <div id="admin-gallery-list" class="item-list">
+                <h2 class="block-title"><i class="fa-solid fa-images"></i> Galerie</h2>
+                <div id="admin-gallery-list" class="item-list gallery-grid">
                     <p class="subtext">Chargement...</p>
                 </div>
-                <button id="btn-save-gallery-order" class="btn-primary" style="margin-top:14px;">Enregistrer les modifications</button>
-            <p id="gallery-order-status" class="status-msg"></p>
+                <div class="save-bar">
+                    <button id="btn-save-gallery-order" class="btn-primary">Enregistrer les modifications</button>
+                    <p id="gallery-order-status" class="status-msg"></p>
+                </div>
+            </section>
         </div>
 
         <div id="tab-general" class="tab-panel">

@@ -2,9 +2,19 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+:root {
+    --ink: #130f07;
+    --navy: #0f1628;
+    --accent: #b8860b;
+    --accent-soft: #fbf3dc;
+    --gold: #e8be4f;
+    --line: #e4e0d4;
+    --paper: #f6f4ee;
+}
+
 body {
     font-family: 'Inter', -apple-system, sans-serif;
-    background: #f3f4f8;
+    background: var(--paper);
     color: #1e2433;
 }
 
@@ -36,7 +46,7 @@ body {
     align-items: center;
     gap: 10px;
 }
-.login-box h1 i { color: #5b5ee0; }
+.login-box h1 i { color: var(--accent); }
 
 .field { margin-bottom: 16px; }
 .field label {
@@ -55,7 +65,7 @@ body {
     font-size: 0.95rem;
     font-family: inherit;
 }
-.field input:focus { outline: none; border-color: #5b5ee0; background: #fff; }
+.field input:focus { outline: none; border-color: var(--accent); background: #fff; }
 .field select {
     width: 100%;
     padding: 12px 14px;
@@ -65,7 +75,7 @@ body {
     font-size: 0.95rem;
     font-family: inherit;
 }
-.field select:focus { outline: none; border-color: #5b5ee0; background: #fff; }
+.field select:focus { outline: none; border-color: var(--accent); background: #fff; }
 .totp-input { text-align: center; font-size: 1.4rem; letter-spacing: 6px; font-weight: 700; }
 
 .btn-primary {
@@ -73,8 +83,8 @@ body {
     padding: 13px;
     border-radius: 9px;
     border: none;
-    background: #5b5ee0;
-    color: #fff;
+    background: var(--navy);
+    color: var(--gold);
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
@@ -150,8 +160,8 @@ body {
     cursor: pointer;
 }
 .nav-item i { width: 18px; font-size: 0.95rem; color: #8b93a7; }
-.nav-item.active { background: #eef0fd; color: #5b5ee0; font-weight: 600; }
-.nav-item.active i { color: #5b5ee0; }
+.nav-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.nav-item.active i { color: var(--accent); }
 
 .btn-logout {
     display: flex;
@@ -190,7 +200,7 @@ body {
     color: #1e2433;
     margin-bottom: 12px;
 }
-.block-title i { color: #5b5ee0; font-size: 0.85rem; }
+.block-title i { color: var(--accent); font-size: 0.85rem; }
 
 .item-list { display: flex; flex-direction: column; gap: 10px; }
 .admin-item-card {
@@ -265,8 +275,69 @@ body {
     margin-right: 8px;
     cursor: pointer;
     font-family: inherit;
-    background: #eef0fd;
-    color: #5b5ee0;
+    background: var(--accent-soft);
+    color: var(--accent);
 }
-.admin-btn-edit:hover { background: #5b5ee0; color: #fff; }
+.admin-btn-edit:hover { background: var(--accent); color: #fff; }
 
+
+
+/* ── Refonte admin : identité JO BAND (marine + or) ── */
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.btn-primary:hover { background: #172036; }
+.side-drawer { background: var(--navy); border-right: none; }
+.drawer-title { color: var(--gold); letter-spacing: 0.04em; }
+.drawer-subtitle { color: #8d97b3; }
+.nav-item { color: #c5cbe0; }
+.nav-item i { color: #7f8aa8; }
+.nav-item:hover { background: rgba(255,255,255,0.06); }
+.nav-item.active { background: rgba(232,190,79,0.14); color: var(--gold); }
+.nav-item.active i { color: var(--gold); }
+.btn-logout { background: transparent; border-color: rgba(255,255,255,0.18); color: #ff8a9a; }
+.block-title i { color: var(--accent); }
+.field input:focus, .field select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,134,11,0.15); }
+
+.upload-box {
+    background: #fff;
+    border: 1.5px dashed #cfc7ae;
+    border-radius: 14px;
+    padding: 16px;
+}
+.upload-box input[type="file"] { width: 100%; font-size: 0.85rem; }
+
+.gallery-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 640px) { .gallery-grid { grid-template-columns: 1fr 1fr; } }
+
+.gallery-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; border-color: var(--line); }
+.gallery-card.is-hidden .gallery-thumb-wrap { opacity: 0.45; }
+.gallery-thumb-wrap { aspect-ratio: 4 / 3; background: var(--navy); }
+.gallery-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-thumb-doc { display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 2.4rem; }
+.gallery-card-body { padding: 14px; display: flex; flex-direction: column; gap: 4px; }
+.gallery-card-body .field { margin-bottom: 10px; }
+.gallery-row { display: flex; gap: 10px; }
+.gallery-row .field { flex: 1; }
+.gallery-row .gallery-order-field { flex: 0 0 90px; }
+.gallery-card input[type="number"] {
+    width: 100%; padding: 12px 14px; border-radius: 9px;
+    border: 1.5px solid #e4e7ee; background: #fafbfc; font-size: 0.95rem; font-family: inherit;
+}
+.gallery-flags { display: flex; flex-wrap: wrap; gap: 6px; min-height: 0; margin-bottom: 6px; }
+.gallery-flags:empty { display: none; }
+.gallery-flag { font-size: 0.72rem; font-weight: 600; padding: 3px 9px; border-radius: 99px; }
+.gallery-flag.warn  { background: #fff1d6; color: #8a5a00; }
+.gallery-flag.muted { background: #ececf1; color: #5b6275; }
+.gallery-flag.gold  { background: var(--accent-soft); color: #7a5600; }
+
+.toggle-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 0.85rem; cursor: pointer; border-top: 1px solid #f0ede3; }
+.toggle-row input { width: 20px; height: 20px; accent-color: var(--accent); flex: none; }
+.gallery-card .admin-btn-delete { margin: 8px 0 0; padding: 11px; width: 100%; }
+
+.save-bar {
+    position: sticky; bottom: 0; margin-top: 16px; padding: 12px 0 8px;
+    background: linear-gradient(to top, var(--paper) 70%, rgba(246,244,238,0));
+}
+.save-bar .status-msg { margin: 8px 0 0; }
+.empty-state { padding: 28px 16px; text-align: center; color: #8b93a7; font-size: 0.9rem; border: 1.5px dashed #cfc7ae; border-radius: 14px; background: #fff; grid-column: 1 / -1; }
+
+@media (prefers-reduced-motion: reduce) { .side-drawer { transition: none; } }
