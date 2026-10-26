@@ -37,7 +37,10 @@ body.theme-gold-intense {
     --gold: #ffd666; --gold-deep: #e0aa2c; --text-main: #fbf2d8; --muted: #c1b289;
 }
 
-*, *::before, *::after { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+a, button, summary, [role="button"], .member-card, .nav-item, .yt-gallery-item, .media-card, label { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+:focus:not(:focus-visible) { outline: none; }
+button::-moz-focus-inner { border: 0; }
 * { margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
@@ -183,8 +186,8 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 700; letter-spacing
 /* Onglets */
 .app-container { max-width: 1180px; margin: 0 auto; }
 .tab-content { display: none; padding: 20px 16px 8px; }
-.tab-content.active { display: block; animation: tabIn .45s cubic-bezier(.2,.8,.2,1); }
-@keyframes tabIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.tab-content.active { display: block; animation: tabIn .6s cubic-bezier(.2,.8,.2,1); }
+@keyframes tabIn { from { opacity: 0; transform: translateY(18px) scale(.985); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
 
 /* ---------- 4. ACCUEIL ---------- */
 #tab-accueil.active { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; align-content: start; }
@@ -535,15 +538,12 @@ body:has(.legal-page) > header h1 { font-size: clamp(2rem, 6vw, 3rem); margin-bo
     .footer { padding: 40px 32px 32px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-}
+
 
 /* ==========================================================================
    14. ANIMATIONS (tout est dans cette section : supprime-la pour revenir au site sans animation)
    ========================================================================== */
-@keyframes rise   { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes rise   { from { opacity: 0; transform: translateY(28px) scale(.985); filter: blur(5px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes pop-in { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
 @keyframes sheen  { to { background-position: 200% 0; } }
 @keyframes bob    { 0%, 100% { transform: translateY(0) rotate(3deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
@@ -631,7 +631,90 @@ body::before { animation: glow 14s ease-in-out infinite; }
     :is(.promo-card, .testimonials-block, .events-calendar-block) { animation-delay: 0s; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    body::before, .hero-emblem, .hero-main-title span, .btn-main, .whatsapp-booking-card .action-whatsapp-btn, #event-wa-btn, #alice-fab-avatar, .hero-eyebrow::before { animation: none !important; }
-    :is(.promo-card, .testimonials-block, .events-calendar-block, .features-grid > *, .packages-grid > *, .coulisses-grid > *, .newsletter-block, .tiktok-section) { animation: none !important; opacity: 1 !important; transform: none !important; }
+
+
+/* ==========================================================================
+   15. EFFETS PILOTÉS PAR ui-effects.js (barre de progression, ombre d'en-tête, lumière sur les cartes)
+   ========================================================================== */
+#scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 1200; transform-origin: 0 50%; transform: scaleX(0); pointer-events: none; background: linear-gradient(90deg, var(--royal), var(--gold)); }
+.main-header { transition: box-shadow .3s, background .3s; }
+.main-header.scrolled { box-shadow: 0 10px 30px -14px rgba(0,0,0,.8); background: rgba(7,11,22,.88); }
+#lightbox-img { cursor: zoom-out; }
+
+/* Repli pour les navigateurs sans animation au défilement */
+.js-reveal .rv { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+.js-reveal .rv.rv-in { opacity: 1; transform: none; }
+
+/* Lumière qui suit la souris */
+.member-card, .feature-item-box, .package-card, .promo-card { position: relative; }
+.has-spot::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(232,190,79,.14), transparent 65%);
 }
+.has-spot:hover::after { opacity: 1; }
+
+
+
+/* ==========================================================================
+   16. ANIMATIONS MODERNES (titre lettre par lettre, indicateur de navigation, bandeau, photos, profondeur)
+   Elles attendent la fin de l'écran de chargement (classe is-ready ajoutée par ui-effects.js).
+   ========================================================================== */
+html.anim-gate:not(.is-ready) :is(.hero-eyebrow, .hero-desc, .hero-actions, .audio-controls-row, .hero-stats, .hero-emblem, .marquee, .hero-main-title .ch) { animation-play-state: paused !important; }
+
+/* Titre : chaque lettre monte depuis un masque, puis un reflet traverse « BAND » à intervalles */
+.hero-main-title.split { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: inherit; animation: none !important; }
+.hero-main-title.split :is(.w, .band) { background: none; animation: none; color: inherit; -webkit-background-clip: border-box; background-clip: border-box; }
+.hero-main-title .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .02em .1em; margin-bottom: -.1em; }
+.hero-main-title .ch {
+    display: inline-block; -webkit-background-clip: text; background-clip: text; color: transparent;
+    background-image: linear-gradient(180deg, #ffffff 20%, #c9d3ee 100%);
+    transform: translateY(112%) rotate(4deg); transform-origin: 0 100%;
+    animation: letterUp 1s cubic-bezier(.16,1,.3,1) both; animation-delay: calc(.1s + var(--i) * .055s);
+}
+.hero-main-title .band .ch { background-image: linear-gradient(180deg, var(--gold), var(--gold-deep)); animation: letterUp 1s cubic-bezier(.16,1,.3,1) both, glint 7s ease-in-out infinite; animation-delay: calc(.1s + var(--i) * .055s), calc(2.4s + var(--i) * .12s); }
+@keyframes letterUp { to { transform: none; } }
+@keyframes glint { 0%, 10%, 100% { filter: brightness(1); } 5% { filter: brightness(1.55) saturate(1.1); } }
+
+/* Bandeau défilant des prestations */
+.marquee { grid-column: 1 / -1; overflow: hidden; padding: 16px 0; border-block: 1px solid var(--line); animation: rise .9s .7s cubic-bezier(.2,.8,.2,1) both;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee-track { display: flex; width: max-content; animation: marquee 34s linear infinite; will-change: transform; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-group { display: flex; flex-shrink: 0; }
+.marquee-group span { display: flex; align-items: center; font-family: var(--f-display); font-weight: 800; font-size: clamp(1.5rem, 4vw, 2.4rem); letter-spacing: -.02em; white-space: nowrap; color: var(--text-main); }
+.marquee-group span::after { content: ""; width: 9px; height: 9px; margin: 0 clamp(22px, 4vw, 44px); border-radius: 50%; background: var(--gold); }
+.marquee-group span:nth-child(even) { color: transparent; -webkit-text-stroke: 1.5px rgba(232,238,252,.55); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Navigation : un indicateur unique glisse d'un onglet à l'autre */
+.bottom-nav { isolation: isolate; }
+.nav-item { position: relative; z-index: 1; }
+.nav-indicator { position: absolute; z-index: 0; left: 0; top: 0; width: 0; height: 0; border-radius: 18px; pointer-events: none; background: linear-gradient(180deg, var(--gold), var(--gold-deep)); box-shadow: 0 8px 20px -8px rgba(232,190,79,.7);
+    transition: transform .6s cubic-bezier(.34,1.25,.5,1), width .6s cubic-bezier(.34,1.25,.5,1), height .3s; }
+.bottom-nav.has-indicator .nav-item.active { background: transparent; }
+@media (min-width: 960px) { .nav-indicator { border-radius: 999px; } }
+.nav-item:active { transform: scale(.94); }
+
+/* Photos : elles se dévoilent par le haut avec un léger zoom arrière (sans bloquer le zoom au survol) */
+.member-img, .yt-gallery-item img { animation: unveil 1.1s cubic-bezier(.16,1,.3,1) backwards; }
+@keyframes unveil { from { clip-path: inset(0 0 100% 0); transform: scale(1.2); } to { clip-path: inset(0 0 0 0); transform: scale(1); } }
+:is(.members-grid, .yt-gallery-grid) > :nth-child(2) :is(.member-img, img) { animation-delay: .08s; }
+:is(.members-grid, .yt-gallery-grid) > :nth-child(3) :is(.member-img, img) { animation-delay: .16s; }
+:is(.members-grid, .yt-gallery-grid) > :nth-child(4) :is(.member-img, img) { animation-delay: .24s; }
+:is(.members-grid, .yt-gallery-grid) > :nth-child(n+5) :is(.member-img, img) { animation-delay: .32s; }
+
+/* Titres de section : le trait doré se dessine */
+.title-gold::after { transform-origin: 0 50%; animation: grow 1s .35s cubic-bezier(.16,1,.3,1) backwards; }
+@keyframes grow { from { transform: scaleX(0); } }
+
+/* En-tête qui se resserre au défilement */
+.main-header { transition: padding .35s cubic-bezier(.2,.8,.2,1), box-shadow .3s, background .3s; }
+.main-header.scrolled { padding-top: 6px; padding-bottom: 6px; }
+
+/* Profondeur : le logo suit légèrement la souris, les boutons principaux sont « magnétiques » */
+.hero-emblem { translate: calc(var(--px, 0) * 18px) calc(var(--py, 0) * 14px); transition: translate .5s cubic-bezier(.2,.8,.2,1); }
+.btn-main, .btn-ghost { transition: translate .3s cubic-bezier(.2,.8,.2,1), transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease; }
+
+/* Liens du pied de page : soulignement qui se trace */
+.footer-legal-links a { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; padding-bottom: 3px; transition: background-size .4s cubic-bezier(.2,.8,.2,1), color .2s; }
+.footer-legal-links a:hover { background-size: 100% 1.5px; text-decoration: none; }

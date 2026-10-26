@@ -1,4 +1,4 @@
-const APP_VERSION = '2026.10.25.1';
+const APP_VERSION = '2026.10.25.2';
 const CACHE_NAME = `joband-cache-v-${APP_VERSION}`;
 
 const ASSETS = [
@@ -8,6 +8,7 @@ const ASSETS = [
   '/alice.css',
   '/script.js',
   '/alice.js',
+  '/ui-effects.js',
   '/youtube-gallery.js',
   '/manifest.json',
   '/privacy_policy.html',

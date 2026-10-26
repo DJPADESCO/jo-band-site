@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<script>document.documentElement.classList.add("anim-gate");setTimeout(function(){document.documentElement.classList.add("is-ready")},4500);</script>
 
 <script>
 (function(){
@@ -187,6 +188,10 @@
                     <div class="stat-card"><span class="stat-number">500K+</span><span class="stat-label">Vues</span></div>
                     <div class="stat-card"><span class="stat-number">Togo</span><span class="stat-label">Partout</span></div>
                 </div>
+            </div>
+
+            <div class="marquee" aria-label="Nos prestations : Humour, DJ, chants, animation, événementiel, vidéo, mariages, concerts">
+                <div class="marquee-track" aria-hidden="true"><div class="marquee-group"><span>Humour</span><span>DJ</span><span>Chants</span><span>Animation</span><span>Événementiel</span><span>Vidéo</span><span>Mariages</span><span>Concerts</span></div><div class="marquee-group"><span>Humour</span><span>DJ</span><span>Chants</span><span>Animation</span><span>Événementiel</span><span>Vidéo</span><span>Mariages</span><span>Concerts</span></div></div>
             </div>
 
 <!-- COMPTEUR ÉVÉNEMENT -->
@@ -697,6 +702,7 @@ Envoyer la demande
 </div>
 
 <script src="alice.js" defer></script>
+<script src="ui-effects.js" defer></script>
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
