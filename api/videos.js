@@ -41,20 +41,43 @@ let cache = null;
 let cacheTime = 0;
 const CACHE_DUREE = 5 * 60 * 1000; // 5 minutes
 
+// Le compte Cloudinary est partagé entre plusieurs projets :
+// seul le dossier de la galerie JO BAND est lu et modifiable ici.
+const GALLERY_FOLDER = 'jo-band-gallery/';
+
+// Récupère toutes les pages d'un type de ressource (100 par page, 5 pages max)
+async function fetchAllPages(resourceType) {
+  let all = [];
+  let cursor;
+  for (let page = 0; page < 5; page++) {
+    const r = await cloudinary.api.resources({
+      resource_type: resourceType,
+      type: 'upload',
+      prefix: GALLERY_FOLDER,
+      max_results: 100,
+      ...(cursor ? { next_cursor: cursor } : {})
+    });
+    all = all.concat(r.resources);
+    cursor = r.next_cursor;
+    if (!cursor) break;
+  }
+  return all;
+}
+
 async function fetchCloudinaryFiles() {
   const [images, videos, raw] = await Promise.all([
-    cloudinary.api.resources({ resource_type: 'image', type: 'upload', max_results: 100 }),
-    cloudinary.api.resources({ resource_type: 'video', type: 'upload', max_results: 100 }),
-    cloudinary.api.resources({ resource_type: 'raw',   type: 'upload', max_results: 100 })
+    fetchAllPages('image'),
+    fetchAllPages('video'),
+    fetchAllPages('raw')
   ]);
 
   return [
-    ...images.resources,
-    ...videos.resources,
-    ...raw.resources
+    ...images,
+    ...videos,
+    ...raw
   ]
-  // Exclut les fichiers exemples de Cloudinary
-  .filter(f => !f.public_id.startsWith('cld-') && !f.public_id.startsWith('samples/') && !f.public_id.startsWith('jo-band-members/'))
+  // Sécurité : on ne garde que le dossier de la galerie
+  .filter(f => f.public_id.startsWith(GALLERY_FOLDER))
   .map(f => ({
     public_id:     f.public_id,
     secure_url:    f.secure_url,
@@ -80,6 +103,7 @@ async function mergeWithMeta(fichiers, db) {
     const meta = metaMap[sanitizeId(f.public_id)] || {};
     return {
       ...f,
+      title:    typeof meta.title === 'string' ? meta.title : '',
       order:    Number.isFinite(meta.order) ? meta.order : 0,
       featured: meta.featured === true,
       hidden:   meta.hidden === true,
@@ -137,14 +161,17 @@ module.exports = async function handler(req, res) {
       const batch = db.batch();
 
       items.forEach(item => {
-        if (!item.publicId) return;
+        if (!item.publicId || String(item.publicId).indexOf(GALLERY_FOLDER) !== 0) return;
         const ref = db.collection('gallery_meta').doc(sanitizeId(item.publicId));
-        batch.set(ref, {
+        const data = {
           order:    Number.isFinite(Number(item.order)) ? Number(item.order) : 0,
           featured: item.featured === true,
           hidden:   item.hidden === true,
           category: ['photo', 'video', 'document', 'affiche'].includes(item.category) ? item.category : 'photo'
-        }, { merge: true });
+        };
+        // Le titre n'est modifié que s'il est envoyé (sinon l'existant est conservé)
+        if (typeof item.title === 'string') data.title = item.title.trim().slice(0, 120);
+        batch.set(ref, data, { merge: true });
       });
 
       await batch.commit();
@@ -161,6 +188,11 @@ module.exports = async function handler(req, res) {
       const { publicId, resourceType } = req.body || {};
       if (!publicId) {
         return res.status(400).json({ success: false, error: 'publicId requis.' });
+      }
+
+      // Sécurité : jamais de suppression hors du dossier de la galerie
+      if (typeof publicId !== 'string' || !publicId.startsWith(GALLERY_FOLDER)) {
+        return res.status(403).json({ success: false, error: 'Suppression refusée : média hors galerie JO BAND.' });
       }
 
       await cloudinary.uploader.destroy(publicId, {
