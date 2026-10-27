@@ -1,4 +1,4 @@
-const APP_VERSION = '2026.10.26.2';
+const APP_VERSION = '2026.10.27.2';
 const CACHE_NAME = `joband-cache-v-${APP_VERSION}`;
 
 const ASSETS = [
@@ -15,7 +15,7 @@ const ASSETS = [
   '/terms_of_use.html',
   '/alice-data.json',
   '/images/logo.jpg',
-  '/images/logo.png'
+  '/images/icon-192.png'
 ];
 
 
@@ -98,69 +98,60 @@ self.addEventListener('activate', event => {
 });
 
 
-/* REQUETES */
+/* REQUETES
+   - /api/*, panneau admin, sw.js : jamais interceptés (toujours le réseau, toujours à jour)
+   - alice-data.json (événements) : réseau d'abord, cache en secours
+   - le reste du site : affiché tout de suite depuis le téléphone, mis à jour en arrière-plan
+*/
+const NETWORK_ONLY = [/^\/api\//, /^\/config-system-v5/, /^\/sw\.js/, /^\/firebase-messaging-sw\.js/];
+const NETWORK_FIRST = [/^\/alice-data\.json/];
+
+function putInCache(request, response) {
+  if (response && response.status === 200 && response.type === 'basic') {
+    const clone = response.clone();
+    caches.open(CACHE_NAME).then(cache => cache.put(request, clone)).catch(() => {});
+  }
+}
+
 self.addEventListener('fetch', event => {
 
-
   const request = event.request;
+  if (request.method !== 'GET' || !request.url.startsWith(self.location.origin)) return;
 
+  const path = new URL(request.url).pathname;
+  if (NETWORK_ONLY.some(re => re.test(path))) return;
 
-  if(
-    request.method !== 'GET' ||
-    !request.url.startsWith(self.location.origin)
-  ){
+  const isNavigation = request.mode === 'navigate';
+  const isHome = isNavigation && (path === '/' || path === '/index.html');
+  const key = isHome ? '/index.html' : request;
+  const matchOptions = isNavigation ? { ignoreSearch: true } : {};
 
+  /* Réseau d'abord (avec cache en secours) */
+  if (NETWORK_FIRST.some(re => re.test(path))) {
+    event.respondWith(
+      fetch(request)
+        .then(response => { putInCache(request, response); return response; })
+        .catch(() => caches.match(request))
+    );
     return;
-
   }
 
-
+  /* Cache d'abord + mise à jour en arrière-plan */
   event.respondWith(
+    caches.match(key, matchOptions).then(cached => {
+      const network = fetch(request)
+        .then(response => {
+          putInCache(key, response);
+          return response;
+        })
+        .catch(() => null);
 
-
-    fetch(request)
-
-    .then(response => {
-
-
-      if(response && response.status === 200){
-
-        const clone = response.clone();
-
-
-        caches.open(CACHE_NAME)
-        .then(cache => {
-
-          cache.put(request,clone);
-
-        });
-
+      if (cached) {
+        event.waitUntil(network);   // rafraîchit le cache sans faire attendre l'affichage
+        return cached;
       }
-
-
-      return response;
-
-
+      return network.then(response => response || caches.match('/index.html'));
     })
-
-
-    .catch(() => {
-
-
-      return caches.match(request)
-      .then(cached => {
-
-
-        return cached || caches.match('/index.html');
-
-
-      });
-
-
-    })
-
-
   );
-
 
 });

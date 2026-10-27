@@ -4,21 +4,33 @@
   "description": "L'application officielle du collectif JO BAND.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#070b16",
-  "theme_color": "#070b16",
+  "background_color": "#0b0f1c",
+  "theme_color": "#0b0f1c",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "images/logo.png",
+      "src": "images/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "images/logo.png",
+      "src": "images/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

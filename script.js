@@ -182,7 +182,7 @@ function hideSplash() {
         splash.style.opacity = '0';
         splash.style.transition = 'opacity 0.4s ease';
         setTimeout(() => { splash.style.display = 'none'; }, 400);
-    }, 1200);
+    }, 150);
 }
 
 function startCounters() {
@@ -238,6 +238,13 @@ function applyLanguage(lang) {
 // CLOUDINARY GALLERY ONLY
 // ==========================
 
+// Cloudinary redimensionne et compresse à la volée : photos légères sur réseau faible
+function optimizedImage(url, resourceType) {
+    if (resourceType && resourceType !== 'image') return url;
+    if (typeof url !== 'string' || url.indexOf('/image/upload/') === -1) return url;
+    return url.replace('/image/upload/', '/image/upload/f_auto,q_auto,w_700,c_limit/');
+}
+
 function loadGallery() {
     const container = document.getElementById('galerie-container');
     const dict = translations[currentLang] || translations.fr;
@@ -269,7 +276,7 @@ function loadGallery() {
                     titre: titrePropre,
                     type:  type,
                     lien:  file.secure_url,
-                    image: file.secure_url,
+                    image: optimizedImage(file.secure_url, file.resource_type),
                     date:  file.created_at || ''
                 };
             });
