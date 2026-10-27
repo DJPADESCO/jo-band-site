@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<script>
+/* Navigateur intégré de TikTok : page légère (liens.html) au lieu du site complet. ?full=1 force le site complet. */
+(function(){try{
+  var ua=navigator.userAgent||'';
+  if(/TikTok|BytedanceWebview|musical_ly/i.test(ua)&&!/[?&]full=1/.test(location.search)){
+    location.replace('/liens.html');
+  }
+}catch(e){}})();
+</script>
 <script>document.documentElement.classList.add("anim-gate");setTimeout(function(){document.documentElement.classList.add("is-ready")},4500);
 /* App installée : l'écran Android sert déjà de chargement, on n'en affiche pas un deuxième */
 try{if((window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true){document.documentElement.classList.add("is-standalone","is-ready");}}catch(e){}</script>
