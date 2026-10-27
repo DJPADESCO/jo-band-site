@@ -789,9 +789,9 @@ initEventCountdown();
 
     const navItems = document.querySelectorAll('.nav-item');
     const tabs = document.querySelectorAll('.tab-content');
-initNotifications();
-initAnnonce();
-initTikTokRedirect();
+try { initNotifications(); } catch (e) { console.warn('Notifications indisponibles :', e && e.message); }
+try { initAnnonce(); } catch (e) {}
+try { initTikTokRedirect(); } catch (e) {}
    
 /* ── COMPTEUR ÉVÉNEMENT ── */
 function initEventCountdown() {
@@ -970,6 +970,8 @@ document.addEventListener('click', e => {
    initEventsCalendar()
 /* ── NOTIFICATIONS PUSH ── */
 function initNotifications() {
+    // Navigateurs intégrés (TikTok, Facebook...) : pas de notifications push, on ne tente rien
+    if (typeof firebase === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) return;
     const VAPID_KEY = 'BEmflxm0W984vE7ZPJ9ADXn2ZfJhUyFVn1pY7lq9d02L1rpgjofPZrcBdaV-s6gARn1_MdnpTM1ZJCrZKWE3p1E';
 
     firebase.initializeApp({
@@ -1050,6 +1052,8 @@ function initTikTokRedirect() {
 
     const isInAppBrowser = /TikTok|BytedanceWebview|musical_ly|FBAN|FBAV|Instagram|Snapchat|VidMate|Line\/|MicroMessenger/i.test(ua);
     if (!isInAppBrowser) return;
+    // Arrivée par le bouton « Notre site web » de liens.html : on laisse le site s'ouvrir sans bannière
+    if (/[?&]full=1/.test(window.location.search)) return;
 
     const isAndroid = /Android/i.test(ua);
 
