@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<script>document.documentElement.classList.add("anim-gate");setTimeout(function(){document.documentElement.classList.add("is-ready")},4500);</script>
+<script>document.documentElement.classList.add("anim-gate");setTimeout(function(){document.documentElement.classList.add("is-ready")},4500);
+/* App installée : l'écran Android sert déjà de chargement, on n'en affiche pas un deuxième */
+try{if((window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true){document.documentElement.classList.add("is-standalone","is-ready");}}catch(e){}</script>
+<style>html.is-standalone #splash-screen{display:none!important}html{background:#0b0f1c}</style>
 
 <script>
 (function(){
@@ -39,8 +42,8 @@
 <meta name="color-scheme" content="dark">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JO BAND | Application Officielle</title>
-  <link rel="icon" type="image/png" href="images/logo.png">
-<link rel="apple-touch-icon" href="images/logo.png">
+  <link rel="icon" type="image/png" href="images/favicon-64.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BQEYSNFFY8"></script>
 <script>
@@ -51,7 +54,7 @@
   gtag('config', 'G-BQEYSNFFY8');
 </script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#070b16">
+    <meta name="theme-color" content="#0b0f1c">
 <!-- SEO & Partage Social -->
 <meta name="description" content="JO BAND - Le collectif artistique incontournable du Togo. Humour, DJ, chants et vidéos. Partout où ça bouge, Jo Band est là.">
   <script type="application/ld+json">
@@ -96,8 +99,9 @@
 <!-- YouTube -->
 <link rel="canonical" href="https://jo-band-site.vercel.app">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Manrope:wght@400..800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Manrope:wght@400..800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
@@ -654,7 +658,7 @@ Envoyer la demande
 
     <script src="youtube-gallery.js"></script>
     <script src="tiktok-gallery.js"></script>
-    <script src="https://apis.google.com/js/platform.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <!-- ================= CONSOLE ALICE INTERACTIVE ================= -->
 <button id="alice-fab" aria-label="Parler à ALICE" onclick="document.getElementById('alice-widget').style.setProperty('display', 'flex', 'important'); this.style.setProperty('display', 'none', 'important');">
@@ -705,8 +709,8 @@ Envoyer la demande
 <script src="ui-effects.js" defer></script>
 
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js" defer></script>
 
 </body>
 </html>
