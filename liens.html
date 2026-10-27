@@ -89,16 +89,18 @@ a:focus,button:focus{outline:3px solid var(--gold);outline-offset:3px}
       <span class="txt"><b>Notre chaîne WhatsApp</b><small>Les nouveautés en direct</small></span>
       <span class="chev"></span>
     </a>
-    <a class="btn web" href="/?full=1">
+    <a class="btn web" id="site" href="/?full=1">
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#e8be4f" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg></span>
       <span class="txt"><b>Notre site web</b><small>Le site complet de JO BAND</small></span>
       <span class="chev"></span>
     </a>
   </nav>
 
-  <p class="note">Le site complet s'ouvre mieux dans votre navigateur habituel.</p>
-  <button class="copy" id="copy" type="button">Copier le lien du site</button>
-  <p class="ok" id="ok" role="status">Lien copié</p>
+  <div id="help" style="display:none">
+    <p class="note">Le site ne s'est pas ouvert ? Copiez son lien et collez-le dans Chrome.</p>
+    <button class="copy" id="copy" type="button">Copier le lien du site</button>
+    <p class="ok" id="ok" role="status">Lien copié</p>
+  </div>
   <p class="foot">JO BAND, Lomé, Togo</p>
 </main>
 <script>
@@ -112,6 +114,17 @@ a:focus,button:focus{outline:3px solid var(--gold);outline-offset:3px}
     try { document.execCommand('copy'); done(); } catch(e) {}
     document.body.removeChild(t);
   }
+  /* Android : le bouton ouvre directement Chrome (hors du navigateur de TikTok).
+     Si Chrome est absent ou bloqué, le site s'ouvre dans la page actuelle. */
+  var site = document.getElementById('site'), help = document.getElementById('help');
+  var full = location.origin + '/?full=1';
+  if (/Android/i.test(navigator.userAgent)) {
+    site.href = 'intent://' + location.host + '/?full=1#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(full) + ';end';
+  }
+  site.addEventListener('click', function(){
+    /* si la page reste affichée après 2 s, on propose la copie du lien en secours */
+    setTimeout(function(){ if (!document.hidden) help.style.display = 'block'; }, 2000);
+  });
   btn.addEventListener('click', function(){
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(done, fallback);
